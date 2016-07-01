@@ -57,14 +57,30 @@ def train_intent_classifiers(mine_src,out_dir):
   return model, clf
 
 def train_keyword_taggers(mine_src,out_dir):
-  def generate_src(src):
-    for s in mine_src:
-      y = s['key']
-      x = list(filter(lambda _x: len(_x)>0, s['raw'].split(' ')))
-      yield (y,x)
   
-  trainset = generate_src(mine_src)
-  # TAOTODO:
+  def generate_trainset(src):
+    for s in mine_src:
+      x   = list(filter(lambda _x: len(_x)>0, s['raw'].split(' ')))
+      y   = src['key'] # Tagged single word as a keyword
+      iy  = x.index(y) if len(y)>0 else -1
+      pos = TextStructure.pos_tag(x)
+      yield (pos[iy],pos)
+
+  def generate_x(trainset):
+    for y,x in trainset:
+      yield x
+
+  def generate_y(trainset):
+    for y,x in trainset:
+      yield y
+  
+  trainset, trainset2 = tee(generate_trainset(mine_src))
+  labels, pos         = generate_y(trainset), generate_x(trainset2)
+
+  # Train the tagger models with given sets of labels and POS tags
+  tagger = TextStructure.train_keyword_tagger(labels,pos)
+  TextStructure.save(tagger,outdir + PATH_TAGGER)  
+  return tagger
 
 
 if __name__ == '__main__':

@@ -11,14 +11,17 @@ import json
 from termcolor import colored
 from textblob import TextBlob
 
-# TAOTODO:
 """
 Extract part of speech structure of the given text
-@param {list} of tokenised text
+@param {list} of tokenised words
 @return {list} of {tuple} of text and its POS
 """
-def pos_tag(texts):
-  blobs = [(t,TextBlob(t).tags) for t in texts]
+def pos_tag(words,as_tuple=True):
+  def generate(t):
+    tags = TextBlob(t).tags
+    return (t,tags) if as_tuple else tags
+
+  blobs = [generate(t) for t in words]
   return blobs
 
 """
@@ -28,8 +31,8 @@ with regards to the specified intent.
 @param {list} of tokenised text
 @return {string} of keyword
 """
-def extract_keyword(tagger_model,texts):
-  pos = pos_tag(texts)
+def extract_keyword(tagger_model,words):
+  pos = pos_tag(words,True)
   if len(pos)==0:
     return None
   else:
@@ -45,8 +48,16 @@ def extract_keyword(tagger_model,texts):
 """
 Train the keyword tagger model from the annotated training set
 @param {list} of Y : annotated POS as a keyword
-@param {list} of X : raw text
+@param {list} of X : POS tags of a sentence
 """
 def train_keyword_tagger(labels,dataset):
   # TAOTODO: HMM-based training
   pass
+
+def save(taggers,path):
+  with open(path,'wb+') as f:
+    pickle.dump(taggers,f)
+
+def load(path):
+  with open(path,'rb') as f:
+    return pickle.load(f)
