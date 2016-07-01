@@ -11,6 +11,7 @@ import argparse
 from pylib.text import structure as TextStructure
 from pylib.text import texthasher as TextHash
 from pylib.knowledge.graph import Knowledge
+from pylib.knowledge.datasource import MineDB
 
 arguments = argparse.ArgumentParser()
 arguments.add_argument('--db', type=str, default='vor') # DB source to take
@@ -24,6 +25,9 @@ if __name__ == '__main__':
   db_name         = args['db']
   collection_name = args['col']
   output_dir      = args['outdir']
+
+  # Initialise the mining datasource
+  mine_src = MineDB('localhost',db_name,collection_name)
 
   # Reads in the raw annotated sentence list
 
