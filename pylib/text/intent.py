@@ -11,9 +11,7 @@ from sklearn.cluster import KMeans
 
 def new(n_labels=10,method='kmeans'):
   methods = {
-    'kmeans': KMeans(
-      n_clusters = n_labels
-    )
+    'kmeans': KMeans(n_clusters = n_labels)
   }
   return methods[method]
 
