@@ -13,7 +13,8 @@ class MineDB:
     self.src   = self.mongo[coll]
 
   def query(self,conditions):
-    return self.src.find(conditions)
+    for n in self.src.find(conditions):
+      yield n
 
   def insert(self,record):
     new_record = InsertOne(record)
