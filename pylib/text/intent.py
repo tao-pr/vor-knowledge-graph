@@ -7,9 +7,15 @@ import os.path
 import pickle
 import json
 from termcolor import colored
+from sklearn.cluster import KMeans
 
-def new():
-  pass # TAOTODO:
+def new(n_labels=10,method='kmeans'):
+  methods = {
+    'kmeans': KMeans(
+      n_clusters = n_labels
+    )
+  }
+  return methods[method]
 
 def save(operations,path):
   with open(path,'wb+') as f:
@@ -30,4 +36,15 @@ def safe_load(path):
     print(colored('Text intent classifier created...','yellow'))
     return new()
 
+# Classify multiple vectors at a time using 
+# the specified trained operations
+def classify(opr):
+  def classify_us(vectors):
+    return opr.transform(vectors)
+  return classify_us
+
+def train(opr):
+  def fit(vectors,labels):
+    return opr.fit(labels,vectors)
+  return fit
 

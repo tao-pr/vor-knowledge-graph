@@ -8,16 +8,18 @@ creates a set of intent classifiers and keyword taggers.
 """
 
 import argparse
+from itertools import tee
 from termcolor import colored
 from pylib.text import structure as TextStructure
 from pylib.text import texthasher as TextHash
+from pylib.text import intent as Intent
 from pylib.knowledge.graph import Knowledge
 from pylib.knowledge.datasource import MineDB
 
 # Paths to models
-PATH_HASHER = '/texthash.pkl'
-PATH_CLF    = '/intentclf.pkl'
-PATH_TAGGER = '/tagger.pkl'
+PATH_HASHER = '/texthash.opr'
+PATH_CLF    = '/intentclf.opr'
+PATH_TAGGER = '/tagger.opr'
 
 arguments = argparse.ArgumentParser()
 arguments.add_argument('--db', type=str, default='vor') # DB source to take
@@ -26,23 +28,31 @@ arguments.add_argument('--outdir', type=str, default='./models') # Where to stor
 args = vars(arguments.parse_args(sys.argv[1:]))
 
 def train_intent_classifiers(mine_src,out_dir):
-  def generate_src(src):
+  def generate_raw_text(src):
+    for s in mine_src:
+      x = list(filter(lambda _x: len(_x)>0, s['raw'].split(' ')))
+      yield x
+
+  def generate_labels(src):
     for s in mine_src:
       y = s['intent']
-      x = list(filter(lambda _x: len(_x)>0, s['raw'].split(' ')))
-      yield (y,x)
+      yield y
 
-  trainset = generate_src(mine_src)
+  textset, textset2 = tee(generate_raw_text(mine_src))
+  labels            = generate_labels(mine_src)
 
   # Train a new text hasher (vectoriser model)
   model = TextHash.new()
   fit   = TextHash.hash(model,learn=True)
-  fit(trainset)
-  TextHash.save(model,out_dir + PATH_HASHER)
+  fit(textset)
+  TextHash.save(model, out_dir + PATH_HASHER)
 
   # Train a new intent classifier
-  clf = None
-  
+  clf   = Intent.new()
+  train = Intent.train(clf)
+  train(trainset,textset2,labels)
+  Intent.save(clf, outdir + PATH_CLF)
+
   return model, clf
 
 def train_keyword_taggers(mine_src,out_dir):
