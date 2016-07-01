@@ -49,6 +49,7 @@ def extract_keyword(tagger_model,words):
 Train the keyword tagger model from the annotated training set
 @param {list} of Y : annotated POS as a keyword
 @param {list} of X : POS tags of a sentence
+@return {object} keyword tagger model
 """
 def train_keyword_tagger(labels,dataset):
   # TAOTODO: HMM-based training
