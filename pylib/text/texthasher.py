@@ -15,7 +15,6 @@ from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.linear_model import RidgeClassifier
 from sklearn.neighbors import NearestCentroid
 from sklearn.preprocessing import Normalizer
-from sklearn.decomposition import NMF
 from sklearn.pipeline import make_pipeline
 from sklearn.decomposition import SparsePCA
 from sklearn.decomposition import TruncatedSVD

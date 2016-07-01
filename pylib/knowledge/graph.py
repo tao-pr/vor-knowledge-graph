@@ -6,7 +6,6 @@ Knowledge graph
 import pyorient
 import numpy as np
 import os.path
-import pickle
 import json
 from termcolor import colored
 
@@ -19,13 +18,13 @@ class Knowledge:
   Otherwise, it just open the existing connection.
   """
   def __init__(self,host,dbname,usrname,psw):
-    self.__db      = pyorient.OrientDB(host,2424)
-    self.__session = self.__db.connect(usrname,psw)
-    if self.__db.db_exists(dbname,pyorient.DB_TYPE_GRAPH)
-      self.__db.db_open(dbname.usrname,psw)
+    self.orient    = pyorient.OrientDB(host,2424)
+    self.__session = self.orient.connect(usrname,psw)
+    if self.orient.db_exists(dbname,pyorient.DB_TYPE_GRAPH):
+      self.orient.db_open(dbname.usrname,psw)
     else:
-      self.__db.db_create(dbname,pyorient.DB_TYPE_GRAPH)
-      self.__db.db_open(dbname,usrname,psw)
+      self.orient.db_create(dbname,pyorient.DB_TYPE_GRAPH)
+      self.orient.db_open(dbname,usrname,psw)
 
   def add_knowledge(self,node):
     pass
