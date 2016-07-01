@@ -10,9 +10,10 @@ class MineDB:
   def __init__(self,host,db,coll):
     addr       = "mongodb://{0}:27017/".format(host)
     self.mongo = MongoClient(addr)
-    self.src   = self.mongo[coll]
+    self.db    = self.mongo[db]
+    self.src   = self.db[coll]
 
-  def query(self,conditions):
+  def query(self,conditions={}):
     for n in self.src.find(conditions):
       yield n
 
