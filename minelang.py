@@ -7,6 +7,7 @@ creates a set of intent classifiers and keyword taggers.
 @author Tao PR (github/starcolon)
 """
 
+import sys
 import argparse
 from itertools import tee
 from termcolor import colored
@@ -74,10 +75,14 @@ if __name__ == '__main__':
 
   # Initialise the mining datasource
   mine_src = MineDB('localhost',db_name,collection_name)
+  print(colored('• Mining datasource initiated...','cyan'))
 
   # Train intent classifiers
-  clfs, hasher = train_intent_classifiers(mine_src,output_dir)
+  print(colored('• Intent classifier training started...','cyan'))
+  hasher, clf = train_intent_classifiers(mine_src.query({}),output_dir)
+  print(colored('[done]','green'))
 
   # Train keyword taggers
-  taggers = train_keyword_taggers(mine_src,output_dir)
-
+  print(colored('• Keyword tagger training started...','cyan'))
+  taggers = train_keyword_taggers(mine_src.query({}),output_dir)
+  print(colored('[done]','green'))
