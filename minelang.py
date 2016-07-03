@@ -23,15 +23,16 @@ PATH_CLF    = '/intentclf.opr'
 PATH_TAGGER = '/tagger.opr'
 
 arguments = argparse.ArgumentParser()
+arguments.add_argument('--verbose', dest='verbose', action='store_true')
 arguments.add_argument('--db', type=str, default='vor') # DB source to take
 arguments.add_argument('--col', type=str, default='text') # Collection source to take
 arguments.add_argument('--outdir', type=str, default='./models') # Where to store output models
 args = vars(arguments.parse_args(sys.argv[1:]))
 
-def train_intent_classifiers(mine_src,out_dir):
+def train_intent_classifiers(mine_src,out_dir,verbose=False):
   def generate_raw_text(src):
     for s in mine_src:
-      x = list(filter(lambda _x: len(_x)>0, s['raw'].split(' ')))
+      x = s['raw']
       yield x
 
   def generate_labels(src):
@@ -44,23 +45,25 @@ def train_intent_classifiers(mine_src,out_dir):
 
   # Train a new text hasher (vectoriser model)
   model = TextHash.new()
-  fit   = TextHash.hash(model,learn=True)
+  fit   = TextHash.hash(model,learn=True,verbose=verbose)
   fit(textset)
   TextHash.save(model, out_dir + PATH_HASHER)
+
+  # TAOTODO: Convert `labels` to numeric values
 
   # Train a new intent classifier
   clf   = Intent.new()
   train = Intent.train(clf)
-  train(trainset,textset2,labels)
+  train(textset2,labels)
   Intent.save(clf, outdir + PATH_CLF)
 
   return model, clf
 
-def train_keyword_taggers(mine_src,out_dir):
+def train_keyword_taggers(mine_src,out_dir,verbose=False):
   
   def generate_trainset(src):
     for s in mine_src:
-      x   = list(filter(lambda _x: len(_x)>0, s['raw'].split(' ')))
+      x   = s['raw']
       y   = src['key'] # Tagged single word as a keyword
       iy  = x.index(y) if len(y)>0 else -1
       pos = TextStructure.pos_tag(x)
@@ -84,10 +87,12 @@ def train_keyword_taggers(mine_src,out_dir):
 
 
 if __name__ == '__main__':
+
   # Collect arguments
   db_name         = args['db']
   collection_name = args['col']
   output_dir      = args['outdir']
+  verbose         = args['verbose']
 
   # Initialise the mining datasource
   mine_src = MineDB('localhost',db_name,collection_name)
@@ -95,10 +100,10 @@ if __name__ == '__main__':
 
   # Train intent classifiers
   print(colored('[✔️] Intent classifier training started...','cyan'))
-  hasher, clf = train_intent_classifiers(mine_src.query({}),output_dir)
+  hasher, clf = train_intent_classifiers(mine_src.query({}),output_dir,verbose)
   print(colored('[done]','green'))
 
   # Train keyword taggers
   print(colored('[✔️] Keyword tagger training started...','cyan'))
-  taggers = train_keyword_taggers(mine_src.query({}),output_dir)
+  taggers = train_keyword_taggers(mine_src.query({}),output_dir,verbose)
   print(colored('[done]','green'))

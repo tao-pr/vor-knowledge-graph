@@ -12,6 +12,7 @@ from termcolor import colored
 from pylib.knowledge.datasource import MineDB
 
 arguments = argparse.ArgumentParser()
+arguments.add_argument('--verbose', dest='verbose', action='store_true')
 arguments.add_argument('--db', type=str, default='vor') # DB source to take
 arguments.add_argument('--col', type=str, default='text') # Collection source to take
 arguments.add_argument('--input', type=str, default=None) # Specify an input CSV file path for file mode
@@ -25,7 +26,7 @@ def cli_input(dbsrc):
   add_to_db(dbsrc, sentence, intent, keyword)
   print(colored("[ADDED]","green"))
 
-def file_input(dbsrc,path):
+def file_input(dbsrc,path,verbose):
   with open(path, 'rb') as csvfile:
     io = csv.reader(csvfile, delimeter=',')
     for row in io:
@@ -34,23 +35,25 @@ def file_input(dbsrc,path):
       keyword  = row[2]
       add_to_db(dbsrc, sentence, intent, keyword)
 
-def add_to_db(db,sentence,intent,keyword)
-  db.insert_one({
+def add_to_db(db,sentence,intent,keyword):
+  db.insert({
     'raw':    sentence,
     'intent': intent,
-    'key':    keyword
+    'key':    keyword if len(keyword.strip())>0 else None
   })
 
 if __name__ == '__main__':
 
   db_name         = args['db']
   collection_name = args['col']
+  verbose         = args['verbose']
   mine_src        = MineDB('localhost',db_name,collection_name)
 
   if args['input'] is not None:
     # Input CSV file mode
     print(colored('[Reading CSV input] : ','magenta') + args['input'])
-    file_input(args['input'])
+    file_input(mine_src,args['input'],verbose)
   else:
     # Input CLI mode
-    cli_input(mine_src)
+    while True:
+      cli_input(mine_src)

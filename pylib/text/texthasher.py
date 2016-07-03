@@ -81,14 +81,14 @@ def safe_load(path,n_components,stop_words,decomposition):
     return new(n_components,stop_words,decomposition)
 
 
-def hash(operations,learn=False):
+def hash(operations,learn=False,verbose=True):
   # @param {iterable} of string
   def hash_me(dataset):
     x = dataset
 
     if learn:
       for i in range(len(operations)): 
-        print(colored('Processing ... #{0} : {1}'.format(i,type(operations[i])),'grey'))
+        verbose and print(colored('Processing ... #{0} : {1}'.format(i,type(operations[i])),'grey'))
         x = operations[i].fit_transform(x)
     else:
       for i in range(len(operations)): 
