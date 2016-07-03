@@ -18,8 +18,7 @@ class MineDB:
       yield n
 
   def insert(self,record):
-    new_record = InsertOne(record)
-    self.src.bulk_write([new_record])
+    self.src.insert_one(record)
 
   def insert_many(self,records):
     new_records = [InsertOne(r) for r in records]
