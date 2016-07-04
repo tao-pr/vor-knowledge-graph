@@ -13,9 +13,14 @@ class MineDB:
     self.db    = self.mongo[db]
     self.src   = self.db[coll]
 
-  def query(self,conditions={}):
+  def query(self,conditions={},field=None):
     for n in self.src.find(conditions):
-      yield n
+      # No field name specified, generate the entire record
+      if field is None:
+        yield n
+      # Generate the specified field
+      else:
+        yield n[field]
 
   def insert(self,record):
     self.src.insert_one(record)

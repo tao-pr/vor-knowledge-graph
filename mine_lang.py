@@ -24,6 +24,7 @@ PATH_TAGGER = '/tagger.opr'
 
 arguments = argparse.ArgumentParser()
 arguments.add_argument('--verbose', dest='verbose', action='store_true', help='Turn verbose output on.')
+arguments.add_argument('--viewonly', dest='viewonly', action='store_true', help='Turn off training and only exhibit the data.')
 arguments.add_argument('--db', type=str, default='vor', help='Specify the database name to store input.')
 arguments.add_argument('--col', type=str, default='text', help='Specify the collection name to store input.')
 arguments.add_argument('--outdir', type=str, default='./models', help='Specify the physical directory to store the trained models.')
@@ -31,14 +32,10 @@ args = vars(arguments.parse_args(sys.argv[1:]))
 
 def train_intent_classifiers(mine_src,out_dir,verbose=False):
   def generate_raw_text(src):
-    for s in mine_src:
-      x = s['raw']
-      yield x
+    return src.query(conditions={},field='raw')
 
   def generate_labels(src):
-    for s in mine_src:
-      y = s['intent']
-      yield y
+    return src.query(conditions={},field='intent')
 
   textset, textset2 = tee(generate_raw_text(mine_src))
   labels            = list(generate_labels(mine_src))
@@ -50,26 +47,27 @@ def train_intent_classifiers(mine_src,out_dir,verbose=False):
       print('   ',lbl)
 
   # Train a new text hasher (vectoriser model)
-  model = TextHash.new()
-  fit   = TextHash.hash(model,learn=True,verbose=verbose)
-  fit(textset)
+  model      = TextHash.new()
+  fit        = TextHash.hash(model,learn=True,verbose=verbose)
+  vectorise  = TextHash.hash(model,learn=False,verbose=verbose)
+  vectortext = fit(textset)
   TextHash.save(model, out_dir + PATH_HASHER)
 
   # Train a new intent classifier
-  clf   = Intent.new(uniq_labels)
-  train = Intent.train(clf)
-  train(textset2,labels)
-  Intent.save(clf, outdir + PATH_CLF)
+  clf         = Intent.new(uniq_labels)
+  train       = Intent.train(clf)
+  train(vectortext,labels)
+  Intent.save(clf, out_dir + PATH_CLF)
 
   return model, clf
 
 def train_keyword_taggers(mine_src,out_dir,verbose=False):
   
   def generate_trainset(src):
-    for s in mine_src:
+    for s in mine_src.query({}):
       x   = s['raw']
       y   = src['key'] # Tagged single word as a keyword
-      iy  = x.index(y) if len(y)>0 else -1
+      iy  = x.index(y) if y is not None and len(y)>0 else -1
       pos = TextStructure.pos_tag(x)
       yield (pos[iy],pos)
 
@@ -86,7 +84,7 @@ def train_keyword_taggers(mine_src,out_dir,verbose=False):
 
   # Train the tagger models with given sets of labels and POS tags
   tagger = TextStructure.train_keyword_tagger(labels,pos)
-  TextStructure.save(tagger,outdir + PATH_TAGGER)  
+  TextStructure.save(tagger,out_dir + PATH_TAGGER)  
   return tagger
 
 
@@ -104,10 +102,10 @@ if __name__ == '__main__':
 
   # Train intent classifiers
   print(colored('[✔️] Intent classifier training started...','cyan'))
-  hasher, clf = train_intent_classifiers(mine_src.query({}),output_dir,verbose)
+  hasher, clf = train_intent_classifiers(mine_src,output_dir,verbose)
   print(colored('[done]','green'))
 
   # Train keyword taggers
   print(colored('[✔️] Keyword tagger training started...','cyan'))
-  taggers = train_keyword_taggers(mine_src.query({}),output_dir,verbose)
+  taggers = train_keyword_taggers(mine_src,output_dir,verbose)
   print(colored('[done]','green'))
