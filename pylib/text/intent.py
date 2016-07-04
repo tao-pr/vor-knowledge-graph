@@ -63,6 +63,7 @@ def train(opr):
   def fit(vectors,labels):
     # Make labels numeric
     numeric_labels = opr['encoder'].transform(labels)
-    return opr['clf'].fit(numeric_labels,vectors)
+    w = opr['clf'].fit_transform(vectors,numeric_labels)
+    return w
   return fit
 

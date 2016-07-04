@@ -94,7 +94,7 @@ def hash(operations,learn=False,verbose=True):
       for i in range(len(operations)): 
         x = operations[i].transform(x)
 
-    return iter(x)
+    return x
   return hash_me
 
 
