@@ -61,6 +61,8 @@ def classify(opr):
 
 def train(opr):
   def fit(vectors,labels):
-    return opr['clf'].fit(labels,vectors)
+    # Make labels numeric
+    numeric_labels = opr['encoder'].transform(labels)
+    return opr['clf'].fit(numeric_labels,vectors)
   return fit
 
