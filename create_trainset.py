@@ -12,10 +12,10 @@ from termcolor import colored
 from pylib.knowledge.datasource import MineDB
 
 arguments = argparse.ArgumentParser()
-arguments.add_argument('--verbose', dest='verbose', action='store_true')
-arguments.add_argument('--db', type=str, default='vor') # DB source to take
-arguments.add_argument('--col', type=str, default='text') # Collection source to take
-arguments.add_argument('--input', type=str, default=None) # Specify an input CSV file path for file mode
+arguments.add_argument('--verbose', dest='verbose', action='store_true', help='Turn verbose output on.')
+arguments.add_argument('--db', type=str, default='vor', help='Specify the database name to store input.')
+arguments.add_argument('--col', type=str, default='text', help='Specify the collection name to store input.')
+arguments.add_argument('--input', type=str, default=None, help='Specify an input CSV file path for file mode.') 
 args = vars(arguments.parse_args(sys.argv[1:]))
 
 def cli_input(dbsrc):
