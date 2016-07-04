@@ -15,17 +15,17 @@ arguments = argparse.ArgumentParser()
 arguments.add_argument('--verbose', dest='verbose', action='store_true', help='Turn verbose output on.')
 arguments.add_argument('--db', type=str, default='vor', help='Specify the database name to store input.')
 arguments.add_argument('--col', type=str, default='text', help='Specify the collection name to store input.')
-# arguments.add_argument('--input', type=str, default=None, help='Specify an input CSV file path for file mode.') 
+#arguments.add_argument('--input', type=str, default=None, help='Specify an input CSV file path for file mode.') 
 args = vars(arguments.parse_args(sys.argv[1:]))
 
 def cli_input(dbsrc):
   sentence = input(colored("Sentence : ","cyan"))
-  who      = input(colored(" ≈ who : ","cyan"))
-  how      = input(colored(" ≈ how : ","cyan"))
-  where    = input(colored(" ≈ where : ","cyan"))
+  subj     = input(colored(" ≈ subj : ","cyan"))
+  dest     = input(colored(" ≈ dest : ","cyan"))
+  link     = input(colored(" ≈ link : ","cyan"))
   when     = input(colored(" ≈ when : ","cyan"))
   # Add to the database
-  add_to_db(dbsrc, sentence, who, how, where, when)
+  add_to_db(dbsrc, sentence, subj, dest, link, when)
   print(colored("[ADDED]","green"))
 
 # def file_input(dbsrc,path,verbose):
@@ -39,13 +39,13 @@ def cli_input(dbsrc):
 #       when  = None if len(when)==0 else when
 #       add_to_db(dbsrc, sentence, who, how, where, when)
 
-def add_to_db(db,sentence,who,how,where,when):
+def add_to_db(db,sentence,subj,dest,link,when):
   db.insert({
-    'raw':   sentence,
-    'who':   who,
-    'how':   how,
-    'where': where,
-    'when':  when
+    'raw':  sentence,
+    'subj': subj,
+    'dest': dest,
+    'link': link,
+    'when': when
   })
 
 if __name__ == '__main__':
