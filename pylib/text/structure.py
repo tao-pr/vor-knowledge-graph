@@ -14,15 +14,19 @@ from textblob import TextBlob
 """
 Extract part of speech structure of the given text
 @param {list} of tokenised words
-@return {list} of {tuple} of text and its POS
 """
-def pos_tag(words,as_tuple=True):
+def pos_tag(words):
   def generate(t):
     tags = TextBlob(t).tags
-    return (t,tags) if as_tuple else tags
+    return tags[0]
 
   blobs = [generate(t) for t in words]
   return blobs
+
+def tag_with_color(words):
+  pos    = pos_tag(words)
+  tokens = ' | '.join([colored(tag,'yellow') + ':' + t for t,tag in pos])
+  print(tokens)
 
 
 """
