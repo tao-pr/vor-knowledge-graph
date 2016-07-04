@@ -44,7 +44,7 @@ def train_intent_classifiers(mine_src,out_dir,verbose=False):
   if verbose:
     print(colored('¬ Training intents:','cyan'))
     for lbl in uniq_labels:
-      print('   ',lbl)
+      print('   [x] ',lbl)
 
   # Train a new text hasher (vectoriser model)
   model      = TextHash.new()

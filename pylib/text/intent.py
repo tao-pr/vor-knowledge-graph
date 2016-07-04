@@ -56,14 +56,14 @@ def safe_load(path):
 # the specified trained operations
 def classify(opr):
   def classify_us(vectors):
-    return opr['clf'].transform(vectors)
+    vs   = opr['clf'].predict(vectors)
+    return opr['encoder'].inverse_transform(vs)
   return classify_us
 
 def train(opr):
   def fit(vectors,labels):
     # Make labels numeric
     numeric_labels = opr['encoder'].transform(labels)
-    w = opr['clf'].fit_transform(vectors,numeric_labels)
-    return w
+    opr['clf'].fit(vectors,numeric_labels)
   return fit
 
