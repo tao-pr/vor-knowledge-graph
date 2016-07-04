@@ -8,12 +8,30 @@ import pickle
 import json
 from termcolor import colored
 from sklearn.cluster import KMeans
+from sklearn.preprocessing import LabelEncoder
 
-def new(n_labels=10,method='kmeans'):
+"""
+Create a new instance of intent classifier, label encoder included.
+@param {list} distinct list of intent labels (string)
+@param {string} classification method
+@return {object} classifier object along with the label encoder
+"""
+def new(intent_labels=[],method='kmeans'):
+  
+  # Classification methods
   methods = {
-    'kmeans': KMeans(n_clusters = n_labels)
+    'kmeans': KMeans(n_clusters = len(intent_labels))
   }
-  return methods[method]
+
+  # Label encoders
+  encoder = LabelEncoder()
+  encoder.fit(intent_labels)
+
+  return {
+    'clf':     methods[method],
+    'encoder': encoder
+  }
+
 
 def save(operations,path):
   with open(path,'wb+') as f:
@@ -38,11 +56,11 @@ def safe_load(path):
 # the specified trained operations
 def classify(opr):
   def classify_us(vectors):
-    return opr.transform(vectors)
+    return opr['clf'].transform(vectors)
   return classify_us
 
 def train(opr):
   def fit(vectors,labels):
-    return opr.fit(labels,vectors)
+    return opr['clf'].fit(labels,vectors)
   return fit
 
