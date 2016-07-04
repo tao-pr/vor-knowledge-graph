@@ -23,10 +23,10 @@ PATH_CLF    = '/intentclf.opr'
 PATH_TAGGER = '/tagger.opr'
 
 arguments = argparse.ArgumentParser()
-arguments.add_argument('--verbose', dest='verbose', action='store_true')
-arguments.add_argument('--db', type=str, default='vor') # DB source to take
-arguments.add_argument('--col', type=str, default='text') # Collection source to take
-arguments.add_argument('--outdir', type=str, default='./models') # Where to store output models
+arguments.add_argument('--verbose', dest='verbose', action='store_true', help='Turn verbose output on.')
+arguments.add_argument('--db', type=str, default='vor', help='Specify the database name to store input.')
+arguments.add_argument('--col', type=str, default='text', help='Specify the collection name to store input.')
+arguments.add_argument('--outdir', type=str, default='./models', help='Specify the physical directory to store the trained models.')
 args = vars(arguments.parse_args(sys.argv[1:]))
 
 def train_intent_classifiers(mine_src,out_dir,verbose=False):
