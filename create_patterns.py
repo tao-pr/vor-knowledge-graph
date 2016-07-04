@@ -9,6 +9,7 @@ import csv
 import sys
 import argparse
 from termcolor import colored
+from pylib.text import structure as TextStructure
 from pylib.knowledge.datasource import MineDB
 
 arguments = argparse.ArgumentParser()
@@ -19,7 +20,8 @@ arguments.add_argument('--input', type=str, default=None, help='Specify an input
 args = vars(arguments.parse_args(sys.argv[1:]))
 
 def cli_input(dbsrc,sentence):
-  sentence = print(colored("Sentence : ","cyan"), sentence)
+  print(colored("Sentence : ","cyan"), sentence)
+  TextStructure.tag_with_color(sentence.split(' '))
   subj     = input(colored(" ≈ subj : ","cyan"))
   dest     = input(colored(" ≈ dest : ","cyan"))
   link     = input(colored(" ≈ link : ","cyan"))
