@@ -24,6 +24,7 @@ def pos_tag(words,as_tuple=True):
   blobs = [generate(t) for t in words]
   return blobs
 
+
 """
 Extract a keyword from the given list of words
 with regards to the specified intent.

@@ -20,26 +20,32 @@ args = vars(arguments.parse_args(sys.argv[1:]))
 
 def cli_input(dbsrc):
   sentence = input(colored("Sentence : ","cyan"))
-  intent   = input(colored(" ≈ Intent : ","cyan"))
-  keyword  = input(colored(" ≈ Keyword : ","cyan"))
+  who      = input(colored(" ≈ who : ","cyan"))
+  how      = input(colored(" ≈ how : ","cyan"))
+  where    = input(colored(" ≈ where : ","cyan"))
+  when     = input(colored(" ≈ when : ","cyan"))
   # Add to the database
-  add_to_db(dbsrc, sentence, intent, keyword)
+  add_to_db(dbsrc, sentence, who, how, where, when)
   print(colored("[ADDED]","green"))
 
 def file_input(dbsrc,path,verbose):
   with open(path, 'rb') as csvfile:
     io = csv.reader(csvfile, delimeter=',')
     for row in io:
-      sentence = row[0]
-      intent   = row[1]
-      keyword  = row[2]
-      add_to_db(dbsrc, sentence, intent, keyword)
+      sentence,who,how,where,when = row
+      who   = None if len(who)==0 else who
+      how   = None if len(how)==0 else how
+      where = None if len(where)==0 else where
+      when  = None if len(when)==0 else when
+      add_to_db(dbsrc, sentence, who, how, where, when)
 
-def add_to_db(db,sentence,intent,keyword):
+def add_to_db(db,sentence,who,how,where,when):
   db.insert({
-    'raw':    sentence,
-    'intent': intent,
-    'key':    keyword if len(keyword.strip())>0 else None
+    'raw':   sentence,
+    'who':   who,
+    'how':   how,
+    'where': where,
+    'when':  when
   })
 
 if __name__ == '__main__':
