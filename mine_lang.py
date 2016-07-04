@@ -41,7 +41,13 @@ def train_intent_classifiers(mine_src,out_dir,verbose=False):
       yield y
 
   textset, textset2 = tee(generate_raw_text(mine_src))
-  labels            = generate_labels(mine_src)
+  labels            = list(generate_labels(mine_src))
+  uniq_labels       = sorted(set(labels))
+
+  if verbose:
+    print(colored('¬ Training intents:','cyan'))
+    for lbl in uniq_labels:
+      print('   ',lbl)
 
   # Train a new text hasher (vectoriser model)
   model = TextHash.new()
@@ -49,10 +55,8 @@ def train_intent_classifiers(mine_src,out_dir,verbose=False):
   fit(textset)
   TextHash.save(model, out_dir + PATH_HASHER)
 
-  # TAOTODO: Convert `labels` to numeric values
-
   # Train a new intent classifier
-  clf   = Intent.new()
+  clf   = Intent.new(uniq_labels)
   train = Intent.train(clf)
   train(textset2,labels)
   Intent.save(clf, outdir + PATH_CLF)
