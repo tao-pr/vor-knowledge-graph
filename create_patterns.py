@@ -1,8 +1,9 @@
 """
 Mining dataset maker
 ---
-The program helps creating a mining dataset easy and convenient.
-Two modes of inputs are eligible: CSV file / CLI inputs.
+The program reads in a set of input text from a physical file,
+prompt for sentence annotations, and saves the results 
+in the MongoDB collection as annotated patterns of sentences.
 """
 
 import csv
@@ -22,24 +23,11 @@ args = vars(arguments.parse_args(sys.argv[1:]))
 def cli_input(dbsrc,sentence):
   print(colored("Sentence : ","cyan"), sentence)
   TextStructure.tag_with_color(sentence.split(' '))
-  subj     = input(colored(" ≈ subj : ","cyan"))
-  dest     = input(colored(" ≈ dest : ","cyan"))
-  link     = input(colored(" ≈ link : ","cyan"))
-  when     = input(colored(" ≈ when : ","cyan"))
+  part_removal  = input(colored(" ¶ Reduced POS form : ","cyan"))
+
   # Add to the database
   add_to_db(dbsrc, sentence, subj, dest, link, when)
   print(colored("[ADDED]","green"))
-
-# def file_input(dbsrc,path,verbose):
-#   with open(path, 'rb') as csvfile:
-#     io = csv.reader(csvfile, delimeter=',')
-#     for row in io:
-#       sentence,who,how,where,when = row
-#       who   = None if len(who)==0 else who
-#       how   = None if len(how)==0 else how
-#       where = None if len(where)==0 else where
-#       when  = None if len(when)==0 else when
-#       add_to_db(dbsrc, sentence, who, how, where, when)
 
 def add_to_db(db,sentence,subj,dest,link,when):
   db.insert({

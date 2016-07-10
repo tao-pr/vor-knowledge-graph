@@ -26,17 +26,19 @@ class Knowledge:
       self.orient.db_create(dbname,pyorient.DB_TYPE_GRAPH)
       self.orient.db_open(dbname,usrname,psw)
 
-  def add_knowledge(self,node):
+  """
+  Add a new knowledge link from a -> b
+  """
+  def add(self,a,b,link):
+    # TAOTODO: Add new knowledge nodes and link
     pass
 
-  def add_link(self,src,dst,lnk):
+  """
+  Unlink an existing knowledge link from a -> b
+  """
+  def unlink(self,a,b):
     pass
 
-  def remove_knowledge(self,node):
+  def visualise(self):
     pass
 
-  def remove_link(self,src,dst):
-    pass
-
-  def recall_related(self,node,max_level=1):
-    pass
