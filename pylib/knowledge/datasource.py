@@ -13,6 +13,9 @@ class MineDB:
     self.db    = self.mongo[db]
     self.src   = self.db[coll]
 
+  def count(self,conditions={}):
+    return self.src.count(conditions)
+
   def query(self,conditions={},field=None):
     for n in self.src.find(conditions):
       # No field name specified, generate the entire record

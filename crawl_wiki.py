@@ -15,7 +15,7 @@ from pylib.knowledge.datasource import MineDB
 
 arguments = argparse.ArgumentParser()
 arguments.add_argument('--verbose', dest='verbose', action='store_true', help='Turn verbose output on.')
-arguments.add_argument('--depth', type=int, default=128, help='Indicate maximum depth of crawling level')
+arguments.add_argument('--depth', type=int, default=4, help='Indicate maximum depth of crawling level')
 args = vars(arguments.parse_args(sys.argv[1:]))
 
 """
@@ -83,12 +83,12 @@ def crawl(crawl_collection,title,depth,verbose):
     subtasks = []
     for rel in content['rels']:
       print('#',depth-1,colored(' Pending for crawling: ','green'), rel)
-      subtasks.append(asyncio.ensure_future(
-        crawl(crawl_collection, title, depth-1, verbose)
+      subtasks.append(asyncio.async(
+        crawl(crawl_collection, rel, depth-1, verbose)
       ))
 
     loop.run_until_complete(asyncio.wait(subtasks))
-    
+
   loop.close()
 
 
@@ -112,7 +112,7 @@ if __name__ == '__main__':
   tasks = []
   for title in pendings:
     print(colored('Pending for crawling: ','green'), title)
-    tasks.append(asyncio.ensure_future(
+    tasks.append(asyncio.async(
       crawl(crawl_collection, title, depth, args['verbose'])
     ))
 
