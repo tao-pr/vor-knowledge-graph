@@ -70,6 +70,12 @@ Execute a crawling subprocess on the destination wiki page title
 def crawl(crawl_collection,title,depth,verbose):
   loop = asyncio.get_event_loop()
   
+  # Skip if downloaded
+  if is_downloaded(crawl_collection, title):
+    print('Already downloaded, skipped.')
+    loop.close()
+    return
+
   # Crawl the content
   add_pending(crawl_collection, title)
 
@@ -95,6 +101,7 @@ def crawl(crawl_collection,title,depth,verbose):
 if __name__ == '__main__':
 
   depth = args['depth']
+  print(colored('# Max depth to run: ','cyan'), depth)
   loop  = asyncio.get_event_loop()
 
   # Prepare the crawling record handler
