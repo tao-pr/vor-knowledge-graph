@@ -49,6 +49,7 @@ def iter(transformation=lambda x:x):
     signal.alarm(0) # Cancel the timer
     print(colored('--Timeout, no further message--','yellow'))
     raise
+    
   except Exception as e:
     signal.alarm(0) 
     print(colored('--Exception broke the iteration--','yellow'))
