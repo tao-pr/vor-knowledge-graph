@@ -22,6 +22,9 @@ class MineDB:
       else:
         yield n[field]
 
+  def update(self,criteria,updater):
+    self.src.update_one(criteria,updater)
+
   def insert(self,record):
     self.src.insert_one(record)
 
