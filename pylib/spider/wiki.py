@@ -2,6 +2,7 @@
 Wikipedia page crawler and scraper
 """
 
+import re
 from . import crawler
 
 def download_wiki(url,verbose=False):
@@ -34,9 +35,19 @@ from the current wikipedia page
 """
 def wiki_rels(page):
   links = []
-  for li in page.find('ul li'):
-    link = li.find('a')
-    # The item must locate a link to another wiki page
-    links.append(link.attr('href'))
+  for li in page.find('ul li a'):
+
+    href = li.attr('href')
+    
+    # Skip unuseable or unwanted links
+    if href[0]=='#' or \
+    ':' in href or \
+    '//' in href or \
+    'index.php' in href or \
+    'Main_Page' in href or \
+    re.search('\/+\w{2,5}.wiki[m|p]edia.org\/*.*', href):
+      continue
+
+    links.append(href)
 
   return links
