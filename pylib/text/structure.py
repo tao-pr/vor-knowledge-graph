@@ -37,7 +37,7 @@ Extract the knowledge links represented in a sentence
 def extract_knowledge_links(words):
   tags = pos_tag(words)
   # TAOTODO:
-
+  
   pass
 
 
