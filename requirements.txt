@@ -1,0 +1,7 @@
+htmldom == 2.0
+numpy == 1.10.4
+pymongo == 3.2.2
+pyorient == 1.5.4
+termcolor == 1.1.0
+textblob == 0.11.0
+scikit_learn == 0.17.1
