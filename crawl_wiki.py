@@ -85,7 +85,7 @@ def crawl(crawl_collection,title,depth,verbose):
 
   # Skip if downloaded or depth recursion exceeded
   if depth>0 and not is_downloaded(crawl_collection, title):
-    content = Wiki.download_wiki('http://en.wikipedia.org/' + title, verbose)
+    content = Wiki.download_wiki('https://en.wikipedia.org' + title, verbose)
     
     # Store the downloaded content in MongoDB
     save_content(crawl_collection, title, content)
@@ -93,7 +93,6 @@ def crawl(crawl_collection,title,depth,verbose):
     # Now recursively download the related links
     subtasks = []
     for rel in content['rels']:
-      print('#',depth-1,colored(' Pending for crawling: ','green'), rel)
       subtasks.append(asyncio.async(
         crawl(crawl_collection, rel, depth-1, verbose)
       ))
@@ -116,7 +115,7 @@ if __name__ == '__main__':
 
   # If there is no pending list, add a default seed
   if len(pendings)==0:
-    pendings.append('wiki/Jupiter')
+    pendings.append('/wiki/Jupiter')
 
   # For each of the pending list, spawns a new crawler subprocess
   # to download those data
