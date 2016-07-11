@@ -3,6 +3,7 @@ Wikipedia single page crawler and scraper
 """
 
 import re
+from termcolor import colored
 from . import crawler
 
 def download_wiki(url,verbose=False):
@@ -12,6 +13,12 @@ def download_wiki(url,verbose=False):
     ('rels', wiki_rels)
   ]
   content  = crawler.download_page(url,selector,verbose)
+
+  if verbose:
+    print(colored('[Downloaded : {0}]'.format(url),'cyan'))
+    print(colored('  title : ','cyan'), content['title'])
+    print(colored('  rels  : ','cyan'), len(content['rels']))
+
   return content
 
 def wiki_title(page):
