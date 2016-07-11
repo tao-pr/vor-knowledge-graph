@@ -9,6 +9,7 @@ the specified RabbitMQ.
 import sys
 import asyncio
 import argparse
+from functools import reduce
 from termcolor import colored
 from pylib.spider import wiki as Wiki
 from pylib.knowledge.datasource import MineDB
@@ -54,7 +55,16 @@ def mark_as_downloaded(crawl_collection,title):
 
 
 def list_crawl_pending(crawl_collection):
-  return [t['title'] for t in crawl_collection.query({'downloaded': False})]
+  # Major pending list
+  majors = [t['title'] for t in crawl_collection.query({'downloaded': False})]
+
+  # List rels of downloaded major pages
+  # which are not yet downloaded
+  ents = [t['content'] for t in crawl_collection.query({'downloaded': True})] 
+  rels = reduce(lambda x, y: x+y['rels'], ents, [])
+  rels = [r for r in rels if not is_downloaded(crawl_collection,r)]
+
+  return majors + rels
 
 """
 Add a fresh new wiki page as yet to be downloaded
@@ -69,17 +79,12 @@ Execute a crawling subprocess on the destination wiki page title
 @asyncio.coroutine
 def crawl(crawl_collection,title,depth,verbose):
   loop = asyncio.get_event_loop()
-  
-  # Skip if downloaded
-  if is_downloaded(crawl_collection, title):
-    print('Already downloaded, skipped.')
-    loop.close()
-    return
 
   # Crawl the content
   add_pending(crawl_collection, title)
 
-  if depth>0:
+  # Skip if downloaded or depth recursion exceeded
+  if depth>0 and not is_downloaded(crawl_collection, title):
     content = Wiki.download_wiki('http://en.wikipedia.org/' + title, verbose)
     
     # Store the downloaded content in MongoDB
@@ -95,7 +100,6 @@ def crawl(crawl_collection,title,depth,verbose):
 
     loop.run_until_complete(asyncio.wait(subtasks))
 
-  loop.close()
 
 
 if __name__ == '__main__':
