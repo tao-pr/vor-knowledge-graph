@@ -1,5 +1,5 @@
 """
-Wikipedia page crawler and scraper
+Wikipedia single page crawler and scraper
 """
 
 import re
