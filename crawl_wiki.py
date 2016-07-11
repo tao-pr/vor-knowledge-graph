@@ -10,6 +10,7 @@ import sys
 import argparse
 from termcolor import colored
 from pylib.spider import wiki as Wiki
+from pylib.jobmq.rabbit import JobMQ
 from pylib.text import structure as TextStructure
 from pylib.knowledge.datasource import MineDB
 
