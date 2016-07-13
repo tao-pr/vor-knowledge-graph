@@ -54,17 +54,30 @@ def mark_as_downloaded(crawl_collection,title):
     crawl_collection.insert({'title': title, 'downloaded': True, 'content':None})
 
 
-def list_crawl_pending(crawl_collection):
+def list_crawl_pending(crawl_collection,max_samples):
+
+  n = 0
+
   # Major pending list
   majors = [t['title'] for t in crawl_collection.query({'downloaded': False})]
 
+  for m in majors:
+    n += 1
+    yield m
+
   # List rels of downloaded major pages
   # which are not yet downloaded
-  ents = [t['content'] for t in crawl_collection.query({'downloaded': True})] 
-  rels = reduce(lambda x, y: x+y['rels'], ents, [])
-  rels = [r for r in rels if not is_downloaded(crawl_collection,r)]
-
-  return majors + rels
+  for t in crawl_collection.query({'downloaded': True}):
+    content = t['content']
+    rels    = content['rels']
+    for r in rels:
+      # Skip the downloaded links
+      if not is_downloaded(crawl_collection,r):
+        # Short circuit if maximum number of samples to generate exceeded
+        if n>max_samples:
+          return
+        n += 1
+        yield r
 
 """
 Add a fresh new wiki page as yet to be downloaded
@@ -111,10 +124,10 @@ if __name__ == '__main__':
   crawl_collection = init_crawl_collection()
 
   # Load all list of pending wiki pages
-  pendings = list_crawl_pending(crawl_collection)
+  pendings = list_crawl_pending(crawl_collection,max_samples=32)
 
   # If there is no pending list, add a default seed
-  if len(pendings)==0:
+  if pendings is None:
     pendings.append('/wiki/Jupiter')
 
   # For each of the pending list, spawns a new crawler subprocess
