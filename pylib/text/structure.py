@@ -8,8 +8,10 @@ import numpy as np
 import os.path
 import pickle
 import json
+from collections import deque
 from termcolor import colored
 from textblob import TextBlob
+
 
 """
 Extract part of speech structure of the given text
@@ -29,15 +31,22 @@ def tag_with_color(words):
   print(tokens)
 
 
+def read_pos_patterns(path):
+  with open(path,'r') as f:
+    return [p.replace('\n','') for p in f.readlines()]
+
+def save_pos_patterns(path,patterns):
+  with open(path,'w') as f:
+    for p in patterns:
+      f.write(p+"\n")
+
 """
 Extract the knowledge links represented in a sentence
-@param {list} of tokenised words
-@return {list} of knowledge link
+@param {list} of tuples of POS tagged
+@return {tuple} of (A,rel,B) or None
 """
-def extract_knowledge_links(words):
-  tags = pos_tag(words)
+def extract_knowledge_links(pos):
   # TAOTODO:
-  
   pass
 
 
