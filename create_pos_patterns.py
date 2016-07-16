@@ -69,6 +69,9 @@ def cli_annotate(crawl_collection,ann_collection):
     pos    = TextStructure.pos_tag(tokens)
     TextStructure.tag_with_color(tokens)
 
+    # Test POS pattern parsing and show the result
+    print(patterns.capture(pos))
+
     # Extract the pure list of POS
     pos_ = [tag for t,tag in pos]
 

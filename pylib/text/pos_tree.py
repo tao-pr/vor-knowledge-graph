@@ -48,8 +48,8 @@ class PatternCapture:
     tree    = []
 
     # Iterate through the sentence POS tags (greedy capture)
-    bichain, bichain_tag = [],[]
-    trichain, trichain_tag = [],[]
+    bichain, bichain_tag = deque(),deque()
+    trichain, trichain_tag = deque(),deque()
     
     while len(pos_deq)>0:
       t,tag = pos_deq.popleft()
