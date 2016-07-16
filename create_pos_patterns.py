@@ -25,13 +25,6 @@ def init_crawl_collection():
   return crawl_collection
 
 """
-Initialise an annotation collection
-"""
-def init_annotate_collection():
-  ann_collection = MineDB('localhost','vor','annotate')
-  return ann_collection
-
-"""
 Iterate through the unannotated recordset in the crawled collection,
 and generate each of the sentence from the topic.
 """
@@ -56,7 +49,7 @@ def raw_records(crawl_collection,start):
 """
 Prompt the user to annotate the given text sentence
 """
-def cli_annotate(crawl_collection,ann_collection):
+def cli_annotate(crawl_collection):
   # Load existing pos patterns
   patterns = PatternCapture()
   patterns.load('./pos-patterns')
@@ -98,10 +91,9 @@ if __name__ == '__main__':
   # Prepare a connection to the crawled dataset
   # and the annotation collection respectively
   crawl_collection = init_crawl_collection()
-  ann_collection   = init_annotate_collection()
 
   # Make an annotator function
-  annotate = cli_annotate(crawl_collection, ann_collection)
+  annotate = cli_annotate(crawl_collection)
 
   # Iterate through each unannotated sentence
   [annotate(_id,t) for (_id,t) in raw_records(crawl_collection,args['start'])]
