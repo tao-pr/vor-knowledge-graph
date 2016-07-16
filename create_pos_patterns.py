@@ -7,6 +7,7 @@ import sys
 import argparse
 from termcolor import colored
 from pylib.text import structure as TextStructure
+from pylib.text.pos_tree import PatternCapture
 from pylib.knowledge.datasource import MineDB
 from nltk.tokenize.punkt import PunktSentenceTokenizer
 
@@ -33,12 +34,12 @@ def init_annotate_collection():
 Iterate through the unannotated recordset in the crawled collection,
 and generate each of the sentence from the topic.
 """
-def raw_records(crawl_collection):
+def raw_records(crawl_collection,start):
 
   # Prepare a naive sentence tokeniser utility
   pst = PunktSentenceTokenizer()
 
-  for rec in crawl_collection.query({'downloaded': True}):
+  for rec in crawl_collection.query({'downloaded': True},field=None,skip=start):
     _id     = rec['_id']
     if rec['content'] is None:
       continue
@@ -56,10 +57,11 @@ Prompt the user to annotate the given text sentence
 """
 def cli_annotate(crawl_collection,ann_collection):
   # Load existing pos patterns
-  patterns = TextStructure.read_pos_patterns('./pos-patterns')
+  patterns = PatternCapture()
+  patterns.load('./pos-patterns')
 
   print(colored('Existing patterns :','green'))
-  print(' , '.join(patterns))
+  print(patterns.join(' , '))
 
   def annotate(_id,text):
     # Analyse the POS structure of the sentence
@@ -82,7 +84,7 @@ def cli_annotate(crawl_collection,ann_collection):
           patterns.append(n)
 
       # Save right away
-      TextStructure.save_pos_patterns('./pos-patterns',patterns)
+      patterns.save('./pos-patterns')
       print("Patterns saved!")
 
   return annotate
@@ -98,4 +100,4 @@ if __name__ == '__main__':
   annotate = cli_annotate(crawl_collection, ann_collection)
 
   # Iterate through each unannotated sentence
-  [annotate(_id,t) for (_id,t) in raw_records(crawl_collection)]
+  [annotate(_id,t) for (_id,t) in raw_records(crawl_collection,args['start'])]

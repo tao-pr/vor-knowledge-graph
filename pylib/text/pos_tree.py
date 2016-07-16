@@ -27,6 +27,12 @@ class PatternCapture:
       for p in self.__patterns:
         f.write(p+"\n")
 
+  def append(self,p):
+    self.__patterns.append(p)
+
+  def join(self,delim):
+    return delim.join(self.__patterns)
+
   """
   Capture the keyword tree of the given sentence
   Sample output:
