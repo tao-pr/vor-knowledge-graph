@@ -31,6 +31,7 @@ def tag_with_color(words):
   print(tokens)
 
 """
+DEPRECATED:
 Read in the list of POS structure from a text file
 """
 def read_pos_patterns(path):
@@ -44,6 +45,9 @@ def save_pos_patterns(path,patterns):
   with open(path,'w') as f:
     for p in patterns:
       f.write(p+"\n")
+
+def create_pos_pattern_tree(patterns):
+  pass
 
 
 
