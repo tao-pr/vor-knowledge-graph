@@ -1,5 +1,6 @@
 """
 RabbitMQ job pipe
+@author TaoPR (github.com/starcolon)
 """
 
 import pika

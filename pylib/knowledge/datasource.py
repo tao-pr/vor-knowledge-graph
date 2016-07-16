@@ -1,6 +1,6 @@
 """
 Mining data source access
-@author Tao PR (github.com/starcolon)
+@author TaoPR (github.com/starcolon)
 """
 from pymongo import MongoClient
 from pymongo import InsertOne

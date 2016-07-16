@@ -1,5 +1,6 @@
 """
 POS pattern tree
+@author TaoPR (github.com/starcolon)
 ---
 Pattern tree is built from a list of POS patterns.
 It is employed as a sentence parser which captures 

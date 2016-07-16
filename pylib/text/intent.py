@@ -1,6 +1,6 @@
 """
 Sentence intent classifier
-@author Tao PR (github.com/starcolon)
+@author TaoPR (github.com/starcolon)
 """
 import numpy as np
 import os.path

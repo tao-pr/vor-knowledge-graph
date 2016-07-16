@@ -1,6 +1,6 @@
 """
 Knowledge graph
-@author Tao PR (github.com/starcolon)
+@author TaoPR (github.com/starcolon)
 """
 
 import pyorient

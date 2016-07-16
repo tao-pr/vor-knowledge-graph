@@ -1,5 +1,6 @@
 """
-Wikipedia crawler service
+Wikipedia crawler service (downloader)
+@author TaoPR (github.com/starcolon)
 ---
 The service runs in background and keeps crawling raw knowledge data.
 The downloaded data from Wikipedia is senquentially pushed to 

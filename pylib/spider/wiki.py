@@ -1,5 +1,6 @@
 """
 Wikipedia single page crawler and scraper
+@author TaoPR (github.com/starcolon)
 """
 
 import re
