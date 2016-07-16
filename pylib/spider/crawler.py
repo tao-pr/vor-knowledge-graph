@@ -1,5 +1,6 @@
 """
 Website crawler with specific reader
+@author TaoPR (github.com/starcolon)
 """
 
 import urllib.request
@@ -9,20 +10,22 @@ from termcolor import colored
 """
 Download and scrape the content from the given URL
 @param {string} URL locator of the website to scrape
-@param {string} DOM selector which locates the content element
-@param {function} defines how to format the DOM element into a data package
+@param {list} of tuples: (field name, selector function)
+@param {bool} turn on/off verbose output
 @return {object} scraped content
 """
-def download_page(url,selector,formatter):
+def download_page(url,selectors,verbose=False):
   # Download the entire page HTML, processed as a DOM tree
   print(colored('Fetching: ','green') + colored(url,'cyan'))
   page = htmldom.HtmlDom(url).createDom()
 
-  # Apply the specified selector the fetch the content
-  # out of the downloaded DOM tree
-  if page.find(selector):
-    dom_content = page.find(selector)
-    pass
-  else:
-    print(colored('Unable to locate the content element','yellow'))
-    return None
+  # Apply selector functions in order to create 
+  # a content package
+  content = {}
+  for tup in selectors:
+    field, selector = tup
+    if verbose:
+      print(colored('   Mapping : ','green'), field)
+    content[field]  = selector(page)
+
+  return content
