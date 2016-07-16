@@ -1,5 +1,6 @@
 """
 Website crawler with specific reader
+@author TaoPR (github.com/starcolon)
 """
 
 import urllib.request

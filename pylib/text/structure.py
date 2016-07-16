@@ -1,7 +1,6 @@
 """
 Sentence pattern semantic extraction module
-@author Tao PR (github.com/starcolon)
-CopyRight 2016-present
+@author TaoPR (github.com/starcolon)
 """
 
 import numpy as np

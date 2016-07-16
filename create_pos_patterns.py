@@ -1,6 +1,7 @@
 """
 Make pos patterns which represent knowledge node
 from the downloaded wikipedia topics.
+@author TaoPR (github.com/starcolon)
 """
 
 import sys
