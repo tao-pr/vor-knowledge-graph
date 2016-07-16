@@ -11,6 +11,16 @@ ability to traverse the relations between knowledge topics.
 
 ---
 
+## Infrastructure
+
+To build and run the knowledge graph engine with vör, 
+you need the following software for the infrastructure.
+
+- [x] OrientDB
+- [x] MongoDB
+
+---
+
 ## Setup
 
 Install python 3.x requirements by:
@@ -23,6 +33,34 @@ In an opposite direction, collect the requirements with:
 
 ```bash
   $ pipreqs .
+```
+
+---
+
+## Download (crawl) wikipedia pages
+
+Execute:
+
+```bash
+  $ python3 crawl_wiki.py --verbose 
+```
+
+The script continuously and endlessly crawls the knowledge topic 
+from Wikipedia starting from `Jupiter` page. You may change 
+the initial topic within the script to what best suits you. 
+To stop the process, just terminate is fine. It won't leave 
+anything at dirty state.
+
+---
+
+## Build the knowledge graph
+
+Once you have enough knowledge downloaded from Wikipedia, 
+you may want to build your own knowledge graph with the following 
+command.
+
+```bash
+  $ python3 create_knowledge.py --verbose
 ```
 
 --- 
