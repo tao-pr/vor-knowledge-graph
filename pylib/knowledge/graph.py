@@ -20,16 +20,21 @@ class Knowledge:
   def __init__(self,host,dbname,usrname,psw):
     self.orient    = pyorient.OrientDB(host,2424)
     self.__session = self.orient.connect(usrname,psw)
-    if self.orient.db_exists(dbname,pyorient.DB_TYPE_GRAPH):
-      self.orient.db_open(dbname.usrname,psw)
+    if self.orient.db_exists(dbname):
+      print(colored('Connecting OrientDB: {0}'.format(dbname),'green'))
+      self.orient.db_open(dbname,usrname,psw)
     else:
-      self.orient.db_create(dbname,pyorient.DB_TYPE_GRAPH)
+      print(colored('Creating OrientDB: {0}'.format(dbname),'magenta'))
+      self.orient.db_create(
+        dbname,
+        pyorient.DB_TYPE_GRAPH
+      )
       self.orient.db_open(dbname,usrname,psw)
 
   """
   Add a new knowledge link from a -> b
   """
-  def add(self,a,b,link):
+  def add(self,a,b,rel):
     # TAOTODO: Add new knowledge nodes and link
     pass
 
