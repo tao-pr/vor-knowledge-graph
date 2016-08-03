@@ -34,6 +34,7 @@ class Knowledge:
     # Make sure {Edge} and {Vertex} classes are recognised by the DB
     self.__prepare_classes()
 
+
   """
   Create initial classes (Edge + Vertex)
   """
@@ -49,19 +50,38 @@ class Knowledge:
 
 
   """
-  Add a new knowledge link from a -> b
+  Add a set of new knowledge links
   """
-  def add(self,a,b,rel):
-    # TAOTODO: Add new knowledge nodes and link
+  def add(self,topic,words):
 
-    print(colored('Adding : ','green'), a, ' ===> ', b)
+    print(colored('Adding : ','green'), topic, ' ===> ', words)
 
-    # Make sure node [a] exists
+    # Add a new topic if not exist
+    queryTopic = "select from TOPIC where title='{0}'".format(topic)
+    if len(self.orient.command(queryTopic))==0:
+      print(colored('New topic added: ','green'), topic)
+      self.orient.command("create vertex TOPIC set title='{0}'"
+        .format(topic))
 
-    # Make sure node [b] exists
+    # Add new words which don't exist
+    for w in words:
+      queryWord = "select from KEYWORD where w='{0}'".format(w)
+      if len(self.orient.command(queryWord))==0:
+        print(colored('New word added: ','green'), w)
+        self.orient.command("create vertex KEYWORD set w='{0}'".format(w))
 
-    # Make sure link [a] <-> [b] exists
-    pass
+      # Add a link from {topic} => {word}
+      self.orient.command("create edge REL from ({0}) to ({1})"
+        .format(queryTopic,queryWord))
+
+      # Add a link to sibling words (words which co-exist in same sentence)
+      siblings = (u for u in words if not w == u)
+      for s in siblings:
+        querySib = "select from KEYWORD where w='{0}'".format(s)
+        self.orient.command("create edge REL from ({0}) to ({1})".
+          format(queryWord,querySib))
+
+
 
   """
   Unlink an existing knowledge link from a -> b
