@@ -31,11 +31,36 @@ class Knowledge:
       )
       self.orient.db_open(dbname,usrname,psw)
 
+    # Make sure {Edge} and {Vertex} classes are recognised by the DB
+    self.__prepare_classes()
+
+  """
+  Create initial classes (Edge + Vertex)
+  """
+  def __prepare_classes(self):
+    try:
+      self.orient.command('create class TOPIC extends V')
+      self.orient.command('create class KEYWORD extends V')
+      self.orient.command('create class REL extends E')
+    except PyOrientSchemaException as e:
+      print(colored('[ERROR] Preparing graph schema','red'))
+      print(colored(e,'red'))
+    
+
+
   """
   Add a new knowledge link from a -> b
   """
   def add(self,a,b,rel):
     # TAOTODO: Add new knowledge nodes and link
+
+    print(colored('Adding : ','green'), a, ' ===> ', b)
+
+    # Make sure node [a] exists
+
+    # Make sure node [b] exists
+
+    # Make sure link [a] <-> [b] exists
     pass
 
   """
