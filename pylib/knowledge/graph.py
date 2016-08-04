@@ -4,6 +4,7 @@ Knowledge graph
 """
 
 import pyorient
+from pyorient.exceptions import PyOrientSchemaException
 import numpy as np
 import os.path
 import json
