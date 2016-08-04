@@ -85,10 +85,14 @@ if __name__ == '__main__':
     pos      = TextStructure.pos_tag(sentence)
     kb_nodes = patterns.capture(pos)
 
+    # TAODEBUG:
+    print(pos)
+    print(kb_nodes)
+
     # Create a set of knowledge links
-    for node in kb_nodes:
-      kb.add(topic,node,'related')
-      for node_ in filter(lambda n: n != node,kb_nodes):
-        kb.add(node,node_,'friend')
+    # for node in kb_nodes:
+    #   kb.add(topic,node,'related')
+    #   for node_ in filter(lambda n: n != node,kb_nodes):
+    #     kb.add(node,node_,'friend')
   
 
