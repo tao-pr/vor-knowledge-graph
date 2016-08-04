@@ -55,13 +55,20 @@ anything at dirty state.
 
 ## Build the knowledge graph
 
-Once you have enough knowledge downloaded from Wikipedia, 
-you may want to build your own knowledge graph with the following 
-command.
+Execute:
 
 ```bash
-  $ python3 create_knowledge.py --verbose
+  $ python3 build_knowledge.py --verbose --root {PASSWORD}
 ```
+
+Where `{PASSWORD}` represents your `root` password of **OrientDB**.
+
+What the script does is simply imports the entire raw hefty text 
+knowledge from **MongoDB** to **OrientDB** as a big graph. 
+The output graph in OrientDB is built from the following components:
+
+[1] **Vertex** : Represents topic / keyword
+[2] **Edge** : Represents relation between topic-keyword or keyword-keyword.
 
 --- 
 
