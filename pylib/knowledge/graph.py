@@ -76,6 +76,8 @@ class Knowledge:
         self.orient.command("create vertex KEYWORD set w='{0}'".format(w))
 
       # Add a link from {topic} => {word}
+      if verbose: 
+        print(colored('New link [{0}] HAS => [{1}]'.format(topic,w),'green'))
       self.orient.command("create edge HAS from ({0}) to ({1})"
         .format(queryTopic,queryWord))
 
