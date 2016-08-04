@@ -19,10 +19,12 @@ Extract part of speech structure of the given text
 def pos_tag(words):
   def generate(t):
     tags = TextBlob(t).tags
+    if len(tags)==0:
+      return None
     return tags[0]
 
   blobs = [generate(t) for t in words]
-  return blobs
+  return [b for b in blobs if b is not None]
 
 def tag_with_color(words):
   pos    = pos_tag(words)
