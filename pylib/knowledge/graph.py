@@ -88,14 +88,12 @@ class Knowledge:
         self.orient.command("create edge REL from ({0}) to ({1})".
           format(queryWord,querySib))
 
-
-
   """
-  Unlink an existing knowledge link from a -> b
+  Enumerate all keywords in a topic
+  @param {str} topic title
   """
-  def unlink(self,a,b):
-    pass
-
-  def visualise(self):
-    pass
+  def keywords_in_topic(self,topic):
+    query = "select expand(out()) from topic where title = '{0}'".format(topic)
+    keywords = iter([rec.oRecordData for rec in self.orient.command(query)])
+    return keywords
 
