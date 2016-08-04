@@ -2,6 +2,10 @@
 
 ---
 
+![Graph](graphic/graph.png)
+
+---
+
 ## Synopsis
 
 The project is initiated as a dirty hack for crawling and modeling 
@@ -67,8 +71,8 @@ What the script does is simply imports the entire raw hefty text
 knowledge from **MongoDB** to **OrientDB** as a big graph. 
 The output graph in OrientDB is built from the following components:
 
-[1] **Vertex** : Represents topic / keyword
-[2] **Edge** : Represents relation between topic-keyword or keyword-keyword.
+[1] **Vertices** : Represent topic / keyword
+[2] **Edges** : Represent relations between topic-keyword or keyword-keyword.
 
 --- 
 
