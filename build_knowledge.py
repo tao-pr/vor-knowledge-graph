@@ -37,9 +37,11 @@ def iter_topic(crawl_collection,start):
   n = 0
   
   for wiki in crawl_collection.query({'downloaded': True},field=None,skip=start):
-    # Explode topic content into sentences
-    if wiki['content'] is None:
+    
+    # Skip empty content or the added one
+    if wiki['content'] is None or 'added_to_graph' in wiki:
       continue
+
     m = 0
     content = wiki['content']
     
@@ -54,8 +56,10 @@ def iter_topic(crawl_collection,start):
         m += 1
         yield (content['title'],s.split(' '))
 
-    # TAOTODO: After all sentences are processed,
+    # After all sentences are processed,
     # mark the current wiki record as 'processed'
+    crit = {'_id': wiki['_id']}
+    crawl_collection.update(crit, {'$set':{'added_to_graph':True}})
 
     n += 1
     if args['verbose']:
