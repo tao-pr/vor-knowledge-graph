@@ -88,9 +88,6 @@ if __name__ == '__main__':
       print(kb_nodes)
 
     # Create a set of knowledge links
-    # for node in kb_nodes:
-    #   kb.add(topic,node,'related')
-    #   for node_ in filter(lambda n: n != node,kb_nodes):
-    #     kb.add(node,node_,'friend')
+    kb.add(topic,kb_nodes,args['verbose'])
   
 

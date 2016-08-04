@@ -44,6 +44,7 @@ class Knowledge:
       self.orient.command('create class TOPIC extends V')
       self.orient.command('create class KEYWORD extends V')
       self.orient.command('create class REL extends E')
+      self.orient.command('create class HAS extends E')
     except PyOrientSchemaException as e:
       print(colored('[ERROR] Preparing graph schema','red'))
       print(colored(e,'red'))
@@ -52,15 +53,18 @@ class Knowledge:
 
   """
   Add a set of new knowledge links
+  @param {str} topic
+  @param {list} of {str} words
+  @param {bool} verbose
   """
-  def add(self,topic,words):
+  def add(self,topic,words,verbose):
 
-    print(colored('Adding : ','green'), topic, ' ===> ', words)
+    if verbose: print(colored('Adding : ','green'), topic, ' ===> ', words)
 
     # Add a new topic if not exist
     queryTopic = "select from TOPIC where title='{0}'".format(topic)
     if len(self.orient.command(queryTopic))==0:
-      print(colored('New topic added: ','green'), topic)
+      if verbose: print(colored('New topic added: ','green'), topic)
       self.orient.command("create vertex TOPIC set title='{0}'"
         .format(topic))
 
@@ -68,13 +72,15 @@ class Knowledge:
     for w in words:
       queryWord = "select from KEYWORD where w='{0}'".format(w)
       if len(self.orient.command(queryWord))==0:
-        print(colored('New word added: ','green'), w)
+        if verbose: print(colored('New word added: ','green'), w)
         self.orient.command("create vertex KEYWORD set w='{0}'".format(w))
 
       # Add a link from {topic} => {word}
-      self.orient.command("create edge REL from ({0}) to ({1})"
+      self.orient.command("create edge HAS from ({0}) to ({1})"
         .format(queryTopic,queryWord))
 
+    # Add links between words
+    for w in words:
       # Add a link to sibling words (words which co-exist in same sentence)
       siblings = (u for u in words if not w == u)
       for s in siblings:
