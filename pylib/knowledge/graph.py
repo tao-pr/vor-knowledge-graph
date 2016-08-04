@@ -89,11 +89,12 @@ class Knowledge:
           format(queryWord,querySib))
 
   """
-  Enumerate all keywords in a topic
+  {Generator} Enumerate all keywords in a topic
   @param {str} topic title
   """
   def keywords_in_topic(self,topic):
-    query = "select expand(out()) from topic where title = '{0}'".format(topic)
-    keywords = iter([rec.oRecordData for rec in self.orient.command(query)])
-    return keywords
+    subquery = "select expand(out()) from topic where title = '{0}'".format(topic)
+    query = "select w from ({0})".format(subquery)
+    for k in self.orient.query(query):
+      yield k
 
