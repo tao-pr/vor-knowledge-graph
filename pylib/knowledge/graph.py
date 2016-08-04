@@ -46,8 +46,8 @@ class Knowledge:
       self.orient.command('create class REL extends E')
       self.orient.command('create class HAS extends E')
     except PyOrientSchemaException as e:
-      print(colored('[ERROR] Preparing graph schema','red'))
-      print(colored(e,'red'))
+      print(colored('[WARNING] Preparing graph schema','yellow'))
+      print(colored(e,'yellow'))
     
 
 
