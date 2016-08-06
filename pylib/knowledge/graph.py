@@ -61,6 +61,11 @@ class Knowledge:
 
     if verbose: print(colored('Adding : ','green'), topic, ' ===> ', words)
 
+    # Escape some unwanted characters from topic and words
+    unwanted = "'"
+    topic = topic.replace(unwanted," ")
+    words = map(lambda w: w.replace(unwanted, " "), words)
+
     # Add a new topic if not exist
     queryTopic = "select from TOPIC where title='{0}'".format(topic)
     if len(self.orient.command(queryTopic))==0:
