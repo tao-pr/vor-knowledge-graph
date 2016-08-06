@@ -104,7 +104,5 @@ if __name__ == '__main__':
 
     # Create a set of knowledge links
     kb.add(topic,kb_nodes,args['verbose'])
-
-    n += 1
   
 
