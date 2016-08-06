@@ -66,10 +66,11 @@ and downloading the related knowledge through link traveral.
 Execute:
 
 ```bash
-  $ python3 build_knowledge.py --verbose --root {PASSWORD}
+  $ python3 build_knowledge.py --verbose --root {PASSWORD} --limit {NUM}
 ```
 
 Where `{PASSWORD}` represents your `root` password of **OrientDB**.
+And `{NUM}` represents the number of wikipedia topics to process.
 
 What the script does is simply imports the entire raw hefty text 
 knowledge from **MongoDB** to **OrientDB** as a big graph. 
