@@ -14,11 +14,13 @@ from pylib.knowledge.graph import Knowledge
 from pylib.text import structure as TextStructure
 from pylib.text.pos_tree import PatternCapture
 from pylib.knowledge.datasource import MineDB
+from pybloom_live import ScalableBloomFilter
 
 arguments = argparse.ArgumentParser()
 arguments.add_argument('--verbose', dest='verbose', action='store_true', help='Turn verbose output on.')
 arguments.add_argument('--start', type=int, default=0, help='Starting index of the crawling record to annotate.')
 arguments.add_argument('--root', type=str, default=None, help='Supply the OrientDB password for root account.')
+arguments.add_argument('--limit', type=int, default=100, help='Maximum number of topics we want to import')
 args = vars(arguments.parse_args(sys.argv[1:]))
 
 """
@@ -83,15 +85,26 @@ if __name__ == '__main__':
   crawl_collection = init_crawl_collection()
 
   # Iterate through the crawling database
+  bf = ScalableBloomFilter(mode=ScalableBloomFilter.SMALL_SET_GROWTH)
   for topic,sentence in iter_topic(crawl_collection,args['start']):
+    
+    # Check if the number of processed topic exceed the limit?
+    if topic not in bf:
+      bf.add(topic)
+      if len(bf) > args['limit']:
+        print(colored('[Topics limit reached] ... BYE','cyan'))
+        sys.exit(0)
+
     # Break the sentence into knowledge nodes
     pos      = TextStructure.pos_tag(sentence)
-    kb_nodes = patterns.capture(pos)
+    kb_nodes = patterns.capture(pos)  
 
     if args['verbose']:
       print(kb_nodes)
 
     # Create a set of knowledge links
     kb.add(topic,kb_nodes,args['verbose'])
+
+    n += 1
   
 
