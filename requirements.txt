@@ -2,6 +2,7 @@ htmldom == 2.0
 nltk == 3.1
 numpy == 1.10.4
 pika == 0.10.0
+pybloom_live == 2.1.0
 pymongo == 3.2.2
 pyorient == 1.5.4
 termcolor == 1.1.0
