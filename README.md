@@ -55,6 +55,10 @@ the initial topic within the script to what best suits you.
 To stop the process, just terminate is fine. It won't leave 
 anything at dirty state.
 
+>**[NOTE]** The script keeps continuously crawling 
+and downloading the related knowledge through link traveral. 
+**The script never ends unless you terminate it.**
+
 ---
 
 ## Build the knowledge graph
@@ -73,6 +77,10 @@ The output graph in OrientDB is built from the following components:
 
 - [1] **Vertices** : Represent topic / keyword
 - [2] **Edges** : Represent relations between topic-keyword or keyword-keyword.
+
+> **[NOTE]** The script processes the entire data in the collection 
+all the way to the end. This will definitely take large amount of 
+time if you have large data in your collection.
 
 --- 
 
