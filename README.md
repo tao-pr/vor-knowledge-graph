@@ -39,6 +39,12 @@ In an opposite direction, collect the requirements with:
   $ pipreqs .
 ```
 
+Install Node.js modules required by the graph visualiser. 
+You may ignore these steps if you are not interested in 
+visualisation.
+
+  - [1] [Install Sigma.js](https://github.com/jacomyal/sigma.js/wiki#getting-started)
+  - [2] Install OrientDB JS with `npm install orientdb-js`
 ---
 
 ## Download (crawl) wikipedia pages
