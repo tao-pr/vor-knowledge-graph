@@ -4,7 +4,7 @@
  */
 
 var Knw = {}
-var orient = require('orientdb-js');
+var OrientDB = require('orientjs');
 var Promise = require('bluebird');
 
 /**
@@ -12,22 +12,38 @@ var Promise = require('bluebird');
  * @param {string} database name
  * @param {string} username
  * @param {string} password
+ * @return {Promise}
  */
 Knw.connect = function(db,usrname,psw){
   // Do nothing if connected
-  if (Knw.__db)
-    return;
+  if (Knw.graph)
+    return Promise.resolve(Knw.graph);
 
-  Knw.__db = orient.connect({
-    'database': db,
-    'user':     usrname,
-    'psw':      psw
-  })
+  Knw.server = OrientDB({
+    host:       'localhost',
+    port:       2424,
+    username:   usrname,
+    password:   psw
+  });
 
-  return !!Knw.__db;
+  return Knw.server.use(db)
+    .then((_db) => {
+      console.log('[OrientDB] connected'.green);
+      Knw.graph = _db;
+      return Knw.graph; 
+    })
 }
 
-Knw.topics = function(condition){}
+/**
+ * Release the database resources
+ */
+Knw.tearDown = function(){
+  Knw.server.close();
+}
+
+Knw.topics = function(condition){
+  
+}
 
 Knw.keywords = function(condition){}
 

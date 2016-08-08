@@ -32,6 +32,6 @@
   "homepage": "https://github.com/starcolon/vor-knowledge-graph#readme",
   "dependencies": {
     "bluebird": "^3.4.1",
-    "orientdb-js": "^0.1.3"
+    "orientjs": "^2.2.2"
   }
 }
