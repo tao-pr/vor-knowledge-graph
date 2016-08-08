@@ -43,8 +43,14 @@ Install Node.js modules required by the graph visualiser.
 You may ignore these steps if you are not interested in 
 visualisation.
 
-  - [1] [Install Sigma.js](https://github.com/jacomyal/sigma.js/wiki#getting-started)
-  - [2] Install OrientDB JS with `npm install orientdb-js`
+```bash
+  $ npm install orientdb-js
+  $ npm install bluebird
+```
+
+Other than above packages, you also need to [install Sigma.js 
+for visualisation](https://github.com/jacomyal/sigma.js/wiki#getting-started).
+
 ---
 
 ## Download (crawl) wikipedia pages
