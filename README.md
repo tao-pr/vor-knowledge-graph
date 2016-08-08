@@ -44,11 +44,9 @@ You may ignore these steps if you are not interested in
 visualisation.
 
 ```bash
-  $ npm install orientdb-js
-  $ npm install bluebird
+  $ npm install
 ```
-
-Other than above packages, you also need to [install Sigma.js 
+Other than registered NPM packages, you also need to [install Sigma.js 
 for visualisation](https://github.com/jacomyal/sigma.js/wiki#getting-started).
 
 ---
