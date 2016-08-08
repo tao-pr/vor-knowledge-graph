@@ -30,8 +30,10 @@ KB.connect(db,usrname,password)
   .then((g) => {
     console.log('[Connected] to OrientDB knowledge graph.'.green);
 
-    // TAOTODO: Implement the visualiser
-    KB.topics();
+    var topics   = KB.topics();
+    var keywords = KB.keywords();
+
+    // topics.then((items) => items.map((i) => console.log(i)));
   })
 
 
