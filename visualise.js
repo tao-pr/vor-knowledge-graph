@@ -21,11 +21,18 @@ var KB     = require('./jslib/knowledge.js');
 const db = 'vor';
 const usrname = 'root';
 var password = args[0];
-if (!KB.connect(db,usrname,password)){
-  console.error('[ERROR] connection to OrientDB failed.'.red);
-  process.exit(1);
-} 
-else console.log('[Connected] to OrientDB knowledge graph.'.green);
+KB.connect(db,usrname,password)
+  .catch((e) => {
+    console.error('[ERROR] connection to OrientDB failed.'.red);
+    console.error(e);
+    process.exit(1);
+  }) 
+  .then((g) => {
+    console.log('[Connected] to OrientDB knowledge graph.'.green);
+
+    // TAOTODO: Implement the visualiser
+    KB.topics();
+  })
 
 
 
