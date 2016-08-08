@@ -23,6 +23,8 @@ Knw.connect = function(db,usrname,psw){
     'user':     usrname,
     'psw':      psw
   })
+
+  return !!Knw.__db;
 }
 
 Knw.topics = function(condition){}
