@@ -31,11 +31,25 @@ Knw.connect = function(db,usrname,psw){
 }
 
 
+/**
+ * List all topic vertices where condition is met
+ * @param {Object} must satisfy OrientDB query format
+ */
 Knw.topics = function(condition){
-  
+  if (condition)
+    return Knw.db.select('title').from('topic').where(condition).all();
+  return Knw.db.select('title').from('topic').all();
 }
 
-Knw.keywords = function(condition){}
+/**
+ * List all keyword vertices where condition is met
+ * @param {Object} must satisfy OrientDB query format
+ */
+Knw.keywords = function(condition){
+  if (condition)
+    return Knw.db.select('w').from('keyword').where(condition).all();
+  return Knw.db.select('w').from('keyword').all();
+}
 
 Knw.expandFromTopic = function(topic,degree){}
 
