@@ -25,6 +25,13 @@ Knw.connect = function(db,usrname,psw){
   })
 }
 
+Knw.topics = function(condition){}
+
+Knw.keywords = function(condition){}
+
+Knw.expandFromTopic = function(topic,degree){}
+
+Knw.expandFromKeyword = function(kw,degree){}
 
 
 module.exports = Knw;
