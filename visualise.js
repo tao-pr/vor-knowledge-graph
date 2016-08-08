@@ -1,6 +1,6 @@
 /**
  * Knowledge graph visualiser module
- @author TaoPR (github.com/starcolon)
+ * @author TaoPR (github.com/starcolon)
  */
 
 var args   = process.argv.slice(2);
