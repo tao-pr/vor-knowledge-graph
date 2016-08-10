@@ -46,7 +46,7 @@ KB.connect(db,usrname,password)
 
     var content = `function getGraph(){ return ${sgraph} }`;
     return new Promise((done,reject) => {
-      fs.writeFile('',content,(err) => {
+      fs.writeFile('./HTML/graph-data.js',content,(err) => {
         console.log('Serialising graph to JS ...'.green);
         console.log(`   ${topics.length} topics`);
         console.log(`   ${keywords.length} keywords`);
