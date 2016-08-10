@@ -51,4 +51,19 @@ Knw.edges = function(condition){
   return Knw.db.select().from('E').all();
 }
 
+/**
+ * List all outbound edges from the specified node
+ * @param {Object} node object
+ * @return {Promise}
+ */
+Knw.getOutE = function(node){
+  var linked = {'out': node['@rid']}
+  if (node['@class']=='TOPIC'){
+    return Knw.db.select().from('has').where(linked).all();
+  }
+  else{
+    return Knw.db.select().from('rel').where(linked).all();  
+  }
+}
+
 module.exports = Knw;

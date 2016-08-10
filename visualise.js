@@ -31,15 +31,22 @@ KB.connect(db,usrname,password)
   .then((g) => {
     console.log('[Connected] to OrientDB knowledge graph.'.green);
 
+    // Read all nodes in
     var nodes = KB.nodes();
-    var edges = KB.edges();
+    console.log('All nodes retrieved...')
 
-    // Generate [graph-data.js] file
-    // for front-end graph rendering
-    var graph = {
-      vertices: nodes,
-      edges:    edges
-    }
+    // Fulfill the values and go on
+    return Promise.resolve(nodes)
+  })
+  .then((nodes) => {
+
+    // TAODEBUG:
+    console.log(JSON.stringify(nodes[0]).cyan);
+
+    // TAOTODO: Read outward edges from those nodes
+    var edges = nodes.map(KB.getOutE);
+
+    var graph = { vertices: nodes, edges: edges };
     var sgraph = JSON.stringify(graph);
 
     var content = `function getGraph(){ return ${sgraph} }`;
