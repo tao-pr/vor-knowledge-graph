@@ -51,9 +51,9 @@ Knw.keywords = function(condition){
   return Knw.db.select('w').from('keyword').all();
 }
 
-Knw.expandFromTopic = function(topic,degree){}
+Knw.linksFromTopic = function(topic){}
 
-Knw.expandFromKeyword = function(kw,degree){}
+Knw.linksFromKeyword = function(w){}
 
 
 module.exports = Knw;
