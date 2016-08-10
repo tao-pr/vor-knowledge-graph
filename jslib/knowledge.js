@@ -32,44 +32,23 @@ Knw.connect = function(db,usrname,psw){
 
 
 /**
- * List all topic vertices where condition is met
+ * List all vertices where condition is met
  * @param {Object} must satisfy OrientDB query format
  */
-Knw.topics = function(condition){
+Knw.nodes = function(condition){
   if (condition)
-    return Knw.db.select('title').from('topic').where(condition).all();
-  return Knw.db.select('title').from('topic').all();
+    return Knw.db.select().from('V').where(condition).all();
+  return Knw.db.select().from('V').all();
 }
 
 /**
- * List all keyword vertices where condition is met
+ * List all edges where condition is met
  * @param {Object} must satisfy OrientDB query format
  */
-Knw.keywords = function(condition){
+Knw.edges = function(condition){
   if (condition)
-    return Knw.db.select('w').from('keyword').where(condition).all();
-  return Knw.db.select('w').from('keyword').all();
+    return Knw.db.select().from('E').where(condition).all();
+  return Knw.db.select().from('E').all();
 }
-
-/**
- * List all has(es) edges where condition is met
- * @param {Object} must satisfy OrientDB query format
- */
-Knw.hases = function(condition){
-  if (condition)
-    return Knw.db.select().from('has').where(condition).all();
-  return Knw.db.select().from('has').all();
-}
-
-/**
- * List all rel(s) edges where condition is met
- * @param {Object} must satisfy OrientDB query format
- */
-Knw.rels = function(condition){
-  if (condition)
-    return Knw.db.select().from('rel').where(condition).all();
-  return Knw.db.select().from('rel').all();
-}
-
 
 module.exports = Knw;
