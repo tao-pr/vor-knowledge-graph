@@ -51,9 +51,25 @@ Knw.keywords = function(condition){
   return Knw.db.select('w').from('keyword').all();
 }
 
-Knw.linksFromTopic = function(topic){}
+/**
+ * List all has(es) edges where condition is met
+ * @param {Object} must satisfy OrientDB query format
+ */
+Knw.hases = function(condition){
+  if (condition)
+    return Knw.db.select().from('has').where(condition).all();
+  return Knw.db.select().from('has').all();
+}
 
-Knw.linksFromKeyword = function(w){}
+/**
+ * List all rel(s) edges where condition is met
+ * @param {Object} must satisfy OrientDB query format
+ */
+Knw.rels = function(condition){
+  if (condition)
+    return Knw.db.select().from('rel').where(condition).all();
+  return Knw.db.select().from('rel').all();
+}
 
 
 module.exports = Knw;
