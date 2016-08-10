@@ -5,6 +5,7 @@
 
 var args   = process.argv.slice(2);
 var colors = require('colors');
+var fs     = require('fs');
 var KB     = require('./jslib/knowledge.js');
 
 
@@ -32,10 +33,36 @@ KB.connect(db,usrname,password)
 
     var topics   = KB.topics();
     var keywords = KB.keywords();
+    var hases    = KB.hases();
+    var rels     = KB.rels();  
 
-    // topics.then((items) => items.map((i) => console.log(i)));
+    // Generate [graph-data.js] file
+    // for front-end graph rendering
+    var graph = {
+      vertices: topics.concat(keywords),
+      edges:    hases.concat(rels)
+    }
+    var sgraph = JSON.stringify(graph);
+
+    var content = `function getGraph(){ return ${sgraph} }`;
+    return new Promise((done,reject) => {
+      fs.writeFile('',content,(err) => {
+        console.log('Serialising graph to JS ...'.green);
+        console.log(`   ${topics.length} topics`);
+        console.log(`   ${keywords.length} keywords`);
+        console.log(`   ${graph.edges.length} links`);
+        if (err){
+          console.error('Serialisation failed...'.red);
+          console.error(err);
+          reject();
+        }
+        else{
+          console.log('Graph HTML is ready in ./HTML/'.green);
+          done();
+        }
+      })
+    })
   })
-
-
+  .then((_) => process.exit())
 
  
