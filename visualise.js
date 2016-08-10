@@ -31,16 +31,14 @@ KB.connect(db,usrname,password)
   .then((g) => {
     console.log('[Connected] to OrientDB knowledge graph.'.green);
 
-    var topics   = KB.topics();
-    var keywords = KB.keywords();
-    var hases    = KB.hases();
-    var rels     = KB.rels();  
+    var nodes = KB.nodes();
+    var edges = KB.edges();
 
     // Generate [graph-data.js] file
     // for front-end graph rendering
     var graph = {
-      vertices: topics.concat(keywords),
-      edges:    hases.concat(rels)
+      vertices: nodes,
+      edges:    edges
     }
     var sgraph = JSON.stringify(graph);
 
@@ -48,8 +46,7 @@ KB.connect(db,usrname,password)
     return new Promise((done,reject) => {
       fs.writeFile('./HTML/graph-data.js',content,(err) => {
         console.log('Serialising graph to JS ...'.green);
-        console.log(`   ${topics.length} topics`);
-        console.log(`   ${keywords.length} keywords`);
+        console.log(`   ${graph.vertices.length} nodes`);
         console.log(`   ${graph.edges.length} links`);
         if (err){
           console.error('Serialisation failed...'.red);
