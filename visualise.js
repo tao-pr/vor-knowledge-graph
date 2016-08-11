@@ -57,29 +57,32 @@ KB.connect(db,usrname,password)
     console.log('Enumurating edges...');
     var edges = [];
     var collectEdges = (es) => es.then((e) => {
-      console.log(e.length); // TAODEBUG:
       edges.push(e);
     });
+    var topic = (n) => n.type=='TOPIC';
 
     // Prepare edge enumuration jobs
     var jobs = nodes
+      .filter(topic)
       .map(KB.getOutE(20))
       .map((n) => {
         return collectEdges(n);
       });
 
     // Make sure edges of all underlying nodes are processed.
-    return Promise.all(jobs)
+    return Promise.all(jobs).then(() => [nodes,edges])
   })
-  .then(() => {
-    
-    // TAODEBUG:
-    console.log(JSON.stringify(edges[0]).cyan);
+  .then((p) => {
+
+    var nodes = p[0];
+    var edges = p[1];
 
     // Make all edges renderable
     edges = edges.map((e) => {
       return {
-        // TAOTODO:
+        id:     Math.random()*10000,
+        source: e.out,
+        target: e.in
       }
     })
 
@@ -95,11 +98,11 @@ KB.connect(db,usrname,password)
         if (err){
           console.error('Serialisation failed...'.red);
           console.error(err);
-          reject();
+          return reject();
         }
         else{
           console.log('Graph HTML is ready in ./HTML/'.green);
-          done();
+          return done();
         }
       })
     })
