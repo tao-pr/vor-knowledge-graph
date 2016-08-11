@@ -58,17 +58,14 @@ Knw.edges = function(condition){
  */
 Knw.getOutE = function(limit){
   return function(node){
-    var linked = {'out': node['@rid']}
-    var output = null;
-    if (node['@class']=='TOPIC'){
-      output = Knw.db.select().from('has').where(linked);
-    }
-    else{
-      output = Knw.db.select().from('rel').where(linked);
-    }
+    // TAOTODO: Find alternative edge query (maybe .traverse() ?)
+    var linked = {'out': node.id}
+    var output = (node.type=='TOPIC') ? 
+      Knw.db.select().from('has').where(linked) :
+      Knw.db.select().from('rel').where(linked);
 
     if (limit){
-      return output.limit(limit);
+      return output.limit(limit).all();
     }
     else
       return output.all();
