@@ -40,8 +40,15 @@ KB.connect(db,usrname,password)
   })
   .then((nodes) => {
 
-    // TAODEBUG:
-    console.log(JSON.stringify(nodes[0]).cyan);
+    // Reduce the form of nodes so they become renderable.
+    nodes = nodes.map((n) => {
+      return {
+        id:    n['@rid'],
+        label: n['@type']=='TOPIC' ? n.title : n.w,
+        size:  n['@type']=='TOPIC' ? 5 : 1,
+        color: n['@type']=='TOPIC' ? '#F00000' : '#F0F030'
+      }
+    })
 
     // Take up to 20 outbound edges from a node
     // console.log('Enumurating edges...');
@@ -49,14 +56,14 @@ KB.connect(db,usrname,password)
     // var edges      = nodes.map(getUpto20E);
     var edges = [];
 
-    var graph = { vertices: nodes, edges: edges };
+    var graph = { nodes: nodes, edges: edges }; 
     var sgraph = JSON.stringify(graph);
 
     var content = `function getGraph(){ return ${sgraph} }`;
     return new Promise((done,reject) => {
       fs.writeFile('./HTML/graph-data.js',content,(err) => {
         console.log('Serialising graph to JS ...'.green);
-        console.log(`   ${graph.vertices.length} nodes`);
+        console.log(`   ${graph.nodes.length} nodes`);
         console.log(`   ${graph.edges.length} links`);
         if (err){
           console.error('Serialisation failed...'.red);
