@@ -1,30 +1,42 @@
 <html>
-<script src="./sigma.min.js" />
-<script src="./graph-data.js" />
-<script>
-  var S     = new sigma('container');
-  var graph = getGraph();
+<head>
+  <script type="text/javascript" src="./sigma.min.js" ></script>
+  <script type="text/javascript" src="./graph-data.js" ></script>
+  <script type="text/javascript">
 
-  // Render the graph with Sigma
-  graph.vertices.forEach((v) => {
-    S.graph.addNode({
-      id:    v.id,
-      label: v.type=='topic' ? v.title : v.w,
-      // x: 0,
-      // y: 0,
-      size:  v.type=='topic' ? 5 : 1,
-      color: v.type=='topic' ? '#F00000' : '#F0F030'
-    })
-  })
+    document.addEventListener("DOMContentLoaded", function(event) { 
+      
+      console.log('INITIALISING');
 
-  graph.edges.forEach((e) => {
-    // TAOTODO:
-  })
+      var S     = new sigma('container');
+      var graph = getGraph();
 
-  // Draw the graph
-  S.refresh();
+      // TAODEBUG:
+      console.log(graph);
 
-</script>
+      // Render the graph with Sigma
+      graph.vertices.forEach((v) => {
+        S.graph.addNode({
+          id:    v['@rid'],
+          label: v.type=='topic' ? v.title : v.w,
+          // x: 0,
+          // y: 0,
+          size:  v.type=='topic' ? 5 : 1,
+          color: v.type=='topic' ? '#F00000' : '#F0F030'
+        })
+      })
+
+      graph.edges.forEach((e) => {
+        // TAOTODO:
+      })
+
+      // Draw the graph
+      console.log('REDRAWING CANVAS');
+      S.refresh();
+    });
+
+  </script>
+</head>
 <body style="width:100%;height:100%;margin:0;padding:0">
   <div id="container" style="width:100%;height:100%;margin:0;padding:0">
     <!-- -->

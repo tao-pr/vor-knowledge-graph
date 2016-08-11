@@ -43,8 +43,11 @@ KB.connect(db,usrname,password)
     // TAODEBUG:
     console.log(JSON.stringify(nodes[0]).cyan);
 
-    // TAOTODO: Read outward edges from those nodes
-    var edges = nodes.map(KB.getOutE);
+    // Take up to 20 outbound edges from a node
+    // console.log('Enumurating edges...');
+    // var getUpto20E = KB.getOutE(20);
+    // var edges      = nodes.map(getUpto20E);
+    var edges = [];
 
     var graph = { vertices: nodes, edges: edges };
     var sgraph = JSON.stringify(graph);
