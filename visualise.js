@@ -48,16 +48,28 @@ KB.connect(db,usrname,password)
         label: n['@class']=='TOPIC' ? n.title : n.w,
         x:     Math.random(),
         y:     Math.random(),
-        size:  n['@class']=='TOPIC' ? 5 : 1,
-        color: n['@class']=='TOPIC' ? '#F00000' : '#F0F030'
+        size:  n['@class']=='TOPIC' ? 10 : 1,
+        color: n['@class']=='TOPIC' ? '#F00000' : '#F00000'
       }
     })
 
-    // Take up to 20 outbound edges from a node
-    // console.log('Enumurating edges...');
-    // var getUpto20E = KB.getOutE(20);
-    // var edges      = nodes.map(getUpto20E);
+    // Take outbound edges of those underlying nodes
+    console.log('Enumurating edges...');
     var edges = [];
+    var collectEdges = (es) => es.then((e) => {
+      console.log(e.length); // TAODEBUG:
+      edges.push(e);
+    });
+
+    // Prepare edge enumuration jobs
+    var jobs = nodes
+      .map(KB.getOutE(20))
+      .map((n) => {
+        return collectEdges(n);
+      });
+
+    // Make sure edges of all underlying nodes are processed.
+    Promise.all(jobs);
 
     var graph = { nodes: nodes, edges: edges }; 
     var sgraph = JSON.stringify(graph);
