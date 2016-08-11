@@ -77,6 +77,9 @@ KB.connect(db,usrname,password)
     var nodes = p[0];
     var edges = p[1];
 
+    // Flatten edges
+    edges = edges.reduce((a,b) => a.concat(b), []);
+
     // Make all edges renderable
     edges = edges.map((e) => {
       return {
