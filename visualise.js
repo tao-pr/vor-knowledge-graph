@@ -69,7 +69,19 @@ KB.connect(db,usrname,password)
       });
 
     // Make sure edges of all underlying nodes are processed.
-    Promise.all(jobs);
+    return Promise.all(jobs)
+  })
+  .then(() => {
+    
+    // TAODEBUG:
+    console.log(JSON.stringify(edges[0]).cyan);
+
+    // Make all edges renderable
+    edges = edges.map((e) => {
+      return {
+        // TAOTODO:
+      }
+    })
 
     var graph = { nodes: nodes, edges: edges }; 
     var sgraph = JSON.stringify(graph);
