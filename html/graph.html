@@ -8,7 +8,15 @@
       
       console.log('INITIALISING');
 
-      var S = new sigma({ graph: getGraph(), container: 'container'});
+      var g = getGraph();
+
+      // Filter only 30 topics, 64 keywords
+      var topic   = (n) => n.type == 'TOPIC';
+      var keyword = (n) => n.type == 'KEYWORD';
+      g.nodes = g.nodes.filter(topic).slice(0,30)
+        .concat(g.nodes.filter(keyword).slice(0,64))
+
+      var S = new sigma({ graph: g, container: 'container'});
       S.settings({
         edgeColor:        'default',
         defaultEdgeColor: '#A4A4A4'
@@ -16,7 +24,7 @@
 
       // Draw the graph
       console.log('REDRAWING CANVAS');
-      console.log(graph.nodes.length, ' vertices to render');
+      console.log(S.graph.nodes.length, ' vertices to render');
       S.refresh();
     });
 

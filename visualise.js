@@ -44,9 +44,12 @@ KB.connect(db,usrname,password)
     nodes = nodes.map((n) => {
       return {
         id:    n['@rid'],
-        label: n['@type']=='TOPIC' ? n.title : n.w,
-        size:  n['@type']=='TOPIC' ? 5 : 1,
-        color: n['@type']=='TOPIC' ? '#F00000' : '#F0F030'
+        type:  n['@class'],
+        label: n['@class']=='TOPIC' ? n.title : n.w,
+        x:     Math.random(),
+        y:     Math.random(),
+        size:  n['@class']=='TOPIC' ? 5 : 1,
+        color: n['@class']=='TOPIC' ? '#F00000' : '#F0F030'
       }
     })
 
