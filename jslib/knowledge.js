@@ -58,7 +58,6 @@ Knw.edges = function(condition){
  */
 Knw.getOutE = function(limit){
   return function(node){
-    // TAOTODO: Find alternative edge query (maybe .traverse() ?)
     var linked = {'out': node.id}
     var output = (node.type=='TOPIC') ? 
       Knw.db.select().from('has').where(linked) :
