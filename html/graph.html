@@ -17,6 +17,11 @@
       g.nodes = g.nodes.filter(topic).slice(0,30)
         .concat(g.nodes.filter(keyword).slice(0,64))
 
+      g.edges = g.edges.filter((e) => {
+        g.nodes.filter((n) => n.id == e.in).count>0 &&
+        g.nodes.filter((n) => n.id == e.out).count>0
+      })
+
       var S = new sigma({ graph: g, container: 'container'});
       S.settings({
         edgeColor:        'default',
