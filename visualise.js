@@ -46,10 +46,10 @@ KB.connect(db,usrname,password)
         id:    n['@rid'],
         type:  n['@class'],
         label: n['@class']=='TOPIC' ? n.title : n.w,
-        x:     Math.random(),
+        x:     Math.random()*3,
         y:     Math.random(),
         size:  n['@class']=='TOPIC' ? 10 : 1,
-        color: n['@class']=='TOPIC' ? '#F00000' : '#F00000'
+        color: n['@class']=='TOPIC' ? '#F00000' : '#FFAAAA'
       }
     })
 

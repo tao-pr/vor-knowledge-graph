@@ -17,15 +17,22 @@
       g.nodes = g.nodes.filter(topic).slice(0,30)
         .concat(g.nodes.filter(keyword).slice(0,500))
 
-      g.edges = g.edges.filter((e) => {
-        g.nodes.filter((n) => n.id == e.in).count>0 &&
-        g.nodes.filter((n) => n.id == e.out).count>0
-      })
+      // TAODEBUG:
+      // g.edges.forEach((e) => {
+      //   var a = g.nodes.filter((n) => n.id == e.source).length;
+      //   var b = g.nodes.filter((n) => n.id == e.target).length;
+      //   console.log([a,b]);
+      // })
+
+      g.edges = g.edges.filter((e) => 
+        g.nodes.filter((n) => n.id == e.source).length>0 &&
+        g.nodes.filter((n) => n.id == e.target).length>0
+      )
 
       var S = new sigma({ graph: g, container: 'container'});
       S.settings({
         edgeColor:        'default',
-        defaultEdgeColor: '#A4A4A4'
+        defaultEdgeColor: '#FFAAAA'
       });
 
       // Draw the graph
