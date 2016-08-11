@@ -56,13 +56,22 @@ Knw.edges = function(condition){
  * @param {Object} node object
  * @return {Promise}
  */
-Knw.getOutE = function(node){
-  var linked = {'out': node['@rid']}
-  if (node['@class']=='TOPIC'){
-    return Knw.db.select().from('has').where(linked).all();
-  }
-  else{
-    return Knw.db.select().from('rel').where(linked).all();  
+Knw.getOutE = function(limit){
+  return function(node){
+    var linked = {'out': node['@rid']}
+    var output = null;
+    if (node['@class']=='TOPIC'){
+      output = Knw.db.select().from('has').where(linked);
+    }
+    else{
+      output = Knw.db.select().from('rel').where(linked);
+    }
+
+    if (limit){
+      return output.limit(limit);
+    }
+    else
+      return output.all();
   }
 }
 
