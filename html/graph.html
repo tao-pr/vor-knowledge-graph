@@ -8,30 +8,15 @@
       
       console.log('INITIALISING');
 
-      var S     = new sigma('container');
-      var graph = getGraph();
-
-      // TAODEBUG:
-      console.log(graph);
-
-      // Render the graph with Sigma
-      graph.vertices.forEach((v) => {
-        S.graph.addNode({
-          id:    v['@rid'],
-          label: v.type=='topic' ? v.title : v.w,
-          // x: 0,
-          // y: 0,
-          size:  v.type=='topic' ? 5 : 1,
-          color: v.type=='topic' ? '#F00000' : '#F0F030'
-        })
-      })
-
-      graph.edges.forEach((e) => {
-        // TAOTODO:
-      })
+      var S = new sigma({ graph: getGraph(), container: 'container'});
+      S.settings({
+        edgeColor:        'default',
+        defaultEdgeColor: '#A4A4A4'
+      });
 
       // Draw the graph
       console.log('REDRAWING CANVAS');
+      console.log(graph.nodes.length, ' vertices to render');
       S.refresh();
     });
 
