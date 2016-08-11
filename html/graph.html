@@ -11,11 +11,11 @@
       var g = getGraph();
 
       // For the sake of simplicity,
-      // Filter only 30 topics, 64 keywords
+      // Filter only 30 topics, 500 keywords
       var topic   = (n) => n.type == 'TOPIC';
       var keyword = (n) => n.type == 'KEYWORD';
       g.nodes = g.nodes.filter(topic).slice(0,30)
-        .concat(g.nodes.filter(keyword).slice(0,64))
+        .concat(g.nodes.filter(keyword).slice(0,500))
 
       g.edges = g.edges.filter((e) => {
         g.nodes.filter((n) => n.id == e.in).count>0 &&
@@ -30,7 +30,8 @@
 
       // Draw the graph
       console.log('REDRAWING CANVAS');
-      console.log(S.graph.nodes.length, ' vertices to render');
+      console.log(g.nodes.length, ' vertices to render');
+      console.log(g.edges.length, ' edges to render');
       S.refresh();
     });
 
