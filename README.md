@@ -2,6 +2,7 @@
 
 ---
 
+![Network](graphic/vor.png)
 ![Graph](graphic/graph.png)
 
 ---

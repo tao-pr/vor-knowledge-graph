@@ -41,13 +41,23 @@ KB.connect(db,usrname,password)
   .then((nodes) => {
 
     // Reduce the form of nodes so they become renderable.
+    var L = nodes.filter((n) => n['@class']=='TOPIC').length;
+    var degreeStep = 2*Math.PI/L;
+    var i = -1;
+
     nodes = nodes.map((n) => {
+      i++;
+      var randomDegree = Math.random()*2*Math.PI;
+      var randomR = Math.random()*0.8;
+      var x = randomR * Math.cos(randomDegree);
+      var y = randomR * Math.sin(randomDegree);
+
       return {
         id:    n['@rid'],
         type:  n['@class'],
         label: n['@class']=='TOPIC' ? n.title : n.w,
-        x:     Math.random()*3,
-        y:     Math.random(),
+        x:     n['@class']=='TOPIC' ? Math.cos(degreeStep*i) : x,
+        y:     n['@class']=='TOPIC' ? Math.sin(degreeStep*i) : y, 
         size:  n['@class']=='TOPIC' ? 10 : 1,
         color: n['@class']=='TOPIC' ? '#F00000' : '#FFAAAA'
       }
@@ -85,7 +95,8 @@ KB.connect(db,usrname,password)
       return {
         id:     Math.random()*10000,
         source: e.out,
-        target: e.in
+        target: e.in,
+        type:   'curve'
       }
     })
 

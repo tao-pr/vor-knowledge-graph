@@ -25,7 +25,14 @@
       var S = new sigma({ graph: g, container: 'container'});
       S.settings({
         edgeColor:        'default',
-        defaultEdgeColor: '#FFAAAA'
+        defaultEdgeColor: '#FFE1E1'
+      });
+
+      // Bind node selection event
+      window['selected'] = [];
+      S.bind('clickNode', function(e) {
+        // TAOTODO:
+        //console.log(e.type, e.data.node.label, e.data.captor);
       });
 
       // Draw the graph
