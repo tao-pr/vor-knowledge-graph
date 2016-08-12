@@ -1,0 +1,52 @@
+<html>
+<head>
+  <script type="text/javascript" src="./sigma.min.js" ></script>
+  <script type="text/javascript" src="./graph-data.js" ></script>
+  <script type="text/javascript">
+
+    document.addEventListener("DOMContentLoaded", function(event) { 
+      
+      console.log('INITIALISING');
+
+      var g = getGraph();
+
+      // For the sake of simplicity,
+      // Filter only 60 topics, 1000 keywords
+      var topic   = (n) => n.type == 'TOPIC';
+      var keyword = (n) => n.type == 'KEYWORD';
+      g.nodes = g.nodes.filter(topic).slice(0,60)
+        .concat(g.nodes.filter(keyword).slice(0,1000))
+
+      g.edges = g.edges.filter((e) => 
+        g.nodes.filter((n) => n.id == e.source).length>0 &&
+        g.nodes.filter((n) => n.id == e.target).length>0
+      )
+
+      var S = new sigma({ graph: g, container: 'container'});
+      S.settings({
+        edgeColor:        'default',
+        defaultEdgeColor: '#FFE1E1'
+      });
+
+      // Bind node selection event
+      window['selected'] = [];
+      S.bind('clickNode', function(e) {
+        // TAOTODO:
+        //console.log(e.type, e.data.node.label, e.data.captor);
+      });
+
+      // Draw the graph
+      console.log('REDRAWING CANVAS');
+      console.log(g.nodes.length, ' vertices to render');
+      console.log(g.edges.length, ' edges to render');
+      S.refresh();
+    });
+
+  </script>
+</head>
+<body style="width:100%;height:100%;margin:0;padding:0">
+  <div id="container" style="width:100%;height:100%;margin:0;padding:0">
+    <!-- -->
+  </div>
+</body>
+</html>

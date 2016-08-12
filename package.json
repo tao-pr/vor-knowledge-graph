@@ -1,0 +1,38 @@
+{
+  "name": "vor-visualiser",
+  "version": "0.0.1",
+  "description": "A knowledge graph visualiser module",
+  "main": "visualise.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/starcolon/vor-knowledge-graph.git"
+  },
+  "keywords": [
+    "vor",
+    "graph",
+    "knowledge",
+    "visualise",
+    "visualize",
+    "visualizer",
+    "visualiser",
+    "render",
+    "d3"
+  ],
+  "author": "TaoPR (StarColon)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/starcolon/vor-knowledge-graph/issues"
+  },
+  "homepage": "https://github.com/starcolon/vor-knowledge-graph#readme",
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "orientjs": "^2.2.2",
+    "sigma": "^1.1.0"
+  }
+}

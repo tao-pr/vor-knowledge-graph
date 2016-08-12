@@ -2,6 +2,7 @@
 
 ---
 
+![Network](graphic/vor.png)
 ![Graph](graphic/graph.png)
 
 ---
@@ -38,6 +39,16 @@ In an opposite direction, collect the requirements with:
 ```bash
   $ pipreqs .
 ```
+
+Install Node.js modules required by the graph visualiser. 
+You may ignore these steps if you are not interested in 
+visualisation.
+
+```bash
+  $ npm install
+```
+Other than registered NPM packages, you also need to [install Sigma.js 
+for visualisation](https://github.com/jacomyal/sigma.js/wiki#getting-started).
 
 ---
 
