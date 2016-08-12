@@ -3,3 +3,4 @@ pylib/interaction/
 pylib/text/__pycache__/
 pylib/spider/__pycache__/
 pylib/knowledge/__pycache__/
+node_modules/
