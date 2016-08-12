@@ -94,6 +94,21 @@ The output graph in OrientDB is built from the following components:
 all the way to the end. This will definitely take large amount of 
 time if you have large data in your collection.
 
+---
+
+## Visualise the knowledge graph
+
+Execute:
+
+```bash
+  $ node visualise {PASSWORD}
+```
+
+Where `{PASSWORD}` is your OrientDB root's password. The script 
+downloads the graph data from OrientDB, renders it with appropriate 
+visual figure. After it's done, you can view your graph in 
+`html/graph.html`.
+
 --- 
 
 ## Licence
