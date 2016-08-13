@@ -113,6 +113,7 @@ visual figure. After it's done, you can view your graph in
 
 ## Licence
 
-The project is licenced under [GNU 3 public licence](https://www.gnu.org/licenses/gpl-3.0.en.html).
+The project is licenced under [GNU 3 public licence](https://www.gnu.org/licenses/gpl-3.0.en.html). All third party libraries are redistributed 
+under their own licences.
 
 ---
