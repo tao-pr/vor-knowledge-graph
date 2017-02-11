@@ -8,6 +8,7 @@ import argparse
 import word2vec
 from termcolor import colored
 from nltk.tokenize.punkt import PunktSentenceTokenizer
+from pylib.knowledge.datasource import MineDB
 
 arguments = argparse.ArgumentParser()
 arguments.add_argument('--verbose', dest='verbose', action='store_true', help='Turn verbose output on.')
@@ -36,7 +37,7 @@ def export_crawl_to_text(mineDB):
   text_path = 'mine.txt'
 
   with open(text_path, 'w') as f:
-    for wiki in mineDB.query({'downloaded': True},field=None,skip=start):
+    for wiki in mineDB.query({'downloaded': True},field=None):
       
       # Skip empty content or the added one
       if wiki['content'] is None or 'added_to_graph' in wiki:
@@ -64,7 +65,7 @@ def export_crawl_to_text(mineDB):
 def create_model(input_path, output_path):
   return word2vec.word2vec(\
     input_path, \
-    output_bin, \
+    output_path, \
     size=10, binary=1, verbose=False)
 
 if __name__ == '__main__':
