@@ -78,7 +78,8 @@ def create_model(input_path, output_path):
     output_path, \
     size=10, binary=1, verbose=True)
   assert(os.path.isfile(output_path))
-  return word2vec.load(output_path)
+  #return word2vec.load(output_path)
+  return word2vec.WordVectors.from_binary(output_path, encoding='ISO-8859-1')
 
 def repl(model):
   while True:
