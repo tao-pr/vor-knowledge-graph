@@ -62,6 +62,12 @@ def list_crawl_pending(crawl_collection,max_samples):
   # Major pending list
   majors = [t['title'] for t in crawl_collection.query({'downloaded': False})]
 
+  # If fresh new crawl, no pending downloads,
+  # initialise with a seed
+  if len(majors)==0:
+    print(colored('Fresh new crawling...','yellow'))
+    yield '/wiki/Graph_theory'
+
   for m in majors:
     n += 1
     yield m
@@ -126,10 +132,6 @@ if __name__ == '__main__':
 
   # Load all list of pending wiki pages
   pendings = list_crawl_pending(crawl_collection,max_samples=32)
-
-  # If there is no pending list, add a default seed
-  if pendings is None:
-    pendings.append('/wiki/Jupiter')
 
   # For each of the pending list, spawns a new crawler subprocess
   # to download those data

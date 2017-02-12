@@ -109,7 +109,23 @@ downloads the graph data from OrientDB, renders it with appropriate
 visual figure. After it's done, you can view your graph in 
 `html/graph.html`.
 
---- 
+---
+
+## Build Word2Vec model over the crawled data
+
+> Still work in progress
+
+Execute:
+
+```bash
+  $ python3 build_wordvec.py --limit {LIMIT} --out {PATH_TO_MODEL}
+``` 
+
+There should be sufficient amount of the downloaded wikipedia 
+in MongoDB which is done by running `crawl_wiki.py`. The output 
+is a binary file.
+
+---
 
 ## Licence
 
