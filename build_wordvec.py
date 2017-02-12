@@ -3,6 +3,7 @@ Create word vector space from the crawled dataset
 @author TaoPR (github.com/starcolon)
 """
 
+import os
 import sys
 import argparse
 import word2vec
@@ -66,10 +67,12 @@ def export_crawl_to_text(mineDB):
         break
 
 def create_model(input_path, output_path):
-  return word2vec.word2vec(\
+  word2vec.word2vec(\
     input_path, \
     output_path, \
     size=10, binary=1, verbose=False)
+  assert(os.path.isfile(output_path))
+  return word2vec.load(output_path)
 
 def repl(model):
   while True:
