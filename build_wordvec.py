@@ -16,7 +16,6 @@ arguments.add_argument('--limit', type=int, default=100, help='Maximum number of
 arguments.add_argument('--out', type=str, default='./models/word2vec.bin', help='Output path of the word2vec binary model.')
 args = vars(arguments.parse_args(sys.argv[1:]))
 
-
 def model_from_crawl_collection(mineDB, output_path):
   # Dump sentences out of the DB
   print(colored('Exporting crawled data to text file...','cyan'))
@@ -25,9 +24,11 @@ def model_from_crawl_collection(mineDB, output_path):
 
   # Train word2vec model
   print(colored('Training word2vec...','cyan'))
-  create_model(text_path, output_path)
+  model = create_model(text_path, output_path)
   print(colored('[Done]','green'))
   print('Word2Vec model is saved at : {}'.format(output_path))
+
+  return model
 
 def export_crawl_to_text(mineDB):
   
@@ -56,7 +57,7 @@ def export_crawl_to_text(mineDB):
           # Filter out noise
           if len(s)<5 or len(s.split(' '))<3:
             continue
-          f.write(s + '\n')
+          f.write(s.lower() + '\n')
 
       m += 1
 
@@ -70,6 +71,22 @@ def create_model(input_path, output_path):
     output_path, \
     size=10, binary=1, verbose=False)
 
+def repl(model):
+  while True:
+    w = input('Enter a word to try: ')
+    indexes, metrics = model.cosine(w)
+    print('... Similar words : {}', model.vocab[indexes])
+
 if __name__ == '__main__':
   mineDB = crawl_collection = MineDB('localhost','vor','crawl')
-  model_from_crawl_collection(mineDB, args['out'])
+  model = model_from_crawl_collection(mineDB, args['out'])
+
+  # Examine the model properties
+  if model is None:
+    print(colored('[ERROR] Model is empty.','red'))
+  else:
+    print(colored('[Word2Vec model spec]','cyan'))
+    print('... Model shape : {}'.format(model.vectors.shape))
+    # Execute a playground REPL
+    print(colored('[Word2Vec REPL]:','cyan'))
+    repl(model)
