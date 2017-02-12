@@ -25,7 +25,7 @@ def repl(model):
       print('... metrics  : {}'.format(metrics))
       print('... similar  : {}'.format(model.vocab[indexes]))
       print('... response : ')
-      print(model.generate_response(indexes, metrics))
+      print(model.generate_response(indexes, metrics).tolist())
     except Exception:
       print(colored('... Vocab not recognised by the model.','red'))
 
