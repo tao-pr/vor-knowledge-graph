@@ -21,10 +21,12 @@ def repl(model):
     w = input('Enter word to test : ')
     try:
       indexes, metrics = model.cosine(w)
-      print('... indexes : {}'.format(indexes))
-      print('... metrics : {}'.format(metrics))
-      print('... similar : {}'.format(model.vocab[indexes]))
-    except e:
+      print('... indexes  : {}'.format(indexes))
+      print('... metrics  : {}'.format(metrics))
+      print('... similar  : {}'.format(model.vocab[indexes]))
+      print('... response : ')
+      print(model.generate_response(indexes, metrics))
+    except Exception:
       print(colored('... Vocab not recognised by the model.','red'))
 
 
