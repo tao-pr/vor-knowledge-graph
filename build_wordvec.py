@@ -10,6 +10,7 @@ import word2vec
 from termcolor import colored
 from nltk.tokenize.punkt import PunktSentenceTokenizer
 from pylib.knowledge.datasource import MineDB
+from pylib.text.cleanser import *
 
 arguments = argparse.ArgumentParser()
 arguments.add_argument('--verbose', dest='verbose', action='store_true', help='Turn verbose output on.')
@@ -55,10 +56,12 @@ def export_crawl_to_text(mineDB):
         print('... content #{} ==> {} sentences extracted.'.format(m, len(sentences)))
 
         for s in sentences:
-          # Filter out noise
-          if len(s)<5 or len(s.split(' '))<3:
+          # Cleanse the sentence
+          s_ = cleanse(s)
+          # Filter out noise by length
+          if len(s_)<5 or len(s_.split(' '))<3:
             continue
-          f.write(s.lower() + '\n')
+          f.write(s_.lower() + '\n')
 
       m += 1
 
