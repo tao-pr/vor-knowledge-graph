@@ -5,6 +5,7 @@ Create word vector space from the crawled dataset
 
 import os
 import sys
+import codecs
 import argparse
 import word2vec
 from termcolor import colored
@@ -39,7 +40,7 @@ def export_crawl_to_text(mineDB):
 
   text_path = os.path.realpath('./mine.txt')
 
-  with open(text_path, 'w') as f:
+  with codecs.open(text_path, 'w', 'utf-8') as f:
     m = 0
     for wiki in mineDB.query({'downloaded': True},field=None):
       
