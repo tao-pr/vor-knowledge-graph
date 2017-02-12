@@ -37,14 +37,13 @@ def export_crawl_to_text(mineDB):
   text_path = 'mine.txt'
 
   with open(text_path, 'w') as f:
+    m = 0
     for wiki in mineDB.query({'downloaded': True},field=None):
       
       # Skip empty content or the added one
       if wiki['content'] is None or 'added_to_graph' in wiki:
         continue
 
-      m = 0
-      k = 0
       content = wiki['content']
 
       # A wiki page may probably comprise of multiple content
@@ -54,12 +53,13 @@ def export_crawl_to_text(mineDB):
         print('... content #{} ==> {} sentences extracted.'.format(m, len(sentences)))
 
         for s in sentences:
+          # Filter out noise
+          if len(s)<5 or len(s.split(' '))<3:
+            continue
           f.write(s + '\n')
-          k += 1
-
-        c += 1
 
       m += 1
+
       if m>=args['limit']:
         print(colored('[Ending] Maximum number of topics reached.','yellow'))
         break
