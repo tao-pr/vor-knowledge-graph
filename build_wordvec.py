@@ -36,7 +36,7 @@ def export_crawl_to_text(mineDB):
   # Prepare a naive sentence tokeniser utility
   pst = PunktSentenceTokenizer()
 
-  text_path = 'mine.txt'
+  text_path = os.path.realpath('./mine.txt')
 
   with open(text_path, 'w') as f:
     m = 0
@@ -66,11 +66,13 @@ def export_crawl_to_text(mineDB):
         print(colored('[Ending] Maximum number of topics reached.','yellow'))
         break
 
+  return text_path
+
 def create_model(input_path, output_path):
   word2vec.word2vec(\
     input_path, \
     output_path, \
-    size=10, binary=1, verbose=False)
+    size=10, binary=1, verbose=True)
   assert(os.path.isfile(output_path))
   return word2vec.load(output_path)
 
@@ -82,7 +84,7 @@ def repl(model):
 
 if __name__ == '__main__':
   mineDB = crawl_collection = MineDB('localhost','vor','crawl')
-  model = model_from_crawl_collection(mineDB, args['out'])
+  model = model_from_crawl_collection(mineDB, os.path.realpath(args['out']))
 
   # Examine the model properties
   if model is None:
