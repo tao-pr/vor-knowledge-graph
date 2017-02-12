@@ -15,8 +15,18 @@ args = vars(arguments.parse_args(sys.argv[1:]))
 
 def repl(model):
   print(colored('[Model] Loaded:','cyan'))
-  print('... Model shape : {}', model.vectors.shape)
-  pass
+  print('... Model shape : {}'.format(model.vectors.shape))
+  print('... Clusters    : {}'.format(model.clusters))
+  while True:
+    w = input('Enter word to test : ')
+    try:
+      indexes, metrics = model.cosine(w)
+      print('... indexes : {}'.format(indexes))
+      print('... metrics : {}'.format(metrics))
+      print('... similar : {}'.format(model.vocab[indexes]))
+    except e:
+      print(colored('... Vocab not recognised by the model.','red'))
+
 
 if __name__ == '__main__':
   # Load the word2vec model
