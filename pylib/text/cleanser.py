@@ -15,7 +15,10 @@ def cleanse(txt):
   return txt_
 
 def patterns():
-  [r'{.+}',\
+  return [ \
+    r'{.+}',\
     r'<.+>',\
-    r'&#.+;']
+    r'&#.+;',\
+    r'\n',\
+    r'[\d+]']
 
