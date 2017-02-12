@@ -5,6 +5,17 @@ Text cleanser
 
 import re
 
+"""
+Remove unwanted tokens from the given text
+"""
 def cleanse(txt):
-  pass
+  txt_ = txt
+  for p in patterns():
+    txt_ = re.sub(p, '', txt_)
+  return txt_
+
+def patterns():
+  [r'{.+}',\
+    r'<.+>',\
+    r'&#.+;']
 
