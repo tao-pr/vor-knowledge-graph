@@ -44,7 +44,7 @@ def export_crawl_to_text(mineDB):
         continue
 
       m = 0
-      s = 0
+      k = 0
       content = wiki['content']
 
       # A wiki page may probably comprise of multiple content
@@ -55,7 +55,9 @@ def export_crawl_to_text(mineDB):
 
         for s in sentences:
           f.write(s + '\n')
-          s += 1
+          k += 1
+
+        c += 1
 
       m += 1
       if m>=args['limit']:
