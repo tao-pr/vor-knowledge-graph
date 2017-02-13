@@ -16,13 +16,13 @@ ability to traverse the relations between knowledge topics.
 
 ---
 
-## Infrastructure
+## Infrastructure / Prerequisites
 
 To build and run the knowledge graph engine with vör, 
 you need the following software for the infrastructure.
 
-- [x] OrientDB
-- [x] MongoDB
+- [x] [OrientDB](http://orientdb.com/download/)
+- [x] [MongoDB](https://www.mongodb.com/download-center#community)
 
 ---
 
@@ -34,12 +34,6 @@ Install python 3.x requirements by:
   $ pip3 install -r -U requirements.txt
 ```
 
-In an opposite direction, collect the requirements with:
-
-```bash
-  $ pipreqs .
-```
-
 Install Node.js modules required by the graph visualiser. 
 You may ignore these steps if you are not interested in 
 visualisation.
@@ -47,12 +41,13 @@ visualisation.
 ```bash
   $ npm install
 ```
+
 Other than registered NPM packages, you also need to [install Sigma.js 
-for visualisation](https://github.com/jacomyal/sigma.js/wiki#getting-started).
+for visualisation](https://github.com/jacomyal/sigma.js/wiki#getting-started). The module is not bundled within this repository.
 
 ---
 
-## Download (crawl) wikipedia pages
+## 1) Download (crawl) wikipedia pages
 
 Execute:
 
@@ -72,7 +67,7 @@ and downloading the related knowledge through link traveral.
 
 ---
 
-## Build the knowledge graph
+## 2) Build the knowledge graph
 
 Execute:
 
@@ -96,7 +91,7 @@ time if you have large data in your collection.
 
 ---
 
-## Visualise the knowledge graph
+## 3) Visualise the knowledge graph
 
 Execute:
 
@@ -111,9 +106,7 @@ visual figure. After it's done, you can view your graph in
 
 ---
 
-## Build Word2Vec model over the crawled data
-
-> Still work in progress
+## 4) Build Word2Vec model over the crawled data
 
 Execute:
 
