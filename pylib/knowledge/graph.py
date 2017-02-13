@@ -105,3 +105,10 @@ class Knowledge:
     for k in self.orient.query(query):
       yield k
 
+  """
+  Enumurate all related keywords which are connected to the 
+  particular keyword by one hop.
+  @param {str} keyword
+  """
+  def related_keywords(self,kw):
+    pass
