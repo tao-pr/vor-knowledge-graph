@@ -111,4 +111,8 @@ class Knowledge:
   @param {str} keyword
   """
   def related_keywords(self,kw):
-    pass
+    query = "select expand(out()) from V \
+      where @class = 'KEYWORD' \
+      and w ='{}'".format(kw)
+    for k in self.orient.query(query):
+      yield k
