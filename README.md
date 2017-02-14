@@ -56,10 +56,11 @@ Execute:
 ```
 
 The script continuously and endlessly crawls the knowledge topic 
-from Wikipedia starting from `Jupiter` page. You may change 
+from Wikipedia starting from the seeding page. You may change 
 the initial topic within the script to what best suits you. 
 To stop the process, just terminate is fine. It won't leave 
-anything at dirty state.
+anything at dirty stat so you can re-execute the script again 
+at any time.
 
 >**[NOTE]** The script keeps continuously crawling 
 and downloading the related knowledge through link traveral. 

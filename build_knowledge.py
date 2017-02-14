@@ -74,6 +74,7 @@ if __name__ == '__main__':
   # Initialise a knowledge database
   print(colored('Initialising knowledge graph database...','cyan'))
   kb = Knowledge('localhost','vor','root',args['root'])
+  kb.clear()
 
   # Load existing pos patterns
   print(colored('Loading POS patterns...','cyan'))
