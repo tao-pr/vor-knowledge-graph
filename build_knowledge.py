@@ -82,10 +82,12 @@ if __name__ == '__main__':
   patterns.load('./pos-patterns')
 
   # Initialise a crawling dataset connection
-  print(colored('Initialising wikipedia crawling collection...'))
+  print(colored('Initialising wikipedia crawling collection...','cyan'))
   crawl_collection = init_crawl_collection()
 
   # Iterate through the crawling database
+  n = 0
+  print(colored('Iterating over crawling database...','cyan'))
   bf = ScalableBloomFilter(mode=ScalableBloomFilter.SMALL_SET_GROWTH)
   for topic,sentence in iter_topic(crawl_collection,args['start']):
     
@@ -105,5 +107,9 @@ if __name__ == '__main__':
 
     # Create a set of knowledge links
     kb.add(topic,kb_nodes,args['verbose'])
+
+    n += 1
+    if n%100 == 0 and n>0:
+      print('... {} topics done so far.'.format(n))
   
 
