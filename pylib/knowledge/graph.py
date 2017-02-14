@@ -50,6 +50,14 @@ class Knowledge:
       print(colored(e,'yellow'))
     
 
+  """
+  Permanently remove all edges and vertices
+  """
+  def clear(self):
+    self.orient.command('delete vertex TOPIC')
+    self.orient.command('delete vertex KEYWORD')
+    self.orient.command('delete edge') # May this be redundant?
+    print(colored('[Graph clearance] done','yellow'))
 
   """
   Add a set of new knowledge links
