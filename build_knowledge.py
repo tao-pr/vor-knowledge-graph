@@ -71,7 +71,12 @@ def iter_topic(crawl_collection,start):
 Remove stopwords from the list of nodes
 """
 def remove_stopwords(ns,stopwords):
-  pass # TAOTODO:
+  def clean(a):
+    for s in stopwords:
+      a.replace(s,'')
+  ns = set(clean(n) for n in ns)
+  return list(ns)
+  
 
 
 if __name__ == '__main__':
