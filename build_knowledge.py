@@ -30,7 +30,6 @@ def init_crawl_collection():
   crawl_collection = MineDB('localhost','vor','crawl')
   return crawl_collection
 
-
 def iter_topic(crawl_collection,start):
   
   # Prepare a naive sentence tokeniser utility
@@ -68,6 +67,12 @@ def iter_topic(crawl_collection,start):
       print(content['title'] + " processed with {0} nodes.".format(m))
       print(colored("{0} wiki documents processed so far...".format(n),'blue'))
 
+"""
+Remove stopwords from the list of nodes
+"""
+def remove_stopwords(ns,stopwords):
+  pass # TAOTODO:
+
 
 if __name__ == '__main__':
 
@@ -80,6 +85,12 @@ if __name__ == '__main__':
   print(colored('Loading POS patterns...','cyan'))
   patterns = PatternCapture()
   patterns.load('./pos-patterns')
+
+  # Load list of stopwords
+  print(colored('Loading stopwords...','cyan'))
+  stopwords = []
+  with open('./pos-stopwords') as f:
+    stopwords = list(f.readlines())
 
   # Initialise a crawling dataset connection
   print(colored('Initialising wikipedia crawling collection...','cyan'))
@@ -101,6 +112,9 @@ if __name__ == '__main__':
     # Break the sentence into knowledge nodes
     pos      = TextStructure.pos_tag(sentence)
     kb_nodes = patterns.capture(pos)  
+
+    # Remove stop words from knowledge nodes
+    kb_nodes = remove_stopwords(kb_nodes)
 
     if args['verbose']:
       print(kb_nodes)
