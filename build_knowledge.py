@@ -6,6 +6,7 @@ Process the entire bulk of the crawled dataset (MongoDB)
 and potentially create a knowledge graph (OrientDB)
 """
 
+import re
 import sys
 import argparse
 from termcolor import colored
@@ -68,10 +69,12 @@ def iter_topic(crawl_collection,start):
       print(colored("{0} wiki documents processed so far...".format(n),'blue'))
 
 """
-Remove stopwords from the list of nodes
+Remove stopwords & ensure text encoder
 """
-def remove_stopwords(ns,stopwords):
+def ensure_viable(ns,stopwords,preferred_encoder):
   def clean(a):
+    # Strip non-alphanumeric symbols (unicode symbols reserved)
+    a = re.sub("[\x00-\x2F\x3A-\x40\x5B-\x60\x7B-\x7F]+", "", a)
     for s in stopwords:
       a.replace(s,'')
   ns = set(clean(n) for n in ns)
@@ -118,8 +121,11 @@ if __name__ == '__main__':
     pos      = TextStructure.pos_tag(sentence)
     kb_nodes = patterns.capture(pos)  
 
-    # Remove stop words from knowledge nodes
-    kb_nodes = remove_stopwords(kb_nodes)
+    # Clean up each of the nodes
+    # a) Remove stopwords
+    # b) Remove duplicates
+    # c) Ensure supported encoding
+    kb_nodes = ensure_viable(kb_nodes)
 
     if args['verbose']:
       print(kb_nodes)
