@@ -71,12 +71,14 @@ def iter_topic(crawl_collection,start):
 """
 Remove stopwords & ensure text encoder
 """
-def ensure_viable(ns,stopwords,preferred_encoder):
+def ensure_viable(ns,stopwords):
   def clean(a):
     # Strip non-alphanumeric symbols (unicode symbols reserved)
     a = re.sub("[\x00-\x2F\x3A-\x40\x5B-\x60\x7B-\x7F]+", "", a)
     for s in stopwords:
       a.replace(s,'')
+    # TAOTODO: Clean up unicode of [a]
+    return a
   ns = set(clean(n) for n in ns)
   return list(ns)
   
@@ -125,7 +127,7 @@ if __name__ == '__main__':
     # a) Remove stopwords
     # b) Remove duplicates
     # c) Ensure supported encoding
-    kb_nodes = ensure_viable(kb_nodes)
+    kb_nodes = ensure_viable(kb_nodes, stopwords)
 
     if args['verbose']:
       print(kb_nodes)
