@@ -78,8 +78,9 @@ def ensure_viable(ns,stopwords):
     for s in stopwords:
       a.replace(s,'')
     # TAOTODO: Clean up unicode of [a]
-    return a
+    return a.strip()
   ns = set(clean(n) for n in ns)
+  ns = [n for n in ns if len(n)>2]
   return list(ns)
   
 
@@ -112,6 +113,9 @@ if __name__ == '__main__':
   bf = ScalableBloomFilter(mode=ScalableBloomFilter.SMALL_SET_GROWTH)
   for topic,sentence in iter_topic(crawl_collection,args['start']):
     
+    # Clean topic string
+    topic = topic.replace("'",'').replace('\n','')
+
     # Check if the number of processed topic exceed the limit?
     if topic not in bf:
       bf.add(topic)
