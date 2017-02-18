@@ -130,6 +130,8 @@ class Knowledge:
       yield k
 
   """
+  TAOTODO: To be fixed, this query doesn't work
+  
   Enumurate all related keywords which are connected to the 
   particular keyword by one hop.
   @param {str} keyword
