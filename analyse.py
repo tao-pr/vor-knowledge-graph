@@ -44,10 +44,11 @@ if __name__ == '__main__':
 
   # List all top keywords (most connected)
   # (as a dict of [word => count])
+  print(colored('Enumurating keywords by their strength of connections...','cyan'))
   top_kws = dict({kw['w']:kw['cnt'] for kw in kb.top_keywords()})
 
   # Iterate through each topic
-  connections = []
+  print(colored('Iteration started...','cyan'))
   for topic in kb:
     print(colored('Analysing topic : ','cyan'), topic.title)
     kws = kb.keywords_in_topic(topic.title)
@@ -56,12 +57,16 @@ if __name__ == '__main__':
     all_keywords = list(kws)
 
     for w in all_keywords:
+
+      # TAOTODO: Find a way to remove,skip
+      #          weak keywords by some empirical metric
   
-      # List all closest neighbors (by word2vec cosine similarity) 
-      # of [kw]
+      # List top closest neighbours (sorted by cosine similarity)
       indexes, metrics = model.cosine(w)
-      similars = model.vocab[indexes]
+      closests = model.generate_response(indexes, metrics).tolist()[:6]
       
       # TAOTODO:
+      for c in closests:
+        pass
 
 
