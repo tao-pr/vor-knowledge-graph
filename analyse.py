@@ -38,4 +38,10 @@ if __name__ == '__main__':
   # Load graph KB
   kb = init_graph()
 
+  # Iterate through each topic
+  for topic in kb:
+    kws = kb.keywords_in_topic(topic)
+    for kw in kws:
+      pass
+
   # TAOTODO:
