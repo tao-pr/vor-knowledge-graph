@@ -65,6 +65,9 @@ if __name__ == '__main__':
     # for w <- W
     for w in all_keywords:
 
+      # List all topics this [w] belong to
+      other_parents = kb.topics_which_have(w)
+
       # Let neighbours [N] of [w] defined by
       #
       # N(w) : {w' | (w.w')/(norm(w,w')) > threshold}
@@ -80,7 +83,7 @@ if __name__ == '__main__':
         #         which belong to this topic
         #         but potentially SCARCELY occur in any other topics
 
-        for c in neighbours:
+        for c,score in neighbours:
           pass
 
       except Exception:
