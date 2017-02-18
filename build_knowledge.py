@@ -77,7 +77,6 @@ def ensure_viable(ns,stopwords):
     a = re.sub("[\x00-\x2F\x3A-\x40\x5B-\x60\x7B-\x7F]+", "", a)
     for s in stopwords:
       a.replace(s,'')
-    # TAOTODO: Clean up unicode of [a]
     return a.strip()
   ns = set(clean(n) for n in ns)
   ns = [n for n in ns if len(n)>2]
