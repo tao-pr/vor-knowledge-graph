@@ -74,7 +74,7 @@ KB.connect(db,usrname,password)
     // Prepare edge enumuration jobs
     var jobs = nodes
       .filter(topic)
-      .map(KB.getOutE(20))
+      .map(KB.getOutE(100))
       .map((n) => {
         return collectEdges(n);
       });
