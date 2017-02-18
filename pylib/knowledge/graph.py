@@ -129,16 +129,3 @@ class Knowledge:
     for k in self.orient.query(query):
       yield k
 
-  """
-  TAOTODO: To be fixed, this query doesn't work
-  
-  Enumurate all related keywords which are connected to the 
-  particular keyword by one hop.
-  @param {str} keyword
-  """
-  def related_keywords(self,kw):
-    query = "select expand(out()) from V \
-      where @class = 'KEYWORD' \
-      and w ='{}'".format(kw)
-    for k in self.orient.query(query):
-      yield k
