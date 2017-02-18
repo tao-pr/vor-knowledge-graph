@@ -45,7 +45,7 @@ if __name__ == '__main__':
   # List all top keywords (most connected)
   # (as a dict of [word => count])
   print(colored('Enumurating keywords by their strength of connections...','cyan'))
-  top_kws = dict({kw['w']:kw['cnt'] for kw in kb.top_keywords()})
+  top_kws = dict({kw.w : kw.cnt for kw in kb.top_keywords()})
 
   # Iterate through each topic
   print(colored('Iteration started...','cyan'))
@@ -53,20 +53,33 @@ if __name__ == '__main__':
     print(colored('Analysing topic : ','cyan'), topic.title)
     kws = kb.keywords_in_topic(topic.title)
 
-    # List all keywords belong to the current topic
+    # T: G(t,W)
+    # ----------------
+    # Definition of topic set [T]
+    # [t] is a topic title
+    # [W] is a set of keywords
+
+    # List all keywords [W] belong to the current topic
     all_keywords = list(kws)
 
+    # for w <- W
     for w in all_keywords:
 
-      # TAOTODO: Find a way to remove,skip
-      #          weak keywords by some empirical metric
+      # Let neighbours [N] of [w] defined by
+      #
+      # N(w) : {w' | (w.w')/(norm(w,w')) > threshold}
   
       # List top closest neighbours (sorted by cosine similarity)
       indexes, metrics = model.cosine(w)
-      closests = model.generate_response(indexes, metrics).tolist()[:6]
+      neighbours = [(c,score) for (c,score) in \
+        model.generate_response(indexes, metrics).tolist()\
+        if score>0.93] # Mimimally accepted cosine similarity
       
-      # TAOTODO:
-      for c in closests:
+      # TAOTODO: Single out strong & unique keywords
+      #         which belong to this topic
+      #         but potentially SCARCELY occur in any other topics
+
+      for c in neighbours:
         pass
 
 
