@@ -40,8 +40,17 @@ if __name__ == '__main__':
 
   # Iterate through each topic
   for topic in kb:
+    print(colored('Analysing topic : ','cyan'), topic)
     kws = kb.keywords_in_topic(topic)
-    for kw in kws:
-      pass
+    for w in kws:
+      # List all neighbour keywords of [kw]
+      neighbours = kb.related_keywords(w)
 
-  # TAOTODO:
+      # List all closest neighbors (by word2vec cosine similarity) 
+      # of [kw]
+      indexes, metrics = model.cosine(w)
+      similars = model.vocab[indexes]
+      
+      # TAOTODO:
+
+
