@@ -6,6 +6,7 @@ Study the distribution and relations between words
 import json
 import os.path
 import pyorient
+import word2vec
 import numpy as np
 from termcolor import colored
 from pybloom_live import ScalableBloomFilter
@@ -13,36 +14,28 @@ from pyorient.exceptions import PyOrientSchemaException
 from pylib.knowledge.graph import Knowledge
 from pylib.knowledge.datasource import MineDB
 
-def init_crawl_collection():
-  crawl_collection = MineDB('localhost','vor','crawl')
-  return crawl_collection
+arguments = argparse.ArgumentParser()
+arguments.add_argument('--root', type=str, default=None, help='Supply the OrientDB password for root account.')
+arguments.add_argument('--limit', type=int, default=100, help='Maximum number of topics we want to import')
+args = vars(arguments.parse_args(sys.argv[1:]))
 
-def load_word2vec(model_path):
-  pass
 
-def iter_crawl_collection(minDB):
-  # TAOTOREVIEW: Following loop is entirely duplicated from
-  #               [build_wordvec.py], may need refactoring
-  for wiki in mineDB.query({'downloaded': True},field=None):
-      
-    # Skip empty content or the added one
-    if wiki['content'] is None or 'added_to_graph' in wiki:
-      continue
+def init_graph():
+  # Initialise a knowledge database
+  print(colored('Initialising knowledge graph database...','cyan'))
+  kb = Knowledge('localhost','vor','root',args['root'])
+  return kb
 
-    content = wiki['content']
+if __name__ == '__main__':
+  # Load the word2vec model
+  model_path = os.path.realpath(args['modelpath'])
+  if not os.path.isfile(model_path):
+    print(colored('[ERROR] word2vec model does not exist.','red'))
+    raise RuntimeError('Model does not exist')
+  print(colored('[Model] loading binary model.','cyan'))
+  model = word2vec.WordVectors.from_binary(model_path, encoding='ISO-8859-1')
+  
+  # Load graph KB
+  kb = init_graph()
 
-    # A wiki page may probably comprise of multiple content
-    for c in content['contents']:
-      # Explode content into sentences
-      sentences = pst.sentences_from_text(c)
-      print('... content #{} ==> {} sentences extracted.'.format(m, len(sentences)))
-
-      for s in sentences:
-        # Cleanse the sentence
-        s_ = cleanse(s)
-        # Filter out noise by length
-        if len(s_)<5 or len(s_.split(' '))<3:
-          continue
-
-        yield s.lower()
-
+  # TAOTODO:
