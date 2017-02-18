@@ -43,18 +43,15 @@ if __name__ == '__main__':
   kb = init_graph()
 
   # List all top keywords (most connected)
-  top_kws = kb.top_keywords()
-  n = 0
-  for w in top_kws:
-    print(w.w, ' : ', w.cnt) # DEBUG:
-    n += 1
-    if n>10: break
+  # (only top 300)
+  top_kws = [kw for kw in kb.top_keywords()][:300]
+  top_kw_pool = set([kw['w'] for kw in top_kws])
 
   # Iterate through each topic
   connections = []
   for topic in kb:
-    print(colored('Analysing topic : ','cyan'), topic)
-    kws = kb.keywords_in_topic(topic)
+    print(colored('Analysing topic : ','cyan'), topic.title)
+    kws = kb.keywords_in_topic(topic.title)
     for w in kws:
       # List all neighbour keywords of [kw]
       neighbours = kb.related_keywords(w)
