@@ -104,6 +104,14 @@ class Knowledge:
           format(queryWord,querySib))
 
   """
+  {Generator} Enumurate all topics
+  """
+  def __iter__(self):
+    query = "select from topic"
+    for k in self.orient.query(query):
+      yield k
+
+  """
   {Generator} Enumerate all keywords in a topic
   @param {str} topic title
   """
