@@ -43,19 +43,20 @@ if __name__ == '__main__':
   kb = init_graph()
 
   # List all top keywords (most connected)
-  # (only top 300)
-  top_kws = [kw for kw in kb.top_keywords()][:300]
-  top_kw_pool = set([kw['w'] for kw in top_kws])
+  # (as a dict of [word => count])
+  top_kws = dict({kw['w']:kw['cnt'] for kw in kb.top_keywords()})
 
   # Iterate through each topic
   connections = []
   for topic in kb:
     print(colored('Analysing topic : ','cyan'), topic.title)
     kws = kb.keywords_in_topic(topic.title)
-    for w in kws:
-      # List all neighbour keywords of [kw]
-      neighbours = kb.related_keywords(w)
 
+    # List all keywords belong to the current topic
+    all_keywords = list(kws)
+
+    for w in all_keywords:
+  
       # List all closest neighbors (by word2vec cosine similarity) 
       # of [kw]
       indexes, metrics = model.cosine(w)
