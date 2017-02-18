@@ -129,3 +129,13 @@ class Knowledge:
     for k in self.orient.query(query):
       yield k
 
+  """
+  {Generator} Enumerate all topics which the given keyword
+  belong to
+  @param {str} keyword to query
+  """
+  def topics_which_have(self,w):
+    query = "select in().title from KEYWORD where w='{}'".format(w)
+    for k in self.orient.query(query):
+      yield k
+
