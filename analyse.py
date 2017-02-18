@@ -4,6 +4,7 @@ Study the distribution and relations between words
 """
 
 import json
+import heapq
 import os.path
 import pyorient
 import word2vec
@@ -39,6 +40,7 @@ if __name__ == '__main__':
   kb = init_graph()
 
   # Iterate through each topic
+  connections = []
   for topic in kb:
     print(colored('Analysing topic : ','cyan'), topic)
     kws = kb.keywords_in_topic(topic)
