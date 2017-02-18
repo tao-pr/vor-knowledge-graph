@@ -10,6 +10,8 @@ import pyorient
 import word2vec
 import argparse
 import numpy as np
+import heapq
+from heapq import *
 from termcolor import colored
 from collections import Counter
 from pybloom_live import ScalableBloomFilter
@@ -63,11 +65,20 @@ if __name__ == '__main__':
     all_keywords = list([kw.w.lower().strip() for kw in kws])
 
     # for w <- W
+    hq = [] # HeapQ
+    bf = ScalableBloomFilter(mode=ScalableBloomFilter.SMALL_SET_GROWTH)
+    print('... Scanning {} keywords'.format(len(all_keywords)))
     for w in all_keywords:
 
       # List all topics this [w] belong to
-      other_parents = Counter(kb.topics_which_have(w))
-      top_other_parents = sorted(other_parents, key=other_parents.get, reverse=True)
+      parents_w       = Counter([t for t in kb.topics_which_have(w)])
+      freq_w          = float(parents_w[topic])
+      freq_global_avg = float(sum(parents_w.values()))/float(len(parents_w))
+
+      # As per topic, record the frequency of [w]
+      if w not in bf:
+        heappush(hq, (freq_w, w))
+        bf.add(w)
 
       # Let neighbours [N] of [w] defined by
       #
@@ -89,4 +100,9 @@ if __name__ == '__main__':
 
       except Exception:
         print(colored('... No definition in word2vec model : ','yellow'), w)
+
+  # After all topics are processed,
+  # List all top common keywords
+  top_common_keywords = 
+
 
