@@ -60,7 +60,7 @@ if __name__ == '__main__':
     # [W] is a set of keywords
 
     # List all keywords [W] belong to the current topic
-    all_keywords = list(kws)
+    all_keywords = list([kw.w for kw in kws])
 
     # for w <- W
     for w in all_keywords:
