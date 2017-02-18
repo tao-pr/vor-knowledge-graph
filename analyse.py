@@ -73,6 +73,7 @@ if __name__ == '__main__':
       # List all topics this [w] belong to
       parents_w       = Counter([t for t in kb.topics_which_have(w)])
       freq_w          = float(parents_w[topic])
+      # TAOTODO: Following may need counting incoming edges to [w] instead
       freq_global_avg = float(sum(parents_w.values()))/float(len(parents_w))
 
       # As per topic, record the frequency of [w]
@@ -95,14 +96,14 @@ if __name__ == '__main__':
         #         which belong to this topic
         #         but potentially SCARCELY occur in any other topics
 
-        for c,score in neighbours:
-          pass
+        # for c,score in neighbours:
+        #   pass
 
       except Exception:
         print(colored('... No definition in word2vec model : ','yellow'), w)
 
   # After all topics are processed,
   # List all top common keywords
-  top_common_keywords = 
+  # TAOTODO:
 
 
