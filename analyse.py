@@ -60,7 +60,7 @@ if __name__ == '__main__':
     # [W] is a set of keywords
 
     # List all keywords [W] belong to the current topic
-    all_keywords = list([kw.w for kw in kws])
+    all_keywords = list([kw.w.lower().strip() for kw in kws])
 
     # for w <- W
     for w in all_keywords:
@@ -70,16 +70,19 @@ if __name__ == '__main__':
       # N(w) : {w' | (w.w')/(norm(w,w')) > threshold}
   
       # List top closest neighbours (sorted by cosine similarity)
-      indexes, metrics = model.cosine(w)
-      neighbours = [(c,score) for (c,score) in \
-        model.generate_response(indexes, metrics).tolist()\
-        if score>0.93] # Mimimally accepted cosine similarity
-      
-      # TAOTODO: Single out strong & unique keywords
-      #         which belong to this topic
-      #         but potentially SCARCELY occur in any other topics
+      try:
+        indexes, metrics = model.cosine(w)
+        neighbours = [(c,score) for (c,score) in \
+          model.generate_response(indexes, metrics).tolist()\
+          if score>0.93] # Mimimally accepted cosine similarity
+        
+        # TAOTODO: Single out strong & unique keywords
+        #         which belong to this topic
+        #         but potentially SCARCELY occur in any other topics
 
-      for c in neighbours:
-        pass
+        for c in neighbours:
+          pass
 
+      except Exception:
+        print(colored('... No definition in word2vec model : ','yellow'), w)
 
