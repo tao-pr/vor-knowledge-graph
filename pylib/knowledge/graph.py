@@ -104,6 +104,14 @@ class Knowledge:
           format(queryWord,querySib))
 
   """
+  {Generator} Enumurate keywords by strength of connections
+  """
+  def top_keywords(self):
+    query = "select w, in().size() as $e from keyword order by $e desc"
+    for k in self.orient.query(query):
+      yield k
+
+  """
   {Generator} Enumurate all topics
   """
   def __iter__(self):
