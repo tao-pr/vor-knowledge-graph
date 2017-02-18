@@ -5,13 +5,13 @@ Study the distribution and relations between words
 
 import sys
 import json
-import heapq
 import os.path
 import pyorient
 import word2vec
 import argparse
 import numpy as np
 from termcolor import colored
+from collections import Counter
 from pybloom_live import ScalableBloomFilter
 from pyorient.exceptions import PyOrientSchemaException
 from pylib.knowledge.graph import Knowledge
@@ -66,7 +66,8 @@ if __name__ == '__main__':
     for w in all_keywords:
 
       # List all topics this [w] belong to
-      other_parents = kb.topics_which_have(w)
+      other_parents = Counter(kb.topics_which_have(w))
+      top_other_parents = sorted(other_parents, key=other_parents.get, reverse=True)
 
       # Let neighbours [N] of [w] defined by
       #
