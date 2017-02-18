@@ -107,7 +107,7 @@ class Knowledge:
   {Generator} Enumurate keywords by strength of connections
   """
   def top_keywords(self):
-    query = "select w, in().size() as $e from keyword order by $e desc"
+    query = "select w, in().size() as cnt from keyword order by cnt desc"
     for k in self.orient.query(query):
       yield k
 

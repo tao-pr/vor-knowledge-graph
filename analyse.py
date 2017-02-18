@@ -3,11 +3,13 @@ Study the distribution and relations between words
 @author TaoPR (github.com/starcolon)
 """
 
+import sys
 import json
 import heapq
 import os.path
 import pyorient
 import word2vec
+import argparse
 import numpy as np
 from termcolor import colored
 from pybloom_live import ScalableBloomFilter
@@ -18,6 +20,7 @@ from pylib.knowledge.datasource import MineDB
 arguments = argparse.ArgumentParser()
 arguments.add_argument('--root', type=str, default=None, help='Supply the OrientDB password for root account.')
 arguments.add_argument('--limit', type=int, default=100, help='Maximum number of topics we want to import')
+arguments.add_argument('--modelpath', type=str, default='./models/word2vec.bin', help='Path of the word2vec binary model.')
 args = vars(arguments.parse_args(sys.argv[1:]))
 
 
@@ -38,6 +41,14 @@ if __name__ == '__main__':
   
   # Load graph KB
   kb = init_graph()
+
+  # List all top keywords (most connected)
+  top_kws = kb.top_keywords()
+  n = 0
+  for w in top_kws:
+    print(w.w, ' : ', w.cnt) # DEBUG:
+    n += 1
+    if n>10: break
 
   # Iterate through each topic
   connections = []
