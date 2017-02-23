@@ -64,21 +64,24 @@ if __name__ == '__main__':
     # List all keywords [W] belong to the current topic
     all_keywords = list([kw.w.lower().strip() for kw in kws])
 
-    # for w <- W
-    hq = [] # HeapQ
+    # for w <- W, identify keywords and their significance
+    hq = [] # HeapQ, containing highlighted keywords with weight
     bf = ScalableBloomFilter(mode=ScalableBloomFilter.SMALL_SET_GROWTH)
     print('... Scanning {} keywords'.format(len(all_keywords)))
+    N = float(len(all_keywords))
     for w in all_keywords:
 
       # List all topics this [w] belong to
       parents_w       = Counter([t for t in kb.topics_which_have(w)])
-      freq_w          = float(parents_w[topic])
-      # TAOTODO: Following may need counting incoming edges to [w] instead
+      freq_w          = float(parents_w[topic])/N
       freq_global_avg = float(sum(parents_w.values()))/float(len(parents_w))
+      common_factor   = float(len(parents_w)) / float(len(num_topics))
+      ratio           = freq_w / freq_global_avg
+      # NOTE: [freq_global_avg] only accounts for only topics which have [w].
 
-      # As per topic, record the frequency of [w]
+      # As per topic, record the frequency ratio of [w]
       if w not in bf:
-        heappush(hq, (freq_w, w))
+        heappush(hq, (ratio, w))
         bf.add(w)
 
       # Let neighbours [N] of [w] defined by
@@ -96,8 +99,8 @@ if __name__ == '__main__':
         #         which belong to this topic
         #         but potentially SCARCELY occur in any other topics
 
-        # for c,score in neighbours:
-        #   pass
+        for c,score in neighbours:
+          pass
 
       except Exception:
         print(colored('... No definition in word2vec model : ','yellow'), w)
@@ -105,5 +108,10 @@ if __name__ == '__main__':
   # After all topics are processed,
   # List all top common keywords
   # TAOTODO:
+
+  # Update topic mapping:
+  #   t -> {(w*,c) | w <- W*}
+  # where [w*] is the highlighted keyword
+  #       [c] is the coefficient, 0 <= c < 1
 
 
