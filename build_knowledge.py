@@ -74,7 +74,7 @@ Remove stopwords & ensure text encoder
 def ensure_viable(ns,stopwords):
   def clean(a):
     # Strip non-alphanumeric symbols (unicode symbols reserved)
-    a = re.sub("[\x00-\x2F\x3A-\x40\x5B-\x60\x7B-\x7F]+", "", a)
+    a = re.sub("[\x00-\x2F\x3A-\x40\x5B-\x60\x7B-\x7F\(\)]+", "", a)
     for s in stopwords:
       a.replace(s,'')
     return a.strip()
