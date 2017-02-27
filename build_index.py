@@ -31,10 +31,9 @@ def collect_wordbag(kb):
     
     # Frequency of [w] in the current topic
     cnt = Counter([kw.w for kw in kws])
-    # Frequency of [w] in the global universe
-    glob = cnt.copy()
+    # Normalise with global frequency
     for word in kws:
-      glob[word.w] = word.freq
+      cnt[word.w] /= word.freq
 
     bag.append(cnt)
     print('...#{} {}'.format(n, cnt))
