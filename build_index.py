@@ -27,7 +27,15 @@ def collect_wordbag(kb):
   n = 0
   for topic in kb:
     n += 1
-    cnt = Counter([kw.w for kw in kb.keywords_in_topic(topic.title)])
+    kws = list(kb.keywords_in_topic(topic.title, with_edge_count=True))
+    
+    # Frequency of [w] in the current topic
+    cnt = Counter([kw.w for kw in kws])
+    # Frequency of [w] in the global universe
+    glob = cnt.copy()
+    for word in kws:
+      glob[word.w] = word.freq
+
     bag.append(cnt)
     print('...#{} {}'.format(n, cnt))
     print('--------------')

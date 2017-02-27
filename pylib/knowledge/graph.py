@@ -123,9 +123,11 @@ class Knowledge:
   {Generator} Enumerate all keywords in a topic
   @param {str} topic title
   """
-  def keywords_in_topic(self,topic):
+  def keywords_in_topic(self, topic, with_edge_count=False):
     subquery = "select expand(out()) from topic where title = '{0}'".format(topic)
-    query = "select w from ({0})".format(subquery)
+    query = "select w from ({0})".format(subquery) \
+      if not with_edge_count \
+      else "select w, in().size() as freq from (select expand(out()) from topic where title = '{}')".format(topic)
     for k in self.orient.query(query):
       yield k
 
