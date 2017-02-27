@@ -27,7 +27,7 @@ def collect_wordbag(kb):
   n = 0
   for topic in kb:
     n += 1
-    cnt = Counter([kw for kw in kb.keywords_in_topic(topic)])
+    cnt = Counter([kw.w for kw in kb.keywords_in_topic(topic.title)])
     bag.append(cnt)
     print('...#{} {}'.format(n, cnt))
     print('--------------')
