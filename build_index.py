@@ -3,6 +3,7 @@ Knowledge index maker
 @author Tao PR (github.com/starcolon)
 """
 
+import numpy as np
 import os
 import sys
 import argparse
@@ -21,8 +22,6 @@ arguments.add_argument('--modelpath', type=str, default='./models/word2vec.bin',
 args = vars(arguments.parse_args(sys.argv[1:]))
 
 def collect_wordbag(kb):
-  bag = []
-  
   print(colored('Iterating through topics...','cyan'))
   n = 0
   for topic in kb:
@@ -34,12 +33,14 @@ def collect_wordbag(kb):
     # Normalise with global frequency
     for word in kws:
       cnt[word.w] /= word.freq
+    # Normalise topic counter
+    norm = np.linalg.norm(list(cnt.values()))
+    cnt = {k:v/norm for k,v in cnt.items()}
 
-    bag.append(cnt)
     print('...#{} {}'.format(n, cnt))
     print('--------------')
 
-  return bag
+    yield cnt
 
 
 def create_index(kb, model):
@@ -63,3 +64,7 @@ if __name__ == '__main__':
   
   # Collect topic wordbag
   wb = collect_wordbag(kb)
+
+  # Create knowledge index
+  for bag in wb:
+    pass
