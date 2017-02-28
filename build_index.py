@@ -12,6 +12,7 @@ from termcolor import colored
 from collections import Counter
 from pylib.knowledge.graph import Knowledge
 from pylib.knowledge.datasource import MineDB
+from pylib.knowledge.indexing import *
 from nltk.tokenize.punkt import PunktSentenceTokenizer
 
 arguments = argparse.ArgumentParser()
