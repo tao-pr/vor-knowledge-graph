@@ -28,11 +28,13 @@ class IndexDomain:
       for path in ['/conf','/data']:
         os.makedirs(SOLR_COLLECTION_PATH + path)
         # Copy initial Solr config files across
-        for file in os.listdir(SOLR_COLLECTION_PATH):
-          srcpath = REPO_PATH + '/solr' + path + '/' + file
-          destpath = SOLR_COLLECTION_PATH + path + '/' + file
-          print('... copying {}'.format(path + '/' + file))
-          copyfile(srcpath, destpath) # TAOTODO:
+        srcdir = REPO_PATH + '/solr' + path
+        for file in os.listdir(srcdir):
+          srcpath = srcdir + '/' + file
+          if os.path.isfile(srcpath):
+            destpath = SOLR_COLLECTION_PATH + path + '/' + file
+            print('... copying {}'.format(path + '/' + file))
+            copyfile(srcpath, destpath) # TAOTODO:
       print('[done] all collection files initialised')
 
   """
