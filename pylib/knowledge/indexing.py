@@ -3,28 +3,42 @@ Solr interface
 @author Tao PR (github.com/starcolon)
 """
 
+import os
 import pysolr
+from shutil import copyfile
 from termcolor import colored
 
 LOCAL_PREFIX  = 'http://localhost:8983/solr/'
+SOLR_PATH     = os.getenv('SOLR','/usr/local/solr/solr-5.3.1')
+SOLR_COLLECTION_PATH = '{}/server/solr/vor'.format(SOLR_PATH)
+SCRIPT_PATH   = os.path.dirname(os.path.realpath(__file__))
+REPO_PATH     = os.path.abspath('{}/../../'.format(SCRIPT_PATH))
 
 class IndexDomain:
   def __init__(self, solr_svr_addr=LOCAL_PREFIX)
     self.solr = pysolr.Solr(url, timeout=8)
 
   """
-  Create a new Solr index if does not exist,
-  otherwise, load the existing
+  Create a new Solr index if does not exist
   """
-  def create_index(collection_name):
-    # TAOTODO: Check whether the collection already exists
+  def create_index():
+    if not is_index_exist:
+      print(colored('[Index] No existing collection found','yellow'))
+      print(colored('[Index] Creating a fresh new','cyan'))
+      for path in ['/conf','/data']:
+        os.makedirs(SOLR_COLLECTION_PATH + path)
+      # TAOTODO: Copy initial Solr config files across
+      print('[Index] Initialising collection...')
+      copyfile('')
 
-    # If the collection is not there,
-    # create a new one
-    pass
-
-  def is_index_exist(collection_name):
-    pass
+  """
+  Dirty way of checking whether the collection exists
+  """
+  def is_index_exist():
+    return os.path.isdir(SOLR_COLLECTION_PATH) and 
+      os.path.isdir(SOLR_COLLECTION_PATH + '/conf') and 
+      os.path.isdir(SOLR_COLLECTION_PATH + '/data') and 
+      os.path.isfile(SOLR_COLLECTION_PATH + 'core.properties')
 
   def add_to_index(node):
     pass
