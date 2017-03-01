@@ -17,10 +17,18 @@ class IndexDomain:
   otherwise, load the existing
   """
   def create_index(collection_name):
+    # TAOTODO: Check whether the collection already exists
+
+    # If the collection is not there,
+    # create a new one
     pass
 
   def is_index_exist(collection_name):
     pass
 
-  def add_to_index(solr,node):
+  def add_to_index(node):
     pass
+
+  def search(phrases,max_results=25):
+    for res in self.solr.search(query,**{'rows': max_results}):
+      yield res

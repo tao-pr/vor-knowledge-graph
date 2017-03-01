@@ -44,7 +44,14 @@ def collect_wordbag(kb):
     yield cnt
 
 
-def create_index(kb, model):
+def create_index():
+  print(colored('[Index] creating index...','cyan'))
+  domain = IndexDomain()
+  domain.create_index('vor')
+  print('[done]')
+  return domain
+
+def add_to_index(index, bag):
   pass
 
 def load_word2vec_model(path):
@@ -66,6 +73,12 @@ if __name__ == '__main__':
   # Collect topic wordbag
   wb = collect_wordbag(kb)
 
+  # Prepare Solr indexing
+  index = create_index()
+
   # Create knowledge index
   for bag in wb:
-    pass
+    print('-----------------------')
+    print(colored('...[index] adding to index : ','green'))
+    print('...', bag)
+    add_to_index(index, bag)
