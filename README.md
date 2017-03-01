@@ -121,6 +121,24 @@ is a binary file.
 
 ---
 
+## 5) Create Solr index
+
+> **Prerequisite**: Set system environment `SOLR` with 
+the physical path to the installation directory 
+of Solr.
+
+Execute the following command to create/re-index Solr:
+
+```bash
+  $ python3 build_index.py --limit {LIMIT} --root {PASSWORD}
+```
+
+This will take some time, depending on how large your 
+dataset is and how performant your system is.
+`root` argument denotes your OrientDB password.
+
+---
+
 ## Licence
 
 The project is licenced under [GNU 3 public licence](https://www.gnu.org/licenses/gpl-3.0.en.html). All third party libraries are redistributed 

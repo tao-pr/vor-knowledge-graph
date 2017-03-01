@@ -82,3 +82,5 @@ if __name__ == '__main__':
     print(colored('...[index] adding to index : ','green'))
     print('...', bag)
     add_to_index(index, bag)
+
+  print(colored('[DONE] all process ended','green'))
