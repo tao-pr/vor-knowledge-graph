@@ -12,7 +12,6 @@ from termcolor import colored
 from collections import Counter
 from pylib.knowledge.graph import Knowledge
 from pylib.knowledge.datasource import MineDB
-from pylib.knowledge.indexing import IndexDomain
 from nltk.tokenize.punkt import PunktSentenceTokenizer
 
 arguments = argparse.ArgumentParser()
@@ -45,11 +44,8 @@ def collect_wordbag(kb):
 
 
 def create_index():
-  print(colored('[Index] creating index...','cyan'))
-  domain = IndexDomain()
-  domain.create_index('vor')
-  print('[done]')
-  return domain
+  # TAOTODO:
+  pass
 
 def add_to_index(index, bag):
   pass
