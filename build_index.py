@@ -37,18 +37,8 @@ def collect_wordbag(kb):
     norm = np.linalg.norm(list(cnt.values()))
     cnt = {k:v/norm for k,v in cnt.items()}
 
-    print('...#{} {}'.format(n, cnt))
-    print('--------------')
-
-    yield cnt
-
-
-def create_index():
-  # TAOTODO:
-  pass
-
-def add_to_index(index, bag):
-  pass
+    yield (n,topic,cnt)
+    if n>=args['limit']: break
 
 def load_word2vec_model(path):
   if not os.path.isfile(model_path):
@@ -56,6 +46,12 @@ def load_word2vec_model(path):
     raise RuntimeError('Model does not exist')
   print(colored('[Model] loading binary model.','cyan'))
   return word2vec.WordVectors.from_binary(model_path, encoding='ISO-8859-1')
+
+def add_to_index(index,bag):
+  print('------------------------------------')
+  n, topic, cnt = bag
+  print('...Constructing : {}'.format(colored(topic.title,'magenta')))
+  print('...#{} {}'.format(n, cnt))
 
 if __name__ == '__main__':
   # Load word2vec model
@@ -69,14 +65,9 @@ if __name__ == '__main__':
   # Collect topic wordbag
   wb = collect_wordbag(kb)
 
-  # Prepare Solr indexing
-  index = create_index()
-
   # Create knowledge index
+  index = []
   for bag in wb:
-    print('-----------------------')
-    print(colored('...[index] adding to index : ','green'))
-    print('...', bag)
     add_to_index(index, bag)
 
   print(colored('[DONE] all process ended','green'))
