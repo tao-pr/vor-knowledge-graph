@@ -52,6 +52,7 @@ def add_to_index(index,bag):
   n, topic, cnt = bag
   print('...Constructing : {}'.format(colored(topic.title,'magenta')))
   print('...#{} {}'.format(n, cnt))
+  # TAOTODO:
 
 if __name__ == '__main__':
   # Load word2vec model
@@ -66,7 +67,8 @@ if __name__ == '__main__':
   wb = collect_wordbag(kb)
 
   # Create knowledge index
-  index = []
+  index = Knowledge('localhost','vorindex','root',args['root'])
+  index.clear()
   for bag in wb:
     add_to_index(index, bag)
 
