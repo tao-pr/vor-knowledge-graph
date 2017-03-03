@@ -136,7 +136,7 @@ if __name__ == '__main__':
       print(kb_nodes)
 
     # Create a set of knowledge links
-    kb.add(topic,kb_nodes,args['verbose'])
+    kb.add(topic,kb_nodes,None,args['verbose'])
 
     n += 1
     if n%100 == 0 and n>0:

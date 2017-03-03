@@ -63,9 +63,10 @@ class Knowledge:
   Add a set of new knowledge links
   @param {str} topic
   @param {list} of {str} words
+  @param {float} weight of the link
   @param {bool} verbose
   """
-  def add(self,topic,words,verbose):
+  def add(self,topic,words,weight,verbose):
 
     if verbose: print(colored('Adding : ','green'), topic, ' ===> ', words)
 
