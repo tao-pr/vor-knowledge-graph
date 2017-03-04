@@ -97,11 +97,11 @@ class Knowledge:
       # [keyword] => [topic]
       if weight is None:
         # General relation
-        self.orient.command("create edge HAS from ({0}) to ({1})"
+        self.orient.command("create edge HAS from ({0}) to ({1})"\
           .format(queryTopic,queryWord))
       else:
         # Invert-index
-        self.orient.command("create edge INDEX from ({0}) to ({1}) SET weight={2}")
+        self.orient.command("create edge INDEX from ({0}) to ({1}) SET weight={2}")\
           .format(queryWord, queryTopic, weight)
 
     # Add links between words

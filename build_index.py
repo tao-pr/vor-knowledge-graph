@@ -52,7 +52,8 @@ def add_to_index(index,bag):
   n, topic, cnt = bag
   print('...Constructing : {}'.format(colored(topic.title,'magenta')))
   print('...#{} {}'.format(n, cnt))
-  # TAOTODO:
+  for w,weight in bag.items:
+    index.add(topic, w, weight, verbose=False)
 
 if __name__ == '__main__':
   # Load word2vec model
