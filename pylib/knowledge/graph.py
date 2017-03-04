@@ -90,10 +90,19 @@ class Knowledge:
         self.orient.command("create vertex KEYWORD set w='{0}'".format(w))
 
       # Add a link from {topic} => {word}
-      if verbose: 
-        print(colored('New link [{0}] HAS => [{1}]'.format(topic,w),'green'))
-      self.orient.command("create edge HAS from ({0}) to ({1})"
-        .format(queryTopic,queryWord))
+      if verbose: print(colored('New link [{0}] HAS => [{1}]'.format(topic,w),'green'))
+      
+      # If [weight] is specified,
+      # Create an inverted-index edge from
+      # [keyword] => [topic]
+      if weight is None:
+        # General relation
+        self.orient.command("create edge HAS from ({0}) to ({1})"
+          .format(queryTopic,queryWord))
+      else:
+        # Invert-index
+        self.orient.command("create edge INDEX from ({0}) to ({1}) SET weight={2}")
+          .format(queryWord, queryTopic, weight)
 
     # Add links between words
     for w in words:
