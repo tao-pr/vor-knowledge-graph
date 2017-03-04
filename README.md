@@ -121,21 +121,19 @@ is a binary file.
 
 ---
 
-## 5) Create Solr index
+## 5) Create topic index
 
-> **Prerequisite**: Set system environment `SOLR` with 
-the physical path to the installation directory 
-of Solr.
-
-Execute the following command to create/re-index Solr:
+Execute:
 
 ```bash
   $ python3 build_index.py --limit {LIMIT} --root {PASSWORD}
 ```
 
-This will take some time, depending on how large your 
-dataset is and how performant your system is.
-`root` argument denotes your OrientDB password.
+The script generates another OrientDB collection `vorindex` 
+which contains all invert-index of the topics and their 
+corresponding keywords. Weights of the edges are calculated 
+by how frequent the word appear in each of the topics.
+
 
 ---
 
