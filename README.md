@@ -103,7 +103,7 @@ Execute:
 Where `{PASSWORD}` is your OrientDB root's password. The script 
 downloads the graph data from OrientDB, renders it with appropriate 
 visual figure. After it's done, you can view your graph in 
-`html/graph.html`.
+`html/graph-universe.html`.
 
 ---
 
