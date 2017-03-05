@@ -9,7 +9,46 @@
   <script type="text/javascript">
   <!-- TAOTODO: -->
 
+  function draw(){
+    var options = {
+      nodes:{
+        shape: 'dot',
+        min: 20,
+        max: 100,
+        scaling:{
+          label:{
+            min: 10,
+            max: 16
+          }
+        }
+      },
+      edges:{
+        scaling:{
+          min:1,
+          max:8,
+          label:{
+            min:12,
+            max:24
+          }
+        }
+      },
+      interaction:{
+        hover: true
+      }
+    }
+
+    var graph = new vis.Network(
+      document.getElementsByName('canvas')[0],
+      graphData,
+      options
+    );
+  }
+
 
   </script>
+  <body>
+    <canvas>
+    </canvas>
+  </body>
 </head>
 </html>
