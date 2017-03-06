@@ -90,12 +90,16 @@ var circularGraphMapper = function(nodes){
       var graph = { nodes: nodes, edges: edges }; 
       var sgraph = JSON.stringify(graph);
 
-      return sgraph
+      return [graph,sgraph]
     })
 }
 
 function saveToJSON(outputPath){
-  return function (sgraph){
+  return function (graphArray){
+    
+    var graph = graphArray[0];
+    var sgraph = graphArray[1];
+
     return new Promise((done,reject) => {
       console.log('Initialising I/O ...');
       var content = `function getGraph(){ return ${sgraph} }`;
