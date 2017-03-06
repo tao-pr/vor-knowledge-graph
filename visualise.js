@@ -22,7 +22,7 @@ const usrname = 'root';
 var password = args[0];
 
 function indexGraphMapper = function(nodes){
-
+  // TAOTODO:
 }
 
 function circularGraphMapper = function(nodes){
