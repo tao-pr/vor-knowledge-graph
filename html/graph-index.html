@@ -7,9 +7,8 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.12.0/vis.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"></script>
   <script type="text/javascript">
-  <!-- TAOTODO: -->
 
-  function draw(){
+  function draw(graphData){
     var options = {
       nodes:{
         shape: 'dot',
@@ -42,8 +41,26 @@
       graphData,
       options
     );
+
+    // TAOTODO: Add render code here
   }
 
+  // Render
+  document.addEventListener("DOMContentLoaded", function(event) { 
+      
+      console.log('INITIALISING');
+      var g = getGraph();
+
+      // TAOTODO: Draw [g]
+      var vis = {
+        edges: g.edges,
+        nodes: g.nodes
+      }
+
+      console.log('Drawing...')
+      draw(vis);
+      console.log('[done]')
+  })
 
   </script>
   <body>
