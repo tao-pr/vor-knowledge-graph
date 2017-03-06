@@ -67,37 +67,39 @@ var circularGraphMapper = function(nodes){
       });
 
     // Make sure edges of all underlying nodes are processed.
-    return Promise.all(jobs).then(() => [nodes,edges])
-  })
-  .then((p) => {
+    return Promise
+      .all(jobs).then(() => [nodes,edges])
+      .then((p) => {
 
-    console.log('Transforming nodes & edges ...')
-    var nodes = p[0];
-    var edges = p[1];
+        console.log('Transforming nodes & edges ...')
+        var nodes = p[0];
+        var edges = p[1];
 
-    // Flatten edges
-    edges = edges.reduce((a,b) => a.concat(b), []);
+        // Flatten edges
+        edges = edges.reduce((a,b) => a.concat(b), []);
 
-    // Make all edges renderable
-    edges = edges.map((e) => {
-      return {
-        id:     Math.random()*10000,
-        source: e.out,
-        target: e.in,
-        type:   'curve'
-      }
-    })
+        // Make all edges renderable
+        edges = edges.map((e) => {
+          return {
+            id:     Math.random()*10000,
+            source: e.out,
+            target: e.in,
+            type:   'curve'
+          }
+        })
 
-    var graph = { nodes: nodes, edges: edges }; 
-    var sgraph = JSON.stringify(graph);
+        var graph = { nodes: nodes, edges: edges }; 
+        var sgraph = JSON.stringify(graph);
 
-    return sgraph
-  })
+        return sgraph
+      })
+  }) 
 }
 
 function saveToJSON(outputPath){
   return function (sgraph){
     return new Promise((done,reject) => {
+      console.log('Initialising I/O ...');
       var content = `function getGraph(){ return ${sgraph} }`;
       fs.writeFile(`./HTML/${outputPath}`,content,(err) => {
         console.log('Serialising graph to JS ...'.green);
