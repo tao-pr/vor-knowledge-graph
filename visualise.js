@@ -21,11 +21,11 @@ var KB     = require('./jslib/knowledge.js');
 const usrname = 'root';
 var password = args[0];
 
-function indexGraphMapper = function(nodes){
+var indexGraphMapper = function(nodes){
   // TAOTODO:
 }
 
-function circularGraphMapper = function(nodes){
+var circularGraphMapper = function(nodes){
   return new Promise((done,reject) => {
     // Reduce the form of nodes so they become renderable.
     var L = nodes.filter((n) => n['@class']=='TOPIC').length;
@@ -51,7 +51,7 @@ function circularGraphMapper = function(nodes){
     })
 
     // Take outbound edges of those underlying nodes
-    console.log('Enumurating edges...');
+    console.log('Enumerating edges...');
     var edges = [];
     var collectEdges = (es) => es.then((e) => {
       edges.push(e);
@@ -71,6 +71,7 @@ function circularGraphMapper = function(nodes){
   })
   .then((p) => {
 
+    console.log('Transforming nodes & edges ...')
     var nodes = p[0];
     var edges = p[1];
 
@@ -124,11 +125,12 @@ const dataMapping = {
   'vor': {
     'mapper': circularGraphMapper,
     'output': 'graph-data.js'
-  },
-  'vorindex': {
-    'mapper': indexGraphMapper,
-    'output': 'graph-index.js'
   }
+  // },
+  // 'vorindex': {
+  //   'mapper': indexGraphMapper,
+  //   'output': 'graph-index.js'
+  // }
 };
 
 /**
