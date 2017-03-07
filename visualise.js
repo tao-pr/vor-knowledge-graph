@@ -22,6 +22,36 @@ const usrname = 'root';
 var password = args[0];
 
 var indexGraphMapper = function(nodes){
+  var nodes = nodes.map((n,i) => {
+    return {
+      id:    i,
+      type:  n['@class'],
+      label: n['@class']=='TOPIC' ? n.title : n.w,
+      color: n['@class']=='TOPIC' ? '#F00000' : '#FFAAAA'
+    }
+  })
+
+  var topicOnly   = (n) => n.type == 'TOPIC';
+  var keywordOnly = (n) => n.type == 'KEYWORD';
+  var allKeywords = nodes.filter(keywordOnly);
+
+  // Enumurate index between [nodes] <==> [keywords]
+  console.log('Enurating edges...');
+  var edges = [];
+  var collectEdges = (es) => es.then((e) => {
+    edges.push({
+      from:  0,
+      to:    0,
+      value: 0
+    });
+  });
+
+  // Prepare edge enumuration jobs
+  var jobs = nodes
+    .filter(keywordOnly)
+    .map(KB.getOutE(600)) // TAOTODO: Apply sort by [weight]?
+    .map(collectEdges);
+
   // TAOTODO:
 }
 
@@ -52,7 +82,7 @@ var circularGraphMapper = function(nodes){
   // Take outbound edges of those underlying nodes
   console.log('Enumerating edges...');
   var edges = [];
-  var collectEdges = (es) => es.then((e) => {
+  var collectEdges = (node) => node.then((e) => {
     edges.push(e);
   });
   var topic = (n) => n.type=='TOPIC';
@@ -61,9 +91,7 @@ var circularGraphMapper = function(nodes){
   var jobs = nodes
     .filter(topic)
     .map(KB.getOutE(100))
-    .map((n) => {
-      return collectEdges(n);
-    });
+    .map(collectEdges);
 
   // Make sure edges of all underlying nodes are processed.
   return Promise
@@ -130,7 +158,7 @@ const dataMapping = {
     'mapper': circularGraphMapper,
     'output': 'graph-data.js'
   }
-  // },
+  // }, TAOTODO: Activate this part when ready
   // 'vorindex': {
   //   'mapper': indexGraphMapper,
   //   'output': 'graph-index.js'
@@ -141,7 +169,9 @@ const dataMapping = {
  * Map [OrientDB data] => [renderable JSON]
  * by the predefined mapping strategies
  */
-for (db in dataMapping){
+
+// TAOTODO: Promisify following iterable
+for (db in dataMapping){ 
   
   console.log('================================'.cyan)
   console.log('[Datasource] Processing : '.cyan, db)
