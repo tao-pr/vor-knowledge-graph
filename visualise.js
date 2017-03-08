@@ -24,7 +24,7 @@ var password = args[0];
 var indexGraphMapper = function(nodes){
   var nodes = nodes.map((n,i) => {
     return {
-      id:    i,
+      id:    n['@rid'],
       type:  n['@class'],
       label: n['@class']=='TOPIC' ? n.title : n.w,
       color: n['@class']=='TOPIC' ? '#F00000' : '#FFAAAA'
@@ -40,16 +40,16 @@ var indexGraphMapper = function(nodes){
   var edges = [];
   var collectEdges = (es) => es.then((e) => {
     edges.push({
-      from:  0,
-      to:    0,
-      value: 0
+      from:  e['in'],
+      to:    e['out'],
+      value: e['weight']
     });
   });
 
   // Prepare edge enumuration jobs
   var jobs = nodes
     .filter(keywordOnly)
-    .map(KB.getOutE(600)) // TAOTODO: Apply sort by [weight]?
+    .map(KB.getOutE(600)) 
     .map(collectEdges);
 
   // TAOTODO:
