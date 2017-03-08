@@ -3,10 +3,11 @@
  * @author TaoPR (github.com/starcolon)
  */
 
-var args   = process.argv.slice(2);
-var colors = require('colors');
-var fs     = require('fs');
-var KB     = require('./jslib/knowledge.js');
+var args    = process.argv.slice(2);
+var colors  = require('colors');
+var fs      = require('fs');
+var KB      = require('./jslib/knowledge.js');
+var Promise = require('bluebird');
 
 
 // Validate the arguments initially
@@ -52,7 +53,16 @@ var indexGraphMapper = function(nodes){
     .map(KB.getOutE(600)) 
     .map(collectEdges);
 
-  // TAOTODO:
+  return Promise
+    .all(jobs).then(() => [nodes,edges])
+    .then((p) => {
+
+      console.log('Transforming nodes & edges ...')
+      var [nodes, edges] = p;
+
+      // TAOTODO: Render to [visjs] data
+
+    });
 }
 
 var circularGraphMapper = function(nodes){
@@ -99,8 +109,7 @@ var circularGraphMapper = function(nodes){
     .then((p) => {
 
       console.log('Transforming nodes & edges ...')
-      var nodes = p[0];
-      var edges = p[1];
+      var [nodes, edges] = p;
 
       // Flatten edges
       edges = edges.reduce((a,b) => a.concat(b), []);
@@ -153,8 +162,9 @@ function saveToJSON(outputPath){
 // [OrientDB data] => [JSON data]
 // mapping strategies
 //-------------------------------
-const dataMapping = {
-  'vor': {
+const dataMapping = [
+  {
+    'name':  'vor',
     'mapper': circularGraphMapper,
     'output': 'graph-data.js'
   }
@@ -163,7 +173,7 @@ const dataMapping = {
   //   'mapper': indexGraphMapper,
   //   'output': 'graph-index.js'
   // }
-};
+]
 
 /**
  * Map [OrientDB data] => [renderable JSON]
@@ -171,23 +181,25 @@ const dataMapping = {
  */
 
 // TAOTODO: Promisify following iterable
-for (db in dataMapping){ 
+//for (db in dataMapping){ 
+Promise.mapSeries(dataMapping, (db) => {
   
   console.log('================================'.cyan)
   console.log('[Datasource] Processing : '.cyan, db)
   console.log('================================'.cyan)
 
-  var mapToJSON = dataMapping[db].mapper;
-  var outputPath = dataMapping[db].output;
+  var mapToJSON = db.mapper;
+  var outputPath = db.output;
 
-  KB.connect(db,usrname,password)
+  return KB
+    .connect(db.name,usrname,password)
     .catch((e) => {
-      console.error(`[ERROR] connection to OrientDB [${db}] failed.`.red);
+      console.error(`[ERROR] connection to OrientDB [${db.name}] failed.`.red);
       console.error(e);
       process.exit(1);
     }) 
     .then((g) => {
-      console.log(`[Connected] to OrientDB [${db}].`.green);
+      console.log(`[Connected] to OrientDB [${db.name}].`.green);
 
       // Read all nodes in
       var nodes = KB.nodes();
@@ -198,5 +210,6 @@ for (db in dataMapping){
     })
     .then(mapToJSON)
     .then(saveToJSON(outputPath))
-    //.then((_) => process.exit())
-}
+    //.then((_) => process.exit()) 
+  })
+.then((_) => process.exit())
