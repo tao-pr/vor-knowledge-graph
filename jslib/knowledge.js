@@ -55,6 +55,7 @@ Knw.edges = function(condition){
  * List all outbound edges from the specified node
  * @param {Object} node object
  * @return {Promise}
+ // TAOTODO: Apply sort?
  */
 Knw.getOutE = function(limit){
   return function(node){
