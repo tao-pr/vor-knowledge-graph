@@ -12,9 +12,10 @@ var Promise = require('bluebird');
  * @param {string} database name
  * @param {string} username
  * @param {string} password
+ * @param {bool} force reconnect?
  * @return {Promise} which wraps a [db] variable
  */
-Knw.connect = function(db,usrname,psw){
+Knw.connect = function(db,usrname,psw,reconnect=false){
   // Do nothing if connected
   if (Knw.db)
     return Promise.resolve(Knw.db);
