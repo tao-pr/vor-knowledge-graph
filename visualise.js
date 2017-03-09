@@ -167,12 +167,12 @@ const dataMapping = [
     'name':  'vor',
     'mapper': circularGraphMapper,
     'output': 'graph-data.js'
+  },
+  {
+    'name': 'vorindex',
+    'mapper': indexGraphMapper,
+    'output': 'graph-index.js'
   }
-  // }, TAOTODO: Activate this part when ready
-  // 'vorindex': {
-  //   'mapper': indexGraphMapper,
-  //   'output': 'graph-index.js'
-  // }
 ]
 
 /**
