@@ -6,7 +6,6 @@
 var args    = process.argv.slice(2);
 var colors  = require('colors');
 var fs      = require('fs');
-var KB      = require('./jslib/knowledge.js');
 var Promise = require('bluebird');
 
 
@@ -22,113 +21,117 @@ var Promise = require('bluebird');
 const usrname = 'root';
 var password = args[0];
 
-var indexGraphMapper = function(nodes){
-  var nodes = nodes.map((n,i) => {
-    return {
-      id:    n['@rid'],
-      type:  n['@class'],
-      label: n['@class']=='TOPIC' ? n.title : n.w,
-      color: n['@class']=='TOPIC' ? '#F00000' : '#FFAAAA'
-    }
-  })
-
-  var topicOnly   = (n) => n.type == 'TOPIC';
-  var keywordOnly = (n) => n.type == 'KEYWORD';
-  var allKeywords = nodes.filter(keywordOnly);
-
-  // Enumurate index between [nodes] <==> [keywords]
-  console.log('Enurating edges...');
-  var edges = [];
-  var collectEdges = (es) => es.then((e) => {
-    edges.push({
-      from:  e['in'],
-      to:    e['out'],
-      value: e['weight']
-    });
-  });
-
-  // Prepare edge enumuration jobs
-  var jobs = nodes
-    .filter(keywordOnly)
-    .map(KB.getOutE(600)) 
-    .map(collectEdges);
-
-  return Promise
-    .all(jobs).then(() => [nodes,edges])
-    .then((p) => {
-
-      console.log('Transforming nodes & edges ...')
-      var [nodes, edges] = p;
-
-      // TAOTODO: Render to [visjs] data
-
-    });
-}
-
-var circularGraphMapper = function(nodes){
-  // Reduce the form of nodes so they become renderable.
-  var L = nodes.filter((n) => n['@class']=='TOPIC').length;
-  var degreeStep = 2*Math.PI/L;
-  var i = -1;
-
-  nodes = nodes.map((n) => {
-    i++;
-    var randomDegree = Math.random()*2*Math.PI;
-    var randomR = Math.random()*0.8;
-    var x = randomR * Math.cos(randomDegree);
-    var y = randomR * Math.sin(randomDegree);
-
-    return {
-      id:    n['@rid'],
-      type:  n['@class'],
-      label: n['@class']=='TOPIC' ? n.title : n.w,
-      x:     n['@class']=='TOPIC' ? Math.cos(degreeStep*i) : x,
-      y:     n['@class']=='TOPIC' ? Math.sin(degreeStep*i) : y, 
-      size:  n['@class']=='TOPIC' ? 10 : 1,
-      color: n['@class']=='TOPIC' ? '#F00000' : '#FFAAAA'
-    }
-  })
-
-  // Take outbound edges of those underlying nodes
-  console.log('Enumerating edges...');
-  var edges = [];
-  var collectEdges = (node) => node.then((e) => {
-    edges.push(e);
-  });
-  var topic = (n) => n.type=='TOPIC';
-
-  // Prepare edge enumuration jobs
-  var jobs = nodes
-    .filter(topic)
-    .map(KB.getOutE(100))
-    .map(collectEdges);
-
-  // Make sure edges of all underlying nodes are processed.
-  return Promise
-    .all(jobs).then(() => [nodes,edges])
-    .then((p) => {
-
-      console.log('Transforming nodes & edges ...')
-      var [nodes, edges] = p;
-
-      // Flatten edges
-      edges = edges.reduce((a,b) => a.concat(b), []);
-
-      // Make all edges renderable
-      edges = edges.map((e) => {
-        return {
-          id:     Math.random()*10000,
-          source: e.out,
-          target: e.in,
-          type:   'curve'
-        }
-      })
-
-      var graph = { nodes: nodes, edges: edges }; 
-      var sgraph = JSON.stringify(graph);
-
-      return [graph,sgraph]
+var indexGraphMapper = function(KB){
+  return function(nodes){
+    var nodes = nodes.map((n,i) => {
+      return {
+        id:    n['@rid'],
+        type:  n['@class'],
+        label: n['@class']=='TOPIC' ? n.title : n.w,
+        color: n['@class']=='TOPIC' ? '#F00000' : '#FFAAAA'
+      }
     })
+
+    var topicOnly   = (n) => n.type == 'TOPIC';
+    var keywordOnly = (n) => n.type == 'KEYWORD';
+    var allKeywords = nodes.filter(keywordOnly);
+
+    // Enumurate index between [nodes] <==> [keywords]
+    console.log('Enurating edges...');
+    var edges = [];
+    var collectEdges = (es) => es.then((e) => {
+      edges.push({
+        from:  e['in'],
+        to:    e['out'],
+        value: e['weight']
+      });
+    });
+
+    // Prepare edge enumuration jobs
+    var jobs = nodes
+      .filter(keywordOnly)
+      .map(KB.getOutE(600)) 
+      .map(collectEdges);
+
+    return Promise
+      .all(jobs).then(() => [nodes,edges])
+      .then((p) => {
+
+        console.log('Transforming nodes & edges ...')
+        var [nodes, edges] = p;
+
+        // TAOTODO: Render to [visjs] data
+
+      });
+  }
+}
+  
+var circularGraphMapper = function(KB){
+  return function(nodes){
+    // Reduce the form of nodes so they become renderable.
+    var L = nodes.filter((n) => n['@class']=='TOPIC').length;
+    var degreeStep = 2*Math.PI/L;
+    var i = -1;
+
+    nodes = nodes.map((n) => {
+      i++;
+      var randomDegree = Math.random()*2*Math.PI;
+      var randomR = Math.random()*0.8;
+      var x = randomR * Math.cos(randomDegree);
+      var y = randomR * Math.sin(randomDegree);
+
+      return {
+        id:    n['@rid'],
+        type:  n['@class'],
+        label: n['@class']=='TOPIC' ? n.title : n.w,
+        x:     n['@class']=='TOPIC' ? Math.cos(degreeStep*i) : x,
+        y:     n['@class']=='TOPIC' ? Math.sin(degreeStep*i) : y, 
+        size:  n['@class']=='TOPIC' ? 10 : 1,
+        color: n['@class']=='TOPIC' ? '#F00000' : '#FFAAAA'
+      }
+    })
+
+    // Take outbound edges of those underlying nodes
+    console.log('Enumerating edges...');
+    var edges = [];
+    var collectEdges = (node) => node.then((e) => {
+      edges.push(e);
+    });
+    var topic = (n) => n.type=='TOPIC';
+
+    // Prepare edge enumuration jobs
+    var jobs = nodes
+      .filter(topic)
+      .map(KB.getOutE(100))
+      .map(collectEdges);
+
+    // Make sure edges of all underlying nodes are processed.
+    return Promise
+      .all(jobs).then(() => [nodes,edges])
+      .then((p) => {
+
+        console.log('Transforming nodes & edges ...')
+        var [nodes, edges] = p;
+
+        // Flatten edges
+        edges = edges.reduce((a,b) => a.concat(b), []);
+
+        // Make all edges renderable
+        edges = edges.map((e) => {
+          return {
+            id:     Math.random()*10000,
+            source: e.out,
+            target: e.in,
+            type:   'curve'
+          }
+        })
+
+        var graph = { nodes: nodes, edges: edges }; 
+        var sgraph = JSON.stringify(graph);
+
+        return [graph,sgraph]
+      })
+  }
 }
 
 function saveToJSON(outputPath){
@@ -188,6 +191,8 @@ Promise.mapSeries(dataMapping, (db) => {
   console.log('[Datasource] Processing : '.cyan, db)
   console.log('================================'.cyan)
 
+  var KB      = require('./jslib/knowledge.js');
+
   var mapToJSON = db.mapper;
   var outputPath = db.output;
 
@@ -208,7 +213,7 @@ Promise.mapSeries(dataMapping, (db) => {
       // Fulfill the values and go on
       return Promise.resolve(nodes)
     })
-    .then(mapToJSON)
+    .then(mapToJSON(KB))
     .then(saveToJSON(outputPath))
   })
 .then((_) => process.exit())
