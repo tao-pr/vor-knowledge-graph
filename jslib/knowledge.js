@@ -80,9 +80,12 @@ Knw.getOutE = function(limit){
 Knw.getOutIndex = function(limit){
   return function(node){
     var linked = {'out': node.id}
-    var output = Knw.db.select().from('e').where(linked)
+    var output = Knw.db
+      .select().from('e')
+      .where(linked)
+      .order('weight desc')
 
-    if (limit){// TAOTODO: Apply sort by weight?
+    if (limit){
       return output.limit(limit).all();
     }
     else
