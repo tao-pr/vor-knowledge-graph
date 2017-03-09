@@ -210,6 +210,5 @@ Promise.mapSeries(dataMapping, (db) => {
     })
     .then(mapToJSON)
     .then(saveToJSON(outputPath))
-    //.then((_) => process.exit()) 
   })
 .then((_) => process.exit())
