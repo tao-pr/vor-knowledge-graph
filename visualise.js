@@ -50,7 +50,7 @@ var indexGraphMapper = function(KB){
     // Prepare edge enumuration jobs
     var jobs = nodes
       .filter(keywordOnly)
-      .map(KB.getOutE(600)) 
+      .map(KB.getOutIndex(600)) 
       .map(collectEdges);
 
     return Promise

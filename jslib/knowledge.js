@@ -56,7 +56,6 @@ Knw.edges = function(condition){
  * List all outbound edges from the specified node
  * @param {Object} node object
  * @return {Promise}
- // TAOTODO: Apply sort?
  */
 Knw.getOutE = function(limit){
   return function(node){
@@ -66,6 +65,24 @@ Knw.getOutE = function(limit){
       Knw.db.select().from('rel').where(linked);
 
     if (limit){
+      return output.limit(limit).all();
+    }
+    else
+      return output.all();
+  }
+}
+
+/**
+ * List all outbound index edges from the specified node
+ * @param {Object} node object
+ * @return {Promise}
+ */
+Knw.getOutIndex = function(limit){
+  return function(node){
+    var linked = {'out': node.id}
+    var output = Knw.db.select().from('e').where(linked)
+
+    if (limit){// TAOTODO: Apply sort by weight?
       return output.limit(limit).all();
     }
     else
