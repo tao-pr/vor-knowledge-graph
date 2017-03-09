@@ -183,8 +183,6 @@ const dataMapping = [
  * by the predefined mapping strategies
  */
 
-// TAOTODO: Promisify following iterable
-//for (db in dataMapping){ 
 Promise.mapSeries(dataMapping, (db) => {
   
   console.log('================================'.cyan)
@@ -192,12 +190,12 @@ Promise.mapSeries(dataMapping, (db) => {
   console.log('================================'.cyan)
 
   var KB      = require('./jslib/knowledge.js');
-
+  var reconnect = true
   var mapToJSON = db.mapper;
   var outputPath = db.output;
 
   return KB
-    .connect(db.name,usrname,password)
+    .connect(db.name,usrname,password,reconnect)
     .catch((e) => {
       console.error(`[ERROR] connection to OrientDB [${db.name}] failed.`.red);
       console.error(e);
