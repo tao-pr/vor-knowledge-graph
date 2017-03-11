@@ -42,7 +42,9 @@
       options
     );
 
-    // TAOTODO: Add render code here
+    console.log('Drawing graph...')
+    draw(graph);
+    console.log('[done]')
   }
 
   // Render
@@ -51,7 +53,6 @@
       console.log('INITIALISING');
       var g = getGraph();
 
-      // TAOTODO: Draw [g]
       var vis = {
         edges: g.edges,
         nodes: g.nodes
