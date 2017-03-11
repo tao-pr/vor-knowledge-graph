@@ -30,18 +30,12 @@ var indexGraphMapper = function(KB){
         id:    n['@rid'],
         type:  n['@class'],
         label: n['@class']=='TOPIC' ? n.title : n.w,
-        color: n['@class']=='TOPIC' ? '#F00000' : '#FFAAAA'
+        color: n['@class']=='TOPIC' ? '#F00000' : '#FFAAAA',
+        value: n['@class']=='TOPIC' ? 25 : 3
       }
     })
 
     nodeHash = Array.from(nodeHash)
-
-    console.log('Remapping nodes...')
-    nodes = nodes.map( n => {
-      n.id = nodeHash.indexOf(n.id); // @rid => integer
-      return n
-    })
-
 
     var topicOnly   = (n) => n.type == 'TOPIC';
     var keywordOnly = (n) => n.type == 'KEYWORD';
@@ -51,32 +45,39 @@ var indexGraphMapper = function(KB){
     // Enumurate index between [nodes] <==> [keywords]
     console.log('Enurating edges...');
     var edges = [];
-    var collectEdges = (es) => es.then((e) => {
+    var collectEdges = (iter) => iter.then((es) => {
 
-      // Do not include below-par confidence level
-      if (e['weight'] < 0.53) return;
+      es.forEach(e => {
+        // Do not include below-par confidence level
+        if (e['weight'] < 0.53) return;
 
-      // TAODEBUG:
-      console.log(e);
+        // TAODEBUG:
+        console.log(e);
 
-      edges.push({
-        from:  nodeHash.indexOf(e['in']),
-        to:    nodeHash.indexOf(e['out']),
-        value: e['weight']
-      });
+        edges.push({
+          from:  nodeHash.indexOf(e['in']),
+          to:    nodeHash.indexOf(e['out']),
+          value: e['weight']
+        });
+      })
     });
 
     // Prepare edge enumuration jobs
-    var jobs = allKeywords
-      .map(KB.getOutIndex(25)) 
+    var jobs = allTopics
+      .map(KB.getInboundIndex(25)) 
       .map(collectEdges);
 
     return Promise
       .all(jobs).then(() => [nodes,edges])
       .then((p) => {
 
-        console.log('Transforming nodes & edges ...')
         var [nodes, edges] = p;
+
+        console.log('Remapping nodes...')
+        nodes = nodes.map( n => {
+          n.id = nodeHash.indexOf(n.id); // @rid => integer
+          return n
+        })
 
         var graph = { nodes: nodes, edges: edges }; 
         var sgraph = JSON.stringify(graph);
