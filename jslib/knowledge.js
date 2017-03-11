@@ -82,9 +82,6 @@ Knw.getOutE = function(limit){
  */
 Knw.getOutIndex = function(limit){
   return function(node){
-    // TAODEBUG:
-    console.log(`...edges from node #${node.id}`)
-
     var linked = {'out': node.id}
     var output = Knw.db
       .select().from('e')
