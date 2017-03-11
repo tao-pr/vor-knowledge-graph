@@ -17,7 +17,7 @@ var Promise = require('bluebird');
  */
 Knw.connect = function(db,usrname,psw,reconnect=false){
   // Do nothing if connected
-  if (Knw.db)
+  if (Knw.db && !reconnect)
     return Promise.resolve(Knw.db);
 
   Knw.db = new ODatabase({
@@ -41,6 +41,9 @@ Knw.nodes = function(condition){
     return Knw.db.select().from('V').where(condition).all();
   return Knw.db.select().from('V').all();
 }
+
+Knw.allTopics = () => Knw.nodes({'@class': 'TOPIC'})
+Knw.allKeywords = () => Knw.nodes({'@class': 'KEYWORD'})
 
 /**
  * List all edges where condition is met
@@ -79,6 +82,9 @@ Knw.getOutE = function(limit){
  */
 Knw.getOutIndex = function(limit){
   return function(node){
+    // TAODEBUG:
+    console.log(`...edges from node #${node.id}`)
+
     var linked = {'out': node.id}
     var output = Knw.db
       .select().from('e')

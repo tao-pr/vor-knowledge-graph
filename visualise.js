@@ -23,7 +23,7 @@ var password = args[0];
 
 var indexGraphMapper = function(KB){
   return function(nodes){
-    var nodes = nodes.map((n,i) => {
+    var nodes = nodes.map(n => {
       return {
         id:    n['@rid'],
         type:  n['@class'],
@@ -31,6 +31,9 @@ var indexGraphMapper = function(KB){
         color: n['@class']=='TOPIC' ? '#F00000' : '#FFAAAA'
       }
     })
+
+    // TAODEBUG:
+    console.log(nodes.map(n => n.id).join(' + '))
 
     var topicOnly   = (n) => n.type == 'TOPIC';
     var keywordOnly = (n) => n.type == 'KEYWORD';
@@ -41,7 +44,10 @@ var indexGraphMapper = function(KB){
     console.log('Enurating edges...');
     var edges = [];
     var collectEdges = (es) => es.then((e) => {
-      // TAOTODO: [e] is empty array, always
+
+      // Do not include below-par confidence level
+      if (e['weight'] < 0.53) return;
+
       edges.push({
         from:  e['in'],
         to:    e['out'],
@@ -167,11 +173,11 @@ function saveToJSON(outputPath){
 // mapping strategies
 //-------------------------------
 const dataMapping = [
-  {
-    'name':  'vor',
-    'mapper': circularGraphMapper,
-    'output': 'graph-data.js'
-  },
+  // {
+  //   'name':  'vor',
+  //   'mapper': circularGraphMapper,
+  //   'output': 'graph-data.js'
+  // },
   {
     'name': 'vorindex',
     'mapper': indexGraphMapper,
