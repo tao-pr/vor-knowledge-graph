@@ -72,7 +72,7 @@ var indexGraphMapper = function(KB){
 
         console.log('Remapping nodes...')
         nodes = nodes.map( n => {
-          n.id = nodeHash.indexOf(n.id); // @rid => integer
+          n.id = nodeHash.indexOf(n.id.toString()); // @rid => integer
           return n
         })
 
