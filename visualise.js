@@ -35,11 +35,13 @@ var indexGraphMapper = function(KB){
     var topicOnly   = (n) => n.type == 'TOPIC';
     var keywordOnly = (n) => n.type == 'KEYWORD';
     var allKeywords = nodes.filter(keywordOnly);
+    var allTopics   = nodes.filter(topicOnly);
 
     // Enumurate index between [nodes] <==> [keywords]
     console.log('Enurating edges...');
     var edges = [];
     var collectEdges = (es) => es.then((e) => {
+      // TAOTODO: [e] is empty array, always
       edges.push({
         from:  e['in'],
         to:    e['out'],
@@ -48,9 +50,8 @@ var indexGraphMapper = function(KB){
     });
 
     // Prepare edge enumuration jobs
-    var jobs = nodes
-      .filter(keywordOnly)
-      .map(KB.getOutIndex(600)) 
+    var jobs = allKeywords
+      .map(KB.getOutIndex(25)) 
       .map(collectEdges);
 
     return Promise
