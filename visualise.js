@@ -25,13 +25,13 @@ var indexGraphMapper = function(KB){
   return function(nodes){
     var nodeHash = new Set();
     var nodes = nodes.map(n => {
-      nodeHash.add(n['@rid']);
+      nodeHash.add(n['@rid'].toString());
       return {
         id:    n['@rid'],
         type:  n['@class'],
         label: n['@class']=='TOPIC' ? n.title : n.w,
         color: n['@class']=='TOPIC' ? '#F00000' : '#FFAAAA',
-        value: n['@class']=='TOPIC' ? 25 : 3
+        value: n['@class']=='TOPIC' ? 7 : 3
       }
     })
 
@@ -51,12 +51,9 @@ var indexGraphMapper = function(KB){
         // Do not include below-par confidence level
         if (e['weight'] < 0.53) return;
 
-        // TAODEBUG:
-        console.log(e);
-
         edges.push({
-          from:  nodeHash.indexOf(e['in']),
-          to:    nodeHash.indexOf(e['out']),
+          from:  nodeHash.indexOf(e['in'].toString()),
+          to:    nodeHash.indexOf(e['out'].toString()),
           value: e['weight']
         });
       })
