@@ -80,9 +80,10 @@ Knw.getOutE = function(limit){
  * @param {Object} node object
  * @return {Promise}
  */
-Knw.getOutIndex = function(limit){
+Knw.getInboundIndex = function(limit){
   return function(node){
-    var linked = {'out': node.id}
+
+    var linked = {'in': node.id}
     var output = Knw.db
       .select().from('e')
       .where(linked)
