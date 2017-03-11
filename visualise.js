@@ -67,8 +67,10 @@ var indexGraphMapper = function(KB){
         console.log('Transforming nodes & edges ...')
         var [nodes, edges] = p;
 
-        // TAOTODO: Render to [visjs] data
+        var graph = { nodes: nodes, edges: edges }; 
+        var sgraph = JSON.stringify(graph);
 
+        return [graph,sgraph]
       });
   }
 }
@@ -173,11 +175,11 @@ function saveToJSON(outputPath){
 // mapping strategies
 //-------------------------------
 const dataMapping = [
-  // {
-  //   'name':  'vor',
-  //   'mapper': circularGraphMapper,
-  //   'output': 'graph-data.js'
-  // },
+  {
+    'name':  'vor',
+    'mapper': circularGraphMapper,
+    'output': 'graph-data.js'
+  },
   {
     'name': 'vorindex',
     'mapper': indexGraphMapper,
