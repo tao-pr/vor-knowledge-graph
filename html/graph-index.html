@@ -37,14 +37,10 @@
     }
 
     var graph = new vis.Network(
-      document.getElementsByName('canvas')[0],
+      document.getElementsByTagName('canvas')[0],
       graphData,
       options
     );
-
-    console.log('Drawing graph...')
-    draw(graph);
-    console.log('[done]')
   }
 
   // Render
