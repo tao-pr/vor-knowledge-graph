@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="en-US" style="width:100%;height:100%">
 <head>
   <meta charset="UTF-8">
   <script type="text/javascript" src="./sigma.min.js" ></script>
@@ -38,8 +38,11 @@
       }
     }
 
+    // TAODEBUG:
+    console.log(graphData)
+
     var graph = new vis.Network(
-      document.getElementsByTagName('canvas')[0],
+      document.getElementById('graph'),
       graphData,
       options
     );
@@ -62,9 +65,8 @@
   })
 
   </script>
-  <body>
-    <canvas style="width:100%;height:100%">
-    </canvas>
+  <body style="width:100%;height:100%">
+    <div id="graph" style="width:100%;height:100%">
   </body>
 </head>
 </html>

@@ -56,6 +56,9 @@ var indexGraphMapper = function(KB){
       // Do not include below-par confidence level
       if (e['weight'] < 0.53) return;
 
+      // TAODEBUG:
+      console.log(e);
+
       edges.push({
         from:  nodeHash.indexOf(e['in']),
         to:    nodeHash.indexOf(e['out']),
