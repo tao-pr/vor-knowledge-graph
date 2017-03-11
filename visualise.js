@@ -23,7 +23,9 @@ var password = args[0];
 
 var indexGraphMapper = function(KB){
   return function(nodes){
+    var nodeHash = new Set();
     var nodes = nodes.map(n => {
+      nodeHash.add(n['@rid']);
       return {
         id:    n['@rid'],
         type:  n['@class'],
@@ -32,8 +34,14 @@ var indexGraphMapper = function(KB){
       }
     })
 
-    // TAODEBUG:
-    console.log(nodes.map(n => n.id).join(' + '))
+    nodeHash = Array.from(nodeHash)
+
+    console.log('Remapping nodes...')
+    nodes = nodes.map( n => {
+      n.id = nodeHash.indexOf(n.id); // @rid => integer
+      return n
+    })
+
 
     var topicOnly   = (n) => n.type == 'TOPIC';
     var keywordOnly = (n) => n.type == 'KEYWORD';
@@ -49,8 +57,8 @@ var indexGraphMapper = function(KB){
       if (e['weight'] < 0.53) return;
 
       edges.push({
-        from:  e['in'],
-        to:    e['out'],
+        from:  nodeHash.indexOf(e['in']),
+        to:    nodeHash.indexOf(e['out']),
         value: e['weight']
       });
     });
