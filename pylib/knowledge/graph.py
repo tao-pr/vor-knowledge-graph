@@ -66,7 +66,7 @@ class Knowledge:
   @param {float} weight of the link
   @param {bool} verbose
   """
-  def add(self,topic,words,weight,verbose):
+  def add(self,topic,words,weights,verbose):
 
     if verbose: print(colored('Adding : ','green'), topic, ' ===> ', words)
 
@@ -74,6 +74,7 @@ class Knowledge:
     unwanted = "'"
     topic = topic.replace(unwanted," ")
     words = map(lambda w: w.replace(unwanted, " "), words)
+    weights = iter(weights) if weights is not None else None
 
     # Add a new topic if not exist
     queryTopic = "select from TOPIC where title='{0}'".format(topic)
@@ -95,12 +96,13 @@ class Knowledge:
       # If [weight] is specified,
       # Create an inverted-index edge from
       # [keyword] => [topic]
-      if weight is None:
+      if weights is None:
         # General relation
         self.orient.command("create edge HAS from ({0}) to ({1})"\
           .format(queryTopic, queryWord))
       else:
         # Invert-index
+        weight = next(weights)
         self.orient.command("create edge INDEX from ({0}) to ({1}) SET weight={2}"\
           .format(queryWord, queryTopic, weight))
 
