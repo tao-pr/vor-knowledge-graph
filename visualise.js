@@ -47,11 +47,14 @@ var indexGraphMapper = function(KB){
     console.log('Enurating edges...');
     var edges = [];
     var collectEdges = (iter) => iter.then((es) => {
-
       es.forEach(e => {
+
+        var _in = e['in'].toString();
+        var _out = e['out'].toString();
+
         edges.push({
-          from:  nodeHash.indexOf(e['in'].toString()),
-          to:    nodeHash.indexOf(e['out'].toString()),
+          from:  nodeHash.indexOf(_in),
+          to:    nodeHash.indexOf(_out),
           value: e['weight']
         });
       })
@@ -59,7 +62,7 @@ var indexGraphMapper = function(KB){
 
     // Prepare edge enumuration jobs
     var jobs = allTopics
-      .map(KB.getInboundIndex(100)) 
+      .map(KB.getInboundIndex(42)) 
       .map(collectEdges);
 
     return Promise
@@ -73,6 +76,13 @@ var indexGraphMapper = function(KB){
           n.id = nodeHash.indexOf(n.id.toString()); // @rid => integer
           return n
         })
+
+        // Remove unlinked nodes from the graph
+        var allInboundNodes = new Set(edges.map(e => e.to));
+        var allOutboundNodes = new Set(edges.map(e => e.from));
+        nodes = nodes.filter(n => 
+          allOutboundNodes.has(n.id) ||
+          allInboundNodes.has(n.id));
 
         var graph = { nodes: nodes, edges: edges }; 
         var sgraph = JSON.stringify(graph);
