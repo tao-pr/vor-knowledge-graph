@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en-US" style="width:100%;height:100%">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="./sigma.min.js" ></script>
+  <script type="text/javascript" src="./graph-index.js" ></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.12.0/vis.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"></script>
+  <script type="text/javascript">
+
+  function draw(graphData){
+    var options = {
+      nodes:{
+        shape: 'dot',
+        scaling:{
+          min: 20,
+          max: 100,
+          label:{
+            min: 10,
+            max: 16
+          }
+        }
+      },
+      edges:{
+        scaling:{
+          min:1,
+          max:8,
+          label:{
+            min:12,
+            max:24
+          }
+        }
+      },
+      interaction:{
+        hover: true
+      }
+    }
+
+    var graph = new vis.Network(
+      document.getElementById('graph'),
+      graphData,
+      options
+    );
+  }
+
+  // Render
+  document.addEventListener("DOMContentLoaded", function(event) { 
+      
+      console.log('INITIALISING');
+      var g = getGraph();
+      var vis = {
+        edges: g.edges,
+        nodes: g.nodes
+      }
+
+      console.log('Drawing...')
+      draw(vis);
+      console.log('[done]')
+  })
+
+  </script>
+  <body style="width:100%;height:100%">
+    <div id="graph" style="width:100%;height:100%">
+  </body>
+</head>
+</html>
