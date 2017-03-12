@@ -49,9 +49,6 @@ var indexGraphMapper = function(KB){
     var collectEdges = (iter) => iter.then((es) => {
 
       es.forEach(e => {
-        // Do not include below-par confidence level
-        if (e['weight'] < 0.33) return;
-
         edges.push({
           from:  nodeHash.indexOf(e['in'].toString()),
           to:    nodeHash.indexOf(e['out'].toString()),
