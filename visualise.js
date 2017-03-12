@@ -31,7 +31,8 @@ var indexGraphMapper = function(KB){
         type:  n['@class'],
         label: n['@class']=='TOPIC' ? n.title : n.w,
         color: n['@class']=='TOPIC' ? '#F00000' : '#FFAAAA',
-        value: n['@class']=='TOPIC' ? 7 : 3
+        value: n['@class']=='TOPIC' ? 5 : 3,
+        borderWidth: n['@class']=='TOPIC' ? 3 : 1
       }
     })
 
@@ -49,7 +50,7 @@ var indexGraphMapper = function(KB){
 
       es.forEach(e => {
         // Do not include below-par confidence level
-        if (e['weight'] < 0.53) return;
+        if (e['weight'] < 0.33) return;
 
         edges.push({
           from:  nodeHash.indexOf(e['in'].toString()),
@@ -61,7 +62,7 @@ var indexGraphMapper = function(KB){
 
     // Prepare edge enumuration jobs
     var jobs = allTopics
-      .map(KB.getInboundIndex(25)) 
+      .map(KB.getInboundIndex(100)) 
       .map(collectEdges);
 
     return Promise
