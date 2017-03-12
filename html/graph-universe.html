@@ -1,13 +1,13 @@
-<html>
+<!DOCTYPE html>
+<html lang="en-US">
 <head>
+  <meta charset="UTF-8">
   <script type="text/javascript" src="./sigma.min.js" ></script>
   <script type="text/javascript" src="./graph-data.js" ></script>
   <script type="text/javascript">
 
-    document.addEventListener("DOMContentLoaded", function(event) { 
-      
+    document.addEventListener("DOMContentLoaded", function(event) {
       console.log('INITIALISING');
-
       var g = getGraph();
 
       // For the sake of simplicity,
@@ -31,8 +31,7 @@
       // Bind node selection event
       window['selected'] = [];
       S.bind('clickNode', function(e) {
-        // TAOTODO:
-        //console.log(e.type, e.data.node.label, e.data.captor);
+        console.log(e.type, e.data.node.label, e.data.captor);
       });
 
       // Draw the graph

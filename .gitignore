@@ -1,6 +1,8 @@
+html/graph-data.js
+html/graph-index.js
+mine.txt
 models/
-pylib/interaction/
-pylib/text/__pycache__/
-pylib/spider/__pycache__/
-pylib/knowledge/__pycache__/
 node_modules/
+pylib/knowledge/__pycache__/
+pylib/spider/__pycache__/
+pylib/text/__pycache__/

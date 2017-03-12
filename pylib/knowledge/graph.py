@@ -50,14 +50,23 @@ class Knowledge:
       print(colored(e,'yellow'))
     
 
+  """
+  Permanently remove all edges and vertices
+  """
+  def clear(self):
+    self.orient.command('delete vertex TOPIC')
+    self.orient.command('delete vertex KEYWORD')
+    self.orient.command('delete edge') # May this be redundant?
+    print(colored('[Graph clearance] done','yellow'))
 
   """
   Add a set of new knowledge links
   @param {str} topic
   @param {list} of {str} words
+  @param {float} weight of the link
   @param {bool} verbose
   """
-  def add(self,topic,words,verbose):
+  def add(self,topic,words,weights,verbose):
 
     if verbose: print(colored('Adding : ','green'), topic, ' ===> ', words)
 
@@ -65,6 +74,7 @@ class Knowledge:
     unwanted = "'"
     topic = topic.replace(unwanted," ")
     words = map(lambda w: w.replace(unwanted, " "), words)
+    weights = iter(weights) if weights is not None else None
 
     # Add a new topic if not exist
     queryTopic = "select from TOPIC where title='{0}'".format(topic)
@@ -81,10 +91,20 @@ class Knowledge:
         self.orient.command("create vertex KEYWORD set w='{0}'".format(w))
 
       # Add a link from {topic} => {word}
-      if verbose: 
-        print(colored('New link [{0}] HAS => [{1}]'.format(topic,w),'green'))
-      self.orient.command("create edge HAS from ({0}) to ({1})"
-        .format(queryTopic,queryWord))
+      if verbose: print(colored('New link [{0}] HAS => [{1}]'.format(topic,w),'green'))
+      
+      # If [weight] is specified,
+      # Create an inverted-index edge from
+      # [keyword] => [topic]
+      if weights is None:
+        # General relation
+        self.orient.command("create edge HAS from ({0}) to ({1})"\
+          .format(queryTopic, queryWord))
+      else:
+        # Invert-index
+        weight = next(weights)
+        self.orient.command("create edge INDEX from ({0}) to ({1}) SET weight={2}"\
+          .format(queryWord, queryTopic, weight))
 
     # Add links between words
     for w in words:
@@ -96,12 +116,40 @@ class Knowledge:
           format(queryWord,querySib))
 
   """
+  {Generator} Enumurate keywords by strength of connections
+  """
+  def top_keywords(self):
+    query = "select w, in().size() as cnt from keyword order by cnt desc"
+    for k in self.orient.query(query):
+      yield k
+
+  """
+  {Generator} Enumurate all topics
+  """
+  def __iter__(self):
+    query = "select from topic"
+    for k in self.orient.query(query):
+      yield k
+
+  """
   {Generator} Enumerate all keywords in a topic
   @param {str} topic title
   """
-  def keywords_in_topic(self,topic):
+  def keywords_in_topic(self, topic, with_edge_count=False):
     subquery = "select expand(out()) from topic where title = '{0}'".format(topic)
-    query = "select w from ({0})".format(subquery)
+    query = "select w from ({0})".format(subquery) \
+      if not with_edge_count \
+      else "select w, in().size() as freq from (select expand(out()) from topic where title = '{}')".format(topic)
+    for k in self.orient.query(query):
+      yield k
+
+  """
+  {Generator} Enumerate all topics which the given keyword
+  belong to
+  @param {str} keyword to query
+  """
+  def topics_which_have(self,w):
+    query = "select in().title from KEYWORD where w='{}'".format(w)
     for k in self.orient.query(query):
       yield k
 

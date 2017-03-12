@@ -12,11 +12,12 @@ var Promise = require('bluebird');
  * @param {string} database name
  * @param {string} username
  * @param {string} password
+ * @param {bool} force reconnect?
  * @return {Promise} which wraps a [db] variable
  */
-Knw.connect = function(db,usrname,psw){
+Knw.connect = function(db,usrname,psw,reconnect=false){
   // Do nothing if connected
-  if (Knw.db)
+  if (Knw.db && !reconnect)
     return Promise.resolve(Knw.db);
 
   Knw.db = new ODatabase({
@@ -41,6 +42,9 @@ Knw.nodes = function(condition){
   return Knw.db.select().from('V').all();
 }
 
+Knw.allTopics = () => Knw.nodes({'@class': 'TOPIC'})
+Knw.allKeywords = () => Knw.nodes({'@class': 'KEYWORD'})
+
 /**
  * List all edges where condition is met
  * @param {Object} must satisfy OrientDB query format
@@ -62,6 +66,28 @@ Knw.getOutE = function(limit){
     var output = (node.type=='TOPIC') ? 
       Knw.db.select().from('has').where(linked) :
       Knw.db.select().from('rel').where(linked);
+
+    if (limit){
+      return output.limit(limit).all();
+    }
+    else
+      return output.all();
+  }
+}
+
+/**
+ * List all outbound index edges from the specified node
+ * @param {Object} node object
+ * @return {Promise}
+ */
+Knw.getInboundIndex = function(limit){
+  return function(node){
+
+    var linked = {'in': node.id}
+    var output = Knw.db
+      .select().from('e')
+      .where(linked)
+      .order('weight desc')
 
     if (limit){
       return output.limit(limit).all();

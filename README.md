@@ -2,8 +2,8 @@
 
 ---
 
+![Network](graphic/index-0.png)
 ![Network](graphic/vor.png)
-![Graph](graphic/graph.png)
 
 ---
 
@@ -16,13 +16,13 @@ ability to traverse the relations between knowledge topics.
 
 ---
 
-## Infrastructure
+## Infrastructure / Prerequisites
 
 To build and run the knowledge graph engine with vör, 
 you need the following software for the infrastructure.
 
-- [x] OrientDB
-- [x] MongoDB
+- [x] [OrientDB](http://orientdb.com/download/)
+- [x] [MongoDB](https://www.mongodb.com/download-center#community)
 
 ---
 
@@ -34,12 +34,6 @@ Install python 3.x requirements by:
   $ pip3 install -r -U requirements.txt
 ```
 
-In an opposite direction, collect the requirements with:
-
-```bash
-  $ pipreqs .
-```
-
 Install Node.js modules required by the graph visualiser. 
 You may ignore these steps if you are not interested in 
 visualisation.
@@ -47,12 +41,13 @@ visualisation.
 ```bash
   $ npm install
 ```
+
 Other than registered NPM packages, you also need to [install Sigma.js 
-for visualisation](https://github.com/jacomyal/sigma.js/wiki#getting-started).
+for visualisation](https://github.com/jacomyal/sigma.js/wiki#getting-started). The module is not bundled within this repository.
 
 ---
 
-## Download (crawl) wikipedia pages
+## 1) Download (crawl) wikipedia pages
 
 Execute:
 
@@ -61,10 +56,11 @@ Execute:
 ```
 
 The script continuously and endlessly crawls the knowledge topic 
-from Wikipedia starting from `Jupiter` page. You may change 
+from Wikipedia starting from the seeding page. You may change 
 the initial topic within the script to what best suits you. 
 To stop the process, just terminate is fine. It won't leave 
-anything at dirty state.
+anything at dirty stat so you can re-execute the script again 
+at any time.
 
 >**[NOTE]** The script keeps continuously crawling 
 and downloading the related knowledge through link traveral. 
@@ -72,7 +68,7 @@ and downloading the related knowledge through link traveral.
 
 ---
 
-## Build the knowledge graph
+## 2) Build the knowledge graph
 
 Execute:
 
@@ -96,7 +92,7 @@ time if you have large data in your collection.
 
 ---
 
-## Visualise the knowledge graph
+## 3) Visualise the knowledge graph
 
 Execute:
 
@@ -106,14 +102,15 @@ Execute:
 
 Where `{PASSWORD}` is your OrientDB root's password. The script 
 downloads the graph data from OrientDB, renders it with appropriate 
-visual figure. After it's done, you can view your graph in 
-`html/graph.html`.
+visual figure. After it's done, you can view the graphs as follows.
+
+- [1] Universe of topics graph [`html/graph-universe.html`].
+- [2] Index graph [`html/graph-index.html`.]
+
 
 ---
 
-## Build Word2Vec model over the crawled data
-
-> Still work in progress
+## 4) Build Word2Vec model over the crawled data
 
 Execute:
 
@@ -124,6 +121,24 @@ Execute:
 There should be sufficient amount of the downloaded wikipedia 
 in MongoDB which is done by running `crawl_wiki.py`. The output 
 is a binary file.
+
+---
+
+## 5) Create topic index
+
+Execute:
+
+```bash
+  $ python3 build_index.py --limit {LIMIT} --root {PASSWORD}
+```
+
+The script generates another OrientDB collection `vorindex` 
+which contains all invert-index of the topics and their 
+corresponding keywords. Weights of the edges are calculated 
+by how frequent the word appear in each of the topics.
+
+![Network](graphic/index-1.png)
+![Network](graphic/index-2.png)
 
 ---
 
