@@ -21,7 +21,7 @@ arguments.add_argument('--root', type=str, default=None, help='Supply the Orient
 arguments.add_argument('--modelpath', type=str, default='./models/word2vec.bin', help='Path of the word2vec binary model.')
 args = vars(arguments.parse_args(sys.argv[1:]))
 
-def collect_wordbag(kb):
+def collect_wordbag(kb, model):
   print(colored('Iterating through topics...','cyan'))
   n = 0
   for topic in kb:
@@ -36,6 +36,14 @@ def collect_wordbag(kb):
     # Normalise topic counter
     norm = np.linalg.norm(list(cnt.values()))
     cnt = {k:v/norm for k,v in cnt.items()}
+
+    # Generate similar words with word2vec
+    for word,freq in cnt:
+      indexes, metrics = model.cosine(word)
+      synnonyms = model.generate_response(indexes, metrics).tolist()
+      for syn, confidence in synnonyms:
+        if confidence < 0.85: break
+        cnt[syn] = confidence * freq
 
     yield (n,topic,cnt)
     if n>=args['limit']: break
@@ -66,7 +74,7 @@ if __name__ == '__main__':
   kb = Knowledge('localhost','vor','root',args['root'])
   
   # Collect topic wordbag
-  wb = collect_wordbag(kb)
+  wb = collect_wordbag(kb, model)
 
   # Create knowledge index
   index = Knowledge('localhost','vorindex','root',args['root'])
