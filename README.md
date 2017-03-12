@@ -2,8 +2,8 @@
 
 ---
 
+![Network](graphic/index-0.png)
 ![Network](graphic/vor.png)
-![Graph](graphic/graph.png)
 
 ---
 
@@ -102,8 +102,11 @@ Execute:
 
 Where `{PASSWORD}` is your OrientDB root's password. The script 
 downloads the graph data from OrientDB, renders it with appropriate 
-visual figure. After it's done, you can view your graph in 
-`html/graph-universe.html`.
+visual figure. After it's done, you can view the graphs as follows.
+
+- [1] Universe of topics graph [`html/graph-universe.html`].
+- [2] Index graph [`html/graph-index.html`.]
+
 
 ---
 
@@ -134,6 +137,8 @@ which contains all invert-index of the topics and their
 corresponding keywords. Weights of the edges are calculated 
 by how frequent the word appear in each of the topics.
 
+![Network](graphic/index-1.png)
+![Network](graphic/index-2.png)
 
 ---
 
