@@ -35,15 +35,20 @@ def collect_wordbag(kb, model):
       cnt[word.w] /= word.freq
     # Normalise topic counter
     norm = np.linalg.norm(list(cnt.values()))
-    cnt = {k:v/norm for k,v in cnt.items()}
+    cnt0 = {k:v/norm for k,v in cnt.items()}
 
     # Generate similar words with word2vec
-    for word,freq in cnt:
-      indexes, metrics = model.cosine(word)
-      synnonyms = model.generate_response(indexes, metrics).tolist()
-      for syn, confidence in synnonyms:
-        if confidence < 0.85: break
-        cnt[syn] = confidence * freq
+    cnt = {}
+    for word, freq in cnt0.items():
+      cnt[word] = freq
+      try:
+        indexes, metrics = model.cosine(word)
+        synnonyms = model.generate_response(indexes, metrics).tolist()
+        for syn, confidence in synnonyms:
+          if confidence < 0.85: break
+          cnt[syn] = confidence * freq
+      except:
+        pass
 
     yield (n,topic,cnt)
     if n>=args['limit']: break
