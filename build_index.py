@@ -29,13 +29,11 @@ def collect_wordbag(kb, model):
     kws = list(kb.keywords_in_topic(topic.title, with_edge_count=True))
     
     # Frequency of [w] in the current topic
-    cnt = Counter([kw.w for kw in kws])
+    cnt0 = Counter([kw.w for kw in kws])
     # Normalise with global frequency
-    for word in kws:
-      cnt[word.w] /= word.freq
-    # Normalise topic counter
     norm = np.linalg.norm(list(cnt.values()))
-    cnt0 = {k:v/norm for k,v in cnt.items()}
+    for word in kws:
+      cnt0[word.w] *= word.freq / norm
 
     # Generate similar words with word2vec
     cnt = {}
