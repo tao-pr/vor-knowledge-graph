@@ -31,7 +31,7 @@ def collect_wordbag(kb, model):
     # Frequency of [w] in the current topic
     cnt0 = Counter([kw.w for kw in kws])
     # Normalise with global frequency
-    norm = np.linalg.norm(list(cnt.values()))
+    norm = np.linalg.norm(list(cnt0.values()))
     for word in kws:
       cnt0[word.w] *= word.freq / norm
 
