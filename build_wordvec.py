@@ -4,6 +4,7 @@ Create word vector space from the crawled dataset
 """
 
 import os
+import re
 import sys
 import codecs
 import argparse
@@ -57,13 +58,17 @@ def export_crawl_to_text(mineDB):
         print('... content #{} ==> {} sentences extracted.'.format(m, len(sentences)))
 
         for s in sentences:
+          words = []
           # Cleanse the sentence
-          # s_ = cleanse(s)
-          s_ = ''.join(filter(str.isalnum, s))
-          # Filter out noise by length
-          if len(s_)<5 or len(s_.split(' '))<3:
+          for w in re.split(" +", s):
+            w_ = ''.join(filter(str.isalnum, w))
+            if len(w_)>2:
+              words.append(w)
+
+          if len(words)==0:
             continue
-          f.write(s_.lower() + '\n')
+
+          f.write(' '.join(words).lower() + '\n')
 
       m += 1
 
