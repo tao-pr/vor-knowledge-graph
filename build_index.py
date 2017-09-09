@@ -10,9 +10,10 @@ import argparse
 import word2vec
 from termcolor import colored
 from collections import Counter
+from nltk.tokenize.punkt import PunktSentenceTokenizer
 from pylib.knowledge.graph import Knowledge
 from pylib.knowledge.datasource import MineDB
-from nltk.tokenize.punkt import PunktSentenceTokenizer
+from pylib.text.cleanser import *
 
 arguments = argparse.ArgumentParser()
 arguments.add_argument('--verbose', dest='verbose', action='store_true', help='Turn verbose output on.')
@@ -64,7 +65,10 @@ def add_to_index(index,bag):
   print('...Constructing : {}'.format(colored(topic.title,'magenta')))
   print('...#{} {}'.format(n, cnt))
 
-  words, weights = zip(*[(w,weight) for w,weight in cnt.items()])
+  def filter_non_alpha(w):
+    return ''.join(filter(str.isalnum, w))
+
+  words, weights = zip(*[(filter_non_alpha(w),weight) for w,weight in cnt.items()])
   index.add(topic.title, words, weights, verbose=False)
 
 if __name__ == '__main__':

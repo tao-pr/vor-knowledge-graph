@@ -58,7 +58,8 @@ def export_crawl_to_text(mineDB):
 
         for s in sentences:
           # Cleanse the sentence
-          s_ = cleanse(s)
+          # s_ = cleanse(s)
+          s_ = ''.join(filter(str.isalnum, s))
           # Filter out noise by length
           if len(s_)<5 or len(s_.split(' '))<3:
             continue
