@@ -39,9 +39,10 @@ def collect_wordbag(kb, model):
     # Generate similar words with word2vec
     cnt = {}
     for word, freq in cnt0.items():
-      cnt[word] = freq
+      w_ = cleanse(''.join(filter(str.isalnum, word)))
+      cnt[w_] = freq
       try:
-        indexes, metrics = model.cosine(word)
+        indexes, metrics = model.cosine(w_)
         synnonyms = model.generate_response(indexes, metrics).tolist()
         for syn, confidence in synnonyms:
           if confidence < 0.85: break
