@@ -107,6 +107,8 @@ visual figure. After it's done, you can view the graphs as follows.
 - [1] Universe of topics graph [`html/graph-universe.html`].
 - [2] Index graph [`html/graph-index.html`.]
 
+![Network](graphic/vor-knowledge-graph-big.gif)
+
 
 ---
 

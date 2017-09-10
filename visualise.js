@@ -62,7 +62,7 @@ var indexGraphMapper = function(KB){
 
     // Prepare edge enumuration jobs
     var jobs = allTopics
-      .map(KB.getInboundIndex(42)) 
+      .map(KB.getInboundIndex(100)) 
       .map(collectEdges);
 
     return Promise
