@@ -132,6 +132,15 @@ class Knowledge:
       yield k
 
   """
+  {Generator} Enumerate all indexed keywords of a topic
+  @param {str} topic titile
+  """
+  def iterate_index(self, topic):
+    query = "select expand(in()) from topic where title = '{0}'".format(topic)
+    for k in self.orient.query(query):
+      yield k
+
+  """
   {Generator} Enumerate all keywords in a topic
   @param {str} topic title
   """
@@ -142,6 +151,15 @@ class Knowledge:
       else "select w, in().size() as freq from (select expand(out()) from topic where title = '{}')".format(topic)
     for k in self.orient.query(query):
       yield k
+
+
+  def get_weight_of_edge(self,in_id,out_id):
+    query = "select weight from e where in={} and out={}".format(in_id,out_id)
+    rs = [w for w in self.orient.query(query)]
+    if len(rs)==0:
+      return None
+    else:
+      return rs[0]
 
   """
   {Generator} Enumerate all topics which the given keyword

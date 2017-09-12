@@ -64,7 +64,6 @@ def add_to_index(index,bag):
   print('------------------------------------')
   n, topic, cnt = bag
   print('...Constructing : {}'.format(colored(topic.title,'magenta')))
-  print('...#{} {}'.format(n, cnt))
 
   def filter_non_alpha(w):
     return ''.join(filter(str.isalnum, w))
