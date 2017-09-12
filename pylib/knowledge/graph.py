@@ -136,25 +136,30 @@ class Knowledge:
   @param {str} topic titile
   """
   def iterate_index(self, topic):
-    query = "select expand(in()) from topic where title = '{0}'".format(topic)
+    query = "select expand(in()) from topic where title = '{0}' limit -1".format(topic)
     for k in self.orient.query(query):
       yield k
+
+  def iterate_keywords(self, limit=-1):
+    query = "select w from keyword limit {}".format(limit)
+    for w in self.orient.query(query):
+      yield w
 
   """
   {Generator} Enumerate all keywords in a topic
   @param {str} topic title
   """
-  def keywords_in_topic(self, topic, with_edge_count=False):
-    subquery = "select expand(out()) from topic where title = '{0}'".format(topic)
+  def keywords_in_topic(self, topic, with_edge_count=False, limit=-1):
+    subquery = "select expand(out()) from topic where title = '{0}' limit {1}".format(topic, limit)
     query = "select w from ({0})".format(subquery) \
       if not with_edge_count \
-      else "select w, in().size() as freq from (select expand(out()) from topic where title = '{}')".format(topic)
+      else "select w, in().size() as freq from (select expand(out()) from topic where title = '{}' limit {})".format(topic, limit)
     for k in self.orient.query(query):
       yield k
 
 
-  def get_weight_of_edge(self,in_id,out_id):
-    query = "select weight from e where in={} and out={}".format(in_id,out_id)
+  def get_weight_of_edge(self,in_id,out_id,limit=-1):
+    query = "select weight from e where in={} and out={} limit {}".format(in_id,out_id,limit)
     rs = [w for w in self.orient.query(query)]
     if len(rs)==0:
       return None
@@ -166,8 +171,8 @@ class Knowledge:
   belong to
   @param {str} keyword to query
   """
-  def topics_which_have(self,w):
-    query = "select in().title from KEYWORD where w='{}'".format(w)
+  def topics_which_have(self,w,limit):
+    query = "select in().title from KEYWORD where w='{}' limit {}".format(w, limit)
     for k in self.orient.query(query):
       yield k
 
