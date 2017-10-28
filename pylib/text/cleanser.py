@@ -9,35 +9,35 @@ import re
 Remove unwanted tokens from the given text
 """
 def cleanse(txt):
-  txt_ = txt.strip()
-  for p in patterns():
-    txt_ = re.sub(p, ' ', txt_)
-  return txt_
+  return ''.join(filter(str.isalnum, txt))
+#   for p in patterns():
+#     txt_ = re.sub(p, ' ', txt_)
+#   return txt_
 
-def patterns():
-  return [ \
-    r'^\-',
-    r'\"',\
-    r"\'",\
-    r'\:',\
-    r'\;',\
-    r'\#',\
-    r'\^',\
-    r'\(',\
-    r'\)',\
-    r'\,',\
-    r'\{.+\}',\
-    r'\{',\
-    r'\}',\
-    r'\\'\
-    r'\<.*\>',\
-    r'&#.+;',\
-    r'\.',\
-    r'\+',\
-    r'\!',\
-    r'\n',\
-    r'[\d+]',
-    r' \w{1,2}\.',
-    r'\[.*\]',
-    r'title=\"\w*\"']
+# def patterns():
+#   return [ \
+#     r'^\-',
+#     r'\"',\
+#     r"\'",\
+#     r'\:',\
+#     r'\;',\
+#     r'\#',\
+#     r'\^',\
+#     r'\(',\
+#     r'\)',\
+#     r'\,',\
+#     r'\{.+\}',\
+#     r'\{',\
+#     r'\}',\
+#     r'\\'\
+#     r'\<.*\>',\
+#     r'&#.+;',\
+#     r'\.',\
+#     r'\+',\
+#     r'\!',\
+#     r'\n',\
+#     r'[\d+]',
+#     r' \w{1,2}\.',
+#     r'\[.*\]',
+#     r'title=\"\w*\"']
 

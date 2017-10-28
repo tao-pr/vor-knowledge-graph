@@ -61,7 +61,7 @@ def export_crawl_to_text(mineDB):
           words = []
           # Cleanse the sentence
           for w in re.split(" +", s):
-            w_ = cleanse(''.join(filter(str.isalnum, w)))
+            w_ = cleanse(w)
             if len(w_)>2:
               words.append(w)
 

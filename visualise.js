@@ -8,6 +8,8 @@ var colors  = require('colors');
 var fs      = require('fs');
 var Promise = require('bluebird');
 
+const MAX_LINKS = 100;
+
 
 // Validate the arguments initially
 (function validateArgs(args){
@@ -62,7 +64,7 @@ var indexGraphMapper = function(KB){
 
     // Prepare edge enumuration jobs
     var jobs = allTopics
-      .map(KB.getInboundIndex(100)) 
+      .map(KB.getInboundIndex(MAX_LINKS)) 
       .map(collectEdges);
 
     return Promise
@@ -128,7 +130,7 @@ var circularGraphMapper = function(KB){
     // Prepare edge enumuration jobs
     var jobs = nodes
       .filter(topic)
-      .map(KB.getOutE(100))
+      .map(KB.getOutE(MAX_LINKS))
       .map(collectEdges);
 
     // Make sure edges of all underlying nodes are processed.

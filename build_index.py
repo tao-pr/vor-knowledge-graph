@@ -39,7 +39,7 @@ def collect_wordbag(kb, model):
     # Generate similar words with word2vec
     cnt = {}
     for word, freq in cnt0.items():
-      w_ = cleanse(''.join(filter(str.isalnum, word)))
+      w_ = cleanse(word)
       cnt[w_] = freq
       try:
         indexes, metrics = model.cosine(w_)
@@ -65,10 +65,7 @@ def add_to_index(index,bag):
   n, topic, cnt = bag
   print('...Constructing : {}'.format(colored(topic.title,'magenta')))
 
-  def filter_non_alpha(w):
-    return ''.join(filter(str.isalnum, w))
-
-  words, weights = zip(*[(filter_non_alpha(w),weight) for w,weight in cnt.items()])
+  words, weights = zip(*[(cleanse(w),weight) for w,weight in cnt.items()])
   index.add(topic.title, words, weights, verbose=False)
 
 if __name__ == '__main__':
