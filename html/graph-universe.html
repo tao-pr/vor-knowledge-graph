@@ -14,7 +14,7 @@
       // Filter only 200 topics, 5000 keywords
       var topic   = (n) => n.type == 'TOPIC';
       var keyword = (n) => n.type == 'KEYWORD';
-      g.nodes = g.nodes.filter(topic).slice(0,200)
+      g.nodes = g.nodes.filter(topic).slice(0,24)
         .concat(g.nodes.filter(keyword).slice(0,5000))
 
       g.edges = g.edges.filter((e) => 

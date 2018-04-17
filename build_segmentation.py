@@ -23,17 +23,25 @@ arguments.add_argument('--verbose', dest='verbose', action='store_true', help='T
 arguments.add_argument('--root', type=str, default=None, help='Supply the OrientDB password for root account.')
 arguments.add_argument('--limit', type=int, default=100, help='Maximum number of topics we want to import')
 arguments.add_argument('--out', type=str, default='./models/segments.ml', help='Segmentation model path to save.')
-arguments.add_argument('--modelpath', type=str, default='./models/word2vec.bin', help='Path of the word2vec binary model.')
+arguments.add_argument('--modelpath', type=str, default='./models/word2vec.bin', help='Path of the input word2vec binary model.')
 args = vars(arguments.parse_args(sys.argv[1:]))
 
 def model_from_index(indexDB, model):
   # Iterate through entire word space, create word2vec feature space
   map_keyword_to_feature = dict()
   for k in indexDB.iterate_keywords():
+    n_skip = 0
     if k.w not in map_keyword_to_feature:
       v = model[k.w]
       # TAOTODO: Make sure word2vec keywords are consistent
       # with the OrientDB index
+    else:
+      n_skip += 1
+
+  print()
+  print("{} keywords skipped".format(n_skip))
+  print("{} keywords collected".format(len(map_keyword_to_feature)))
+  print()
 
   return # TAODEBUG:
 

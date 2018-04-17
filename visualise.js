@@ -46,7 +46,7 @@ var indexGraphMapper = function(KB){
     var allTopics   = nodes.filter(topicOnly);
 
     // Enumurate index between [nodes] <==> [keywords]
-    console.log('Enurating edges...');
+    console.log('Enumerating edges...');
     var edges = [];
     var collectEdges = (iter) => iter.then((es) => {
       es.forEach(e => {
