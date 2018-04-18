@@ -33,26 +33,17 @@ def model_from_index(indexDB, model):
     n_skip = 0
     if k.w not in map_keyword_to_feature:
       v = model[k.w]
-      # TAOTODO: Make sure word2vec keywords are consistent
-      # with the OrientDB index
+      map_keyword_to_feature[k.w] = v
     else:
       n_skip += 1
 
   print()
   print("{} keywords skipped".format(n_skip))
   print("{} keywords collected".format(len(map_keyword_to_feature)))
+  print("{} MB used as a storage of keyword vectors".format(sys.getsizeof(map_keyword_to_feature)/1024**2))
   print()
 
   return # TAODEBUG:
-
-  # Iterate through topics, create feature vectors
-  for t in indexDB:
-    print(t.title)
-    for kw in indexDB.iterate_index(t.title):
-      k = kw.w
-      w = indexDB.get_weight_of_edge(t._rid, kw._rid)
-      # TAOTODO:
-  pass
 
 def load_word2vec_model(path):
   if not os.path.isfile(model_path):
