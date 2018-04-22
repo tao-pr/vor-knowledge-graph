@@ -1,6 +1,11 @@
 """
 Create word vector space from the crawled dataset
 @author TaoPR (github.com/starcolon)
+
+---
+
+@input    : topic sentences (mine.txt)
+@outputs  : wordvector model
 """
 
 import os
@@ -16,68 +21,17 @@ from pylib.text.cleanser import *
 
 arguments = argparse.ArgumentParser()
 arguments.add_argument('--verbose', dest='verbose', action='store_true', help='Turn verbose output on.')
-arguments.add_argument('--limit', type=int, default=100, help='Maximum number of topics we want to import')
 arguments.add_argument('--out', type=str, default='./models/word2vec.bin', help='Output path of the word2vec binary model.')
 args = vars(arguments.parse_args(sys.argv[1:]))
 
-def model_from_crawl_collection(mineDB, output_path):
-  # Dump sentences out of the DB
-  print(colored('Exporting crawled data to text file...','cyan'))
-  text_path = export_crawl_to_text(mineDB)
-  print(colored('[Done]','green'))
-
+def model_from_mine(output_path):
   # Train word2vec model
   print(colored('Training word2vec...','cyan'))
-  model = create_model(text_path, output_path)
+  model = create_model('mine.txt', output_path)
   print(colored('[Done]','green'))
   print('Word2Vec model is saved at : {}'.format(output_path))
 
   return model
-
-def export_crawl_to_text(mineDB):
-  
-  # Prepare a naive sentence tokeniser utility
-  pst = PunktSentenceTokenizer()
-
-  text_path = os.path.realpath('./mine.txt')
-
-  # TAOTODO: ALL WORDVEC KEYWORDS SHOULD EXIST INSIDE ORIENTDB KEYWORDS
-  with codecs.open(text_path, 'w', 'utf-8') as f:
-    m = 0
-    for wiki in mineDB.query({'downloaded': True},field=None):
-      
-      # Skip empty content or the added one
-      if wiki['content'] is None or 'added_to_graph' in wiki:
-        continue
-
-      content = wiki['content']
-
-      # A wiki page may probably comprise of multiple content
-      for c in content['contents']:
-        # Explode content into sentences
-        sentences = pst.sentences_from_text(c)
-        print('... content #{} ==> {} sentences extracted.'.format(m, len(sentences)))
-
-        for s in sentences:
-          words = []
-          # Cleanse the sentence
-          for w in re.split(" +", s):
-            w_ = cleanse(w)
-            if len(w_)>2:
-              words.append(w)
-
-          if len(words)==0:
-            continue
-
-          f.write(' '.join(words).lower() + '\n')
-
-      m += 1
-
-      if m>=args['limit']:
-        print(colored('[Ending] Maximum number of topics reached.','yellow'))
-        break
-
-  return text_path
 
 def create_model(input_path, output_path):
   word2vec.word2vec(\
@@ -94,8 +48,7 @@ def repl(model):
     print('... Similar words : {}', model.vocab[indexes])
 
 if __name__ == '__main__':
-  mineDB = crawl_collection = MineDB('localhost','vor','crawl')
-  model = model_from_crawl_collection(mineDB, os.path.realpath(args['out']))
+  model = model_from_mine(os.path.realpath(args['out']))
 
   # Examine the model properties
   if model is None:
