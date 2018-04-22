@@ -4,10 +4,16 @@ Knowledge graph builder
 ---
 Process the entire bulk of the crawled dataset (MongoDB)
 and potentially create a knowledge graph (OrientDB)
+
+@input    : crawled collection (Mongo)
+@outputs  : knowledge data (OrientDB : vor)
+          : topic sentences (mine.txt)
 """
 
 import re
+import os
 import sys
+import codecs
 import argparse
 from termcolor import colored
 from nltk.tokenize.punkt import PunktSentenceTokenizer
@@ -56,7 +62,7 @@ def iter_topic(crawl_collection,start):
       sentences = pst.sentences_from_text(c)
       for s in sentences:
         m += 1
-        yield (content['title'],s.split(' '))
+        yield (content['title'],re.split(' |\n',s))
 
     # After all sentences are processed,
     # mark the current wiki record as 'processed'
@@ -106,40 +112,48 @@ if __name__ == '__main__':
   print(colored('Initialising wikipedia crawling collection...','cyan'))
   crawl_collection = init_crawl_collection()
 
+  # Clear [mine.txt]
+  if os.path.isfile('./mine.txt'):
+    os.remove('./mine.txt')
+
   # Iterate through the crawling database
   n = 0
   print(colored('Iterating over crawling database...','cyan'))
   bf = ScalableBloomFilter(mode=ScalableBloomFilter.SMALL_SET_GROWTH)
-  for topic,sentence in iter_topic(crawl_collection,args['start']):
+  with codecs.open('./mine.txt', 'w+', 'utf-8') as f:
+    for topic,sentence in iter_topic(crawl_collection,args['start']):
+      
+      # Clean topic string
+      topic = topic.replace("'",'').replace('\n','')
+
+      # Check if the number of processed topic exceed the limit?
+      if topic not in bf:
+        bf.add(topic)
+        if len(bf) > args['limit'] and args['limit'] > 0:
+          print(colored('[Topics limit reached] ... BYE','cyan'))
+          break
+
+      # Break the sentence into knowledge nodes
+      pos      = TextStructure.pos_tag(sentence)
+      kb_nodes = patterns.capture(pos)  
+
+      # Clean up each of the nodes
+      # a) Remove stopwords
+      # b) Remove duplicates
+      # c) Ensure supported encoding
+      kb_nodes = ensure_viable(kb_nodes, stopwords)
+
+      if args['verbose']:
+        print(kb_nodes)
+
+      # Create a set of knowledge links
+      kb.add(topic,kb_nodes,None,args['verbose'])
+
+      # Save the sentence to [mine.txt] for later use
+      f.write(' '.join(sentence).lower() + '\n')
+
+      n += 1
+      if n%100 == 0 and n>0:
+        print('... {} topics done so far.'.format(n))
     
-    # Clean topic string
-    topic = topic.replace("'",'').replace('\n','')
-
-    # Check if the number of processed topic exceed the limit?
-    if topic not in bf:
-      bf.add(topic)
-      if len(bf) > args['limit']:
-        print(colored('[Topics limit reached] ... BYE','cyan'))
-        sys.exit(0)
-
-    # Break the sentence into knowledge nodes
-    pos      = TextStructure.pos_tag(sentence)
-    kb_nodes = patterns.capture(pos)  
-
-    # Clean up each of the nodes
-    # a) Remove stopwords
-    # b) Remove duplicates
-    # c) Ensure supported encoding
-    kb_nodes = ensure_viable(kb_nodes, stopwords)
-
-    if args['verbose']:
-      print(kb_nodes)
-
-    # Create a set of knowledge links
-    kb.add(topic,kb_nodes,None,args['verbose'])
-
-    n += 1
-    if n%100 == 0 and n>0:
-      print('... {} topics done so far.'.format(n))
-  
-
+  sys.exit(0)

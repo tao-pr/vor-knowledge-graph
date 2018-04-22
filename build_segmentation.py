@@ -29,16 +29,30 @@ args = vars(arguments.parse_args(sys.argv[1:]))
 def model_from_index(indexDB, model):
   # Iterate through entire word space, create word2vec feature space
   map_keyword_to_feature = dict()
-  for k in indexDB.iterate_keywords():
-    n_skip = 0
-    if k.w not in map_keyword_to_feature:
-      v = model[k.w]
-      map_keyword_to_feature[k.w] = v
-    else:
-      n_skip += 1
+  print(colored('Iterating through topics...','cyan'))
+  n = 0
+  for topic in indexDB:
+    n += 1
+    kws = list(indexDB.keywords_in_topic(topic.title, with_edge_count=True))
+
+    pass
+
+    if n > args['limit']:
+      break
+
+
+  # for k in indexDB.iterate_keywords():
+  #   n_skip = 0
+  #   if k.w not in map_keyword_to_feature and k.w in model:
+  #     v = model[k.w]
+  #     map_keyword_to_feature[k.w] = v
+  #   else:
+  #     n_skip += 1
+
+  #   if len(map_keyword_to_feature) > args['limit']:
+  #     break
 
   print()
-  print("{} keywords skipped".format(n_skip))
   print("{} keywords collected".format(len(map_keyword_to_feature)))
   print("{} MB used as a storage of keyword vectors".format(sys.getsizeof(map_keyword_to_feature)/1024**2))
   print()
@@ -57,6 +71,7 @@ if __name__ == '__main__':
   # Load word2vec model
   model_path = os.path.realpath(args['modelpath'])
   model = load_word2vec_model(model_path)
+  print('Word2vec model loaded ({} keywords)'.format(len(model)))
 
   # Initialise a knowledge database
   print(colored('Initialising index database...','cyan'))

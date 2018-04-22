@@ -41,6 +41,7 @@ def export_crawl_to_text(mineDB):
 
   text_path = os.path.realpath('./mine.txt')
 
+  # TAOTODO: ALL WORDVEC KEYWORDS SHOULD EXIST INSIDE ORIENTDB KEYWORDS
   with codecs.open(text_path, 'w', 'utf-8') as f:
     m = 0
     for wiki in mineDB.query({'downloaded': True},field=None):
