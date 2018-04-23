@@ -2,8 +2,13 @@
 Indexed content segmentation
 @author TaoPR (github.com/starcolon)
 ---
-Categorise the entire crawled content into segments
-based on word2vec vectors
+Build content segmentation model
+
+---
+
+@inputs   : wordvector model
+          : knowledge data (OrientDB : vor)
+@outputs  : segmentation model
 """
 
 import os
