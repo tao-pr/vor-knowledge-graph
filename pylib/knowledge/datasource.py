@@ -17,7 +17,7 @@ class MineDB:
     return self.src.count(conditions)
 
   def query(self,conditions={},field=None,skip=0):
-    query = self.src.find(conditions) if skip==0 else self.src.find(filter=conditions,skip=skip)
+    query = self.src.find(conditions) if skip==0 else self.src.find(filter=conditions,skip=skip,no_cursor_timeout=True)
     for n in query:
       # No field name specified, generate the entire record
       if field is None:

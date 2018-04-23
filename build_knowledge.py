@@ -42,8 +42,7 @@ def iter_topic(crawl_collection,start):
   # Prepare a naive sentence tokeniser utility
   pst = PunktSentenceTokenizer()
   
-  n = 0
-  
+  n = 0  
   for wiki in crawl_collection.query({'downloaded': True},field=None,skip=start):
     
     # Skip empty content or the added one
