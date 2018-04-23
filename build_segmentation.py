@@ -76,7 +76,8 @@ if __name__ == '__main__':
   # Load word2vec model
   model_path = os.path.realpath(args['modelpath'])
   model = load_word2vec_model(model_path)
-  print('Word2vec model loaded ({} keywords)'.format(len(model)))
+  # TAODEBUG: When upgraded word2vec, following has to change to [model.wv.vocab]
+  print('Word2vec model loaded ({} keywords)'.format(len(model.vocab)))
 
   # Initialise a knowledge database
   print(colored('Initialising index database...','cyan'))
