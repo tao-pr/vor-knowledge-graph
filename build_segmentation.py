@@ -39,23 +39,11 @@ def model_from_index(indexDB, model):
   for topic in indexDB:
     n += 1
     kws = list(indexDB.keywords_in_topic(topic.title, with_edge_count=True))
-
+    # TAOTODO:
     pass
 
     if n > args['limit']:
       break
-
-
-  # for k in indexDB.iterate_keywords():
-  #   n_skip = 0
-  #   if k.w not in map_keyword_to_feature and k.w in model:
-  #     v = model[k.w]
-  #     map_keyword_to_feature[k.w] = v
-  #   else:
-  #     n_skip += 1
-
-  #   if len(map_keyword_to_feature) > args['limit']:
-  #     break
 
   print()
   print("{} keywords collected".format(len(map_keyword_to_feature)))

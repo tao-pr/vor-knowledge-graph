@@ -73,6 +73,10 @@ def iter_topic(crawl_collection,start):
       print(content['title'] + " processed with {0} nodes.".format(m))
       print(colored("{0} wiki documents processed so far...".format(n),'blue'))
 
+    if n>args['limit'] and args['limit']>0:
+      print(colored('Limit reached', 'cyan'))
+      break
+
 """
 Remove stopwords & ensure text encoder
 """
