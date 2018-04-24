@@ -1,6 +1,12 @@
 """
 Knowledge index maker
 @author Tao PR (github.com/starcolon)
+
+---
+
+@inputs   : wordvector model
+            knowledge data (OrientDB : vor)
+@outputs  : knowledge index data (OrientDB : vorindex)
 """
 
 import numpy as np
