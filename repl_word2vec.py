@@ -13,6 +13,24 @@ arguments = argparse.ArgumentParser()
 arguments.add_argument('--modelpath', type=str, default='./models/word2vec.bin', help='Path of the word2vec binary model.')
 args = vars(arguments.parse_args(sys.argv[1:]))
 
+"""
+Find the best identical twin of the specified word.
+Identical twins are a couple of words which score the highest similarity both ways.
+"""
+def find_twin(w, model):
+  indexes, metrics = model.cosine(w)
+  candidates = model.generate_response(indexes, metrics).tolist()
+  reverse_candidates = []
+  for c,score in candidates:
+     _indexes, _metrics = model.cosine(c)
+    twins = [(_c,_score) for _c,_score in generate_response(_indexes, _metrics) if _c == w]
+    if len(twins) > 0:
+      reverse_candidates.append((c,_score * score))
+  
+  if len(reverse_candidates)==0:
+    return None
+  return sorted(reverse_candidates, lambda x: -x[1])[0]
+
 def repl(model):
   print(colored('[Model] Loaded:','cyan'))
   print('... Model shape : {}'.format(model.vectors.shape))
