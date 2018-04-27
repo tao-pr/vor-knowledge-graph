@@ -18,18 +18,21 @@ Find the best identical twin of the specified word.
 Identical twins are a couple of words which score the highest similarity both ways.
 """
 def find_twin(w, model):
-  indexes, metrics = model.cosine(w)
-  candidates = model.generate_response(indexes, metrics).tolist()
-  reverse_candidates = []
-  for c,score in candidates:
-     _indexes, _metrics = model.cosine(c)
-    twins = [(_c,_score) for _c,_score in generate_response(_indexes, _metrics) if _c == w]
-    if len(twins) > 0:
-      reverse_candidates.append((c,_score * score))
-  
-  if len(reverse_candidates)==0:
-    return None
-  return sorted(reverse_candidates, lambda x: -x[1])[0]
+  try:
+    indexes, metrics = model.cosine(w)
+    candidates = model.generate_response(indexes, metrics).tolist()
+    reverse_candidates = []
+    for c,score in candidates:
+      _indexes, _metrics = model.cosine(c)
+      for _c,_score in model.generate_response(_indexes, _metrics):
+        if _c == w:
+          reverse_candidates.append((c,_score * score))
+    
+    if len(reverse_candidates)==0:
+      return None
+    return sorted(reverse_candidates, key=lambda x: -x[1])[0]
+  except:
+   return None
 
 def repl(model):
   print(colored('[Model] Loaded:','cyan'))
@@ -39,13 +42,15 @@ def repl(model):
     w = input('Enter word to test : ')
     try:
       indexes, metrics = model.cosine(w)
-      print('... indexes  : {}'.format(indexes))
-      print('... metrics  : {}'.format(metrics))
-      print('... similar  : {}'.format(model.vocab[indexes]))
-      print('... response : ')
+      print(colored('... indexes  : ', 'cyan'), indexes)
+      print(colored('... metrics  : ', 'cyan'), metrics)
+      print(colored('... similar  : ', 'cyan'), model.vocab[indexes])
+      print(colored('... response : ', 'cyan'))
       print(model.generate_response(indexes, metrics).tolist())
     except Exception:
       print(colored('... Vocab not recognised by the model.','red'))
+
+    print(colored('... twin : ', 'green'), find_twin(w, model))
 
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 html/graph-data.js
 html/graph-index.js
 mine.txt
+mine_train.txt
 models/
 node_modules/
 pylib/knowledge/__pycache__/
